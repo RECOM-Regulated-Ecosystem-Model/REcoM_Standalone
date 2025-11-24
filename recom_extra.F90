@@ -94,12 +94,10 @@ end subroutine Depth_calculations
 !===============================================================================
 subroutine Cobeta(partit, mesh)
     use REcoM_GloVar
-    use g_clock
-    use mod_mesh
-    use MOD_PARTIT
-    use MOD_PARSUP
-    use o_PARAM
-    use g_comm_auto
+    use g_clock, only: daynew, ndpyr
+    use mod_mesh, only: t_mesh, sparse_matrix
+    use MOD_PARTIT, only: t_partit, com_struct
+    use o_PARAM, only: wp, pi
 
     implicit none
   	
