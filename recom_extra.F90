@@ -156,12 +156,10 @@ end subroutine Cobeta
     use REcoM_declarations
     use REcoM_LocVar
     use REcoM_GloVar
-    use g_clock
-    use o_PARAM
-    use mod_mesh
-    use MOD_PARTIT
-    use MOD_PARSUP
-    use g_comm_auto
+    use mod_mesh, only: t_mesh, sparse_matrix
+    use MOD_PARTIT, only: t_partit, com_struct
+    use g_clock, only: daynew
+    use o_PARAM, only: wp
 
     implicit none
 
