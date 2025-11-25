@@ -16,6 +16,7 @@ subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali
     use recom_locvar
     use recom_config
     use recom_glovar
+    use recom_extra
     use gasx
     use recom_ciso
     use g_clock
@@ -118,7 +119,7 @@ if (enable_coccos) then
     tiny_C_p = tiny_N_p/NCmax_p     ! NCmax_c = 0.15d0
 endif
 
-    call Cobeta(partit, mesh)      
+    call Cobeta(daynew, ndpyr, partit%myDim_nod2D, partit%eDim_nod2D, mesh%geo_coord_nod2D)
     call Depth_calculations(n, Nn,SinkVel,zF,thick,recipthick, partit, mesh)
 
     !! *** Mocsy ***
