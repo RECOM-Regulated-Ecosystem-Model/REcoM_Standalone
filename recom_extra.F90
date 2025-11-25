@@ -20,20 +20,15 @@ module recom_extra
         subroutine Cobeta(partit, mesh)
             use mod_mesh, only: t_mesh
             use MOD_PARTIT, only: t_partit
-
-            ! Input parameters
             type(t_partit), intent(inout),   target          :: partit
             type(t_mesh)  , intent(inout),   target          :: mesh
         end subroutine Cobeta
 
-        subroutine krill_resp(n, partit, mesh)
-            use mod_mesh, only: t_mesh
-            use MOD_PARTIT, only: t_partit
-
-            ! Input parameters
-            integer                                          :: n
-            type(t_partit), intent(inout),   target          :: partit
-            type(t_mesh)  , intent(inout),   target          :: mesh
+        subroutine krill_resp(n, daynew, myDim_nod2D, eDim_nod2D, geo_coord_nod2D)
+            use o_PARAM, only: wp
+            integer, intent(in)                       :: n, daynew
+            integer, intent(in)                       :: myDim_nod2D, eDim_nod2D
+            real(kind=WP), intent(in), dimension(:,:) :: geo_coord_nod2D
         end subroutine krill_resp
     end interface
 end module recom_extra
@@ -190,29 +185,19 @@ end subroutine Cobeta
 !================================================================================
 ! Calculating second zooplankton respiration rates
 !================================================================================
- subroutine krill_resp(n, partit, mesh)
+subroutine krill_resp(n, daynew, myDim_nod2D, eDim_nod2D, geo_coord_nod2D)
     use REcoM_declarations
     use REcoM_LocVar
     use REcoM_GloVar
-    use mod_mesh, only: t_mesh
-    use MOD_PARTIT, only: t_partit
-    use g_clock, only: daynew
     use o_PARAM, only: wp
 
     implicit none
 
     ! Input parameters
-    integer                                          :: n
-    type(t_partit), intent(inout),   target          :: partit
-    type(t_mesh)  , intent(inout),   target          :: mesh
+    integer, intent(in)                       :: n, daynew
+    integer, intent(in)                       :: myDim_nod2D, eDim_nod2D
+    real(kind=WP), intent(in), dimension(:,:) :: geo_coord_nod2D
 
-    integer, pointer                       :: myDim_nod2D, eDim_nod2D
-    real(kind=WP), dimension(:,:), pointer :: geo_coord_nod2D
-
-    myDim_nod2D                                   => partit%myDim_nod2D
-    eDim_nod2D                                    => partit%eDim_nod2D
-    geo_coord_nod2D(1:2,1:myDim_nod2D+eDim_nod2D) => mesh%geo_coord_nod2D(:,:)
- 
    ! Values from FESOM                                                                                                 
 
    if (geo_coord_nod2D(2,n)<0.0_WP) then  !SH

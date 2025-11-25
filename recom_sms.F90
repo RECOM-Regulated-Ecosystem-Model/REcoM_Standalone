@@ -14,6 +14,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp, Sali_depth &
     use recom_glovar
     use recom_config
     use recoM_ciso
+    use recom_extra
     use g_clock
 
     use g_config
@@ -3365,7 +3366,7 @@ real(kind=8) :: &
 
            ! Call detailed krill respiration subroutine
            ! Handles additional physiological processes (e.g., molting, reproduction)
-           call krill_resp(n, partit, mesh)
+           call krill_resp(n, daynew, partit%myDim_nod2D, partit%eDim_nod2D, mesh%geo_coord_nod2D)
 
            ! Calculate feeding success modifier
            ! Low feeding rates trigger stress response with elevated respiration
