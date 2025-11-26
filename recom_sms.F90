@@ -7,7 +7,7 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp, Sali_depth &
         , OmegaC_watercolumn                                                 &
         , kspc_watercolumn                                                   &
         , rhoSW_watercolumn                                                  &
-        , Loc_slp, zF, PAR, Lond, Latd, ice, dynamics, tracers, partit, mesh)
+        , Loc_slp, zF, PAR, Lond, Latd, partit, mesh)
 
     use recom_declarations
     use recom_locvar
@@ -19,18 +19,12 @@ subroutine REcoM_sms(n,Nn,state,thick,recipthick,SurfSR,sms,Temp, Sali_depth &
     use g_clock, only: daynew
     use g_config, only: dt, wp, kappa, mstep
     use MOD_MESH, only: t_mesh, sparse_matrix
-    use MOD_TRACER, only: t_tracer
-    use MOD_DYN, only: t_dyn
-    USE MOD_ICE, only: t_ice
     USE MOD_PARTIT, only: t_partit, com_struct
     use mvars, only: vars_sprac
 
     implicit none
-    type(t_dyn)   , intent(inout), target :: dynamics
-    type(t_tracer), intent(inout), target :: tracers
     type(t_partit), intent(inout), target :: partit
     type(t_mesh)  , intent(inout), target :: mesh
-    type(t_ice)   , intent(inout), target :: ice
 
     integer, intent(in)                                     :: Nn                   !< Total number of nodes in the vertical
     real(kind=8),dimension(mesh%nl-1,bgc_num),intent(inout) :: state                !< ChlA conc in phytoplankton [mg/m3]

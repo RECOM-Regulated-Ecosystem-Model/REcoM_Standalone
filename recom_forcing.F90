@@ -251,7 +251,7 @@ if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_sms'/
         , kspc_watercolumn                                             & ! DISS stoichiometric solubility product [mol^2/kg^2]
         , rhoSW_watercolumn                                            & ! DISS in-situ density of seawater [kg/m3]
         , Loc_slp                                                      &
-        , zF, PAR, Lond, Latd, ice, dynamics, tracers, partit, mesh)
+        , zF, PAR, Lond, Latd, partit, mesh)
 
   state(1:nn,:)      = max(tiny,state(1:nn,:) + sms(1:nn,:))
 
