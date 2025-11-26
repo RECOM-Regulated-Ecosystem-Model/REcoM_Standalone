@@ -7,8 +7,8 @@
       use recom_config
       use recom_ciso
 
-      use mod_mesh, only: t_mesh, sparse_matrix
-      USE MOD_PARTIT, only: t_partit, com_struct
+      use mod_mesh, only: t_mesh
+      USE MOD_PARTIT, only: t_partit
 
       use g_config, only: dt
       use g_forcing_arrays, only: wp
@@ -22,11 +22,6 @@
       real(kind=WP), parameter          :: mol_allatm = 1.7726e20  ! atmospheric inventory of all compounds (mol)
       type(t_partit), intent(inout), target :: partit
       type(t_mesh)  , intent(inout), target :: mesh
-
-#include "../associate_part_def.h"
-#include "../associate_mesh_def.h"
-#include "../associate_part_ass.h"
-#include "../associate_mesh_ass.h"
 
 !     Globally integrated air-sea CO2 flux (mol / s)
       total_co2flux    = 0.
