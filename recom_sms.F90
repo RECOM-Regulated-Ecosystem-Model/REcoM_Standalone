@@ -18,8 +18,8 @@ subroutine REcoM_sms(n,Nn,state,thick,SurfSR,sms,Temp, Sali_depth &
 
     use g_clock, only: daynew
     use g_config, only: dt, wp, kappa, mstep
-    use MOD_MESH, only: t_mesh, sparse_matrix
-    USE MOD_PARTIT, only: t_partit, com_struct
+    use MOD_MESH, only: t_mesh
+    USE MOD_PARTIT, only: t_partit
     use mvars, only: vars_sprac
 
     implicit none
@@ -117,11 +117,8 @@ real(kind=8) :: &
     MicZooN,   & ! [mmol/m3] Microzooplankton nitrogen
     MicZooC      ! [mmol/m3] Microzooplankton carbon
 
-#include "../associate_part_def.h"
-#include "../associate_mesh_def.h"
-#include "../associate_part_ass.h"
-#include "../associate_mesh_ass.h"
-
+    integer, pointer :: mype
+    mype => partit%mype
 
     ! ===========================================================================
     ! VARIABLE DECLARATIONS AND INITIALIZATION
