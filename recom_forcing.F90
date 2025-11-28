@@ -10,7 +10,7 @@ subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali
             , OmegaC_watercolumn                                       &
             , kspc_watercolumn                                         &
             , rhoSW_watercolumn                                        &
-            , PAR, ice, dynamics, tracers, partit, mesh)
+            , PAR, partit, mesh)
 
     use recom_declarations
     use recom_locvar
@@ -25,15 +25,9 @@ subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali
     use g_config, only: dt, wp, kappa, mstep, rad
     use mod_mesh, only: t_mesh, sparse_matrix
     USE MOD_PARTIT, only: t_partit, com_struct
-    use mod_tracer, only: t_tracer
-    use MOD_DYN, only: t_dyn
-    use MOD_ICE, only: t_ice
 
     implicit none
 
-    type(t_dyn)   , intent(inout), target :: dynamics
-    type(t_ice)   , intent(inout), target :: ice
-    type(t_tracer), intent(inout), target :: tracers
     type(t_partit), intent(inout), target :: partit
     type(t_mesh)  , intent(inout), target :: mesh
 

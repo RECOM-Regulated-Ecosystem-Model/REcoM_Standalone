@@ -389,7 +389,7 @@ endif
            , OmegaC_watercolumn                                  & ! NEW DISS OmegaC for the whole watercolumn
            , kspc_watercolumn                                    & ! NEW DISS stoichiometric solubility product for calcite [mol^2/kg^2]
            , rhoSW_watercolumn                                   & ! NEW DISS in-situ density of seawater [mol/m^3]
-                           , PAR, ice, dynamics, tracers, partit, mesh)
+           , PAR, partit, mesh)
 
         do tr_num = num_tracers-bgc_num+1, num_tracers !bgc_num+2
             tracers%data(tr_num)%values(1:nzmax, n) = C(1:nzmax, tr_num-2)
