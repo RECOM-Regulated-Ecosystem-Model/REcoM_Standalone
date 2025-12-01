@@ -67,6 +67,7 @@ subroutine recom(ice, dynamics, tracers, partit, mesh)
     use g_clock
     use g_forcing_arrays, only: press_air, u_wind, v_wind, shortwave
     use g_comm_auto
+    use recom_forcing_module
 
     implicit none
 
@@ -380,16 +381,18 @@ endif
 
 ! ======================================================================================
 !******************************** RECOM FORCING ****************************************
-        call REcoM_Forcing(zr, n, nzmax, C, SW, Loc_slp, Temp, Sali, Sali_depth &
-           , CO2_watercolumn                                     & ! NEW MOCSY CO2 for the whole watercolumn
-           , pH_watercolumn                                      & ! NEW MOCSY pH for the whole watercolumn
-           , pCO2_watercolumn                                    & ! NEW MOCSY pCO2 for the whole watercolumn
-           , HCO3_watercolumn                                    & ! NEW MOCSY HCO3 for the whole watercolumn
-           , CO3_watercolumn                                     & ! NEW DISS CO3 for the whole watercolumn
-           , OmegaC_watercolumn                                  & ! NEW DISS OmegaC for the whole watercolumn
-           , kspc_watercolumn                                    & ! NEW DISS stoichiometric solubility product for calcite [mol^2/kg^2]
-           , rhoSW_watercolumn                                   & ! NEW DISS in-situ density of seawater [mol/m^3]
-           , PAR, partit, mesh)
+        call REcoM_Forcing(n, nzmax, C, SW, Loc_slp, Temp, Sali, Sali_depth, &
+                           CO2_watercolumn,         & ! NEW MOCSY CO2 for the whole watercolumn
+                           pH_watercolumn,          & ! NEW MOCSY pH for the whole watercolumn
+                           pCO2_watercolumn,        & ! NEW MOCSY pCO2 for the whole watercolumn
+                           HCO3_watercolumn,        & ! NEW MOCSY HCO3 for the whole watercolumn
+                           CO3_watercolumn,         & ! NEW DISS CO3 for the whole watercolumn
+                           OmegaC_watercolumn,      & ! NEW DISS OmegaC for the whole watercolumn
+                           kspc_watercolumn,        & ! NEW DISS stoichiometric solubility product for calcite [mol^2/kg^2]
+                           rhoSW_watercolumn,       & ! NEW DISS in-situ density of seawater [mol/m^3]
+                           PAR, partit%MPI_COMM_FESOM, partit%mype, partit%myDim_nod2D, &
+                           partit%eDim_nod2D, mesh%nl, mesh%hnode, mesh%zbar_3d_n,    &
+                           mesh%geo_coord_nod2D, daynew, ndpyr, dt, kappa, mstep, rad)
 
         do tr_num = num_tracers-bgc_num+1, num_tracers !bgc_num+2
             tracers%data(tr_num)%values(1:nzmax, n) = C(1:nzmax, tr_num-2)

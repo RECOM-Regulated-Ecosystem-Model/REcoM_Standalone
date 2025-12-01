@@ -1,16 +1,62 @@
+module recom_forcing_module
+    interface
+        subroutine REcoM_Forcing(n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali_depth,    &
+                                 CO2_watercolumn, pH_watercolumn, pCO2_watercolumn,        &
+                                 HCO3_watercolumn, CO3_watercolumn, OmegaC_watercolumn,    &
+                                 kspc_watercolumn, rhoSW_watercolumn, PAR, MPI_COMM_FESOM, &
+                                 mype, myDim_nod2D, eDim_nod2D, nl, hnode, zbar_3d_n,      &
+                                 geo_coord_nod2D, daynew, ndpyr, dt, kappa, mstep, rad)
+
+            use recom_declarations
+            use recom_locvar
+            use recom_config
+            use recom_glovar
+            use recom_extra
+            use recom_sms_module
+            use recom_ciso
+            use g_config, only: wp
+
+            implicit none
+
+            integer, intent(in) :: daynew, ndpyr, mype, myDim_nod2D, eDim_nod2D, nl, mstep
+            integer, intent(in) :: MPI_COMM_FESOM, n, Nn         ! Nn -Total number of nodes
+
+            real(kind=8), intent(in)    :: rad
+            real(kind=8), intent(in)    :: Sali              ! Salinity of current surface layer
+            real(kind=8), intent(in)    :: SurfSW        ! [W/m2] ShortWave radiation at surface
+            real(kind=8), intent(in)    :: Loc_slp       ! [Pa] sea-level pressure
+            real(kind=8), intent(inout) :: kappa, dt
+
+            real(kind=8), intent(in), dimension(nl - 1) :: Temp          ! [degrees C] Ocean temperature
+            real(kind=8), intent(in), dimension(nl - 1) :: Sali_depth    ! Salinity for the whole water column
+
+            !!---- Watercolumn carbonate chemistry
+            real(kind=8), intent(inout), dimension(nl - 1) :: CO2_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: pH_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: pCO2_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: HCO3_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: CO3_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: OmegaC_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: kspc_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: rhoSW_watercolumn
+            real(kind=8), intent(inout), dimension(nl - 1) :: PAR
+
+            real(kind=WP), intent(in),    dimension(:, :) :: hnode, zbar_3d_n
+            real(kind=WP), intent(in),    dimension(:, :) :: geo_coord_nod2D
+            real(kind=8),  intent(inout), dimension(nl - 1, bgc_num) :: state
+        end subroutine recom_forcing
+    end interface
+end module recom_forcing_module
+
 !===============================================================================
 ! REcoM_Forcing
 !===============================================================================
-subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali_depth &
-            , CO2_watercolumn                                          &
-            , pH_watercolumn                                           &
-            , pCO2_watercolumn                                         &
-            , HCO3_watercolumn                                         &
-            , CO3_watercolumn                                          &
-            , OmegaC_watercolumn                                       &
-            , kspc_watercolumn                                         &
-            , rhoSW_watercolumn                                        &
-            , PAR, partit, mesh)
+subroutine REcoM_Forcing(n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali_depth,    &
+                         CO2_watercolumn, pH_watercolumn, pCO2_watercolumn,        &
+                         HCO3_watercolumn, CO3_watercolumn, OmegaC_watercolumn,    &
+                         kspc_watercolumn, rhoSW_watercolumn, PAR, MPI_COMM_FESOM, &
+                         mype, myDim_nod2D, eDim_nod2D, nl, hnode, zbar_3d_n,      &
+                         geo_coord_nod2D, daynew, ndpyr, dt, kappa, mstep, rad)
 
     use recom_declarations
     use recom_locvar
@@ -19,81 +65,71 @@ subroutine REcoM_Forcing(zNodes, n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali
     use recom_extra
     use recom_sms_module
     use recom_ciso
-
     use gasx
-    use g_clock, only: daynew, ndpyr
-    use g_config, only: dt, wp, kappa, mstep, rad
-    use mod_mesh, only: t_mesh, sparse_matrix
-    USE MOD_PARTIT, only: t_partit, com_struct
+    use g_config, only: wp
 
     implicit none
 
-    type(t_partit), intent(inout), target :: partit
-    type(t_mesh)  , intent(inout), target :: mesh
+    integer, intent(in) :: daynew, ndpyr, mype, myDim_nod2D, eDim_nod2D, nl, mstep
+    integer, intent(in) :: MPI_COMM_FESOM, n, Nn         ! Nn -Total number of nodes
 
-    real(kind=8)                              :: Latr          
-    integer                                   :: n, Nn         ! Nn -Total number of nodes
-    real(kind=8),dimension(mesh%nl-1)	      :: zNodes	       ! Depth of nodes   zr(1:nzmax) = Z_3d_n(1:nzmax,n)
-    real(kind=8),dimension(mesh%nl-1,bgc_num) :: state         	
-    real(kind=8)                              :: SurfSW        ! [W/m2] ShortWave radiation at surface
-    real(kind=8)                              :: Loc_slp       ! [Pa] sea-level pressure
-    real(kind=8),dimension(mesh%nl-1)         :: Temp          ! [degrees C] Ocean temperature
-    real(kind=8),dimension(mesh%nl-1)         :: Sali_depth    ! Salinity for the whole water column
+    real(kind=8), intent(in)    :: rad
+    real(kind=8), intent(in)    :: Sali              ! Salinity of current surface layer
+    real(kind=8), intent(in)    :: SurfSW        ! [W/m2] ShortWave radiation at surface
+    real(kind=8), intent(in)    :: Loc_slp       ! [Pa] sea-level pressure
+    real(kind=8), intent(inout) :: kappa, dt
+
+    real(kind=8), intent(in), dimension(nl - 1) :: Temp          ! [degrees C] Ocean temperature
+    real(kind=8), intent(in), dimension(nl - 1) :: Sali_depth    ! Salinity for the whole water column
 
     !!---- Watercolumn carbonate chemistry
-    real(kind=8),dimension(mesh%nl-1)         :: CO2_watercolumn
-    real(kind=8),dimension(mesh%nl-1)         :: pH_watercolumn
-    real(kind=8),dimension(mesh%nl-1)         :: pCO2_watercolumn
-    real(kind=8),dimension(mesh%nl-1)         :: HCO3_watercolumn
-    real(kind=8),dimension(mesh%nl-1)         :: CO3_watercolumn
-    real(kind=8),dimension(mesh%nl-1)         :: OmegaC_watercolumn
-    real(kind=8),dimension(mesh%nl-1)         :: kspc_watercolumn
-    real(kind=8),dimension(mesh%nl-1)         :: rhoSW_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: CO2_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: pH_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: pCO2_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: HCO3_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: CO3_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: OmegaC_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: kspc_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: rhoSW_watercolumn
+    real(kind=8), intent(inout), dimension(nl - 1) :: PAR
 
-    real(kind=8),dimension(mesh%nl-1)         :: PAR
+    real(kind=WP), intent(in),    dimension(:, :) :: hnode, zbar_3d_n
+    real(kind=WP), intent(in),    dimension(:, :) :: geo_coord_nod2D
+    real(kind=8),  intent(inout), dimension(nl - 1, bgc_num) :: state
+
+    integer :: tr_num
+    real(kind=8) :: Latr
+
+    !!---- Subroutine CO2Flux /mocsy
+    real(kind=8) :: REcoM_DIC(1)         ! [mol/m3] Conc of DIC in the surface water, used to calculate CO2 flux
+    real(kind=8) :: REcoM_Alk(1)         ! [mol/m3] Conc of Alk in the surface water, used to calculate CO2 flux
+    real(kind=8) :: REcoM_Si(1)          ! [mol/m3] Conc of Si in the surface water, used to calculate CO2 flux
+    real(kind=8) :: REcoM_Phos(1)        ! [mol/m3] Conc of Phos in the surface water, used to calculate the CO2 flux
+    real(kind=8) :: Latd(1)              ! latitude in degree
+    real(kind=8) :: Lond(1)              ! longitude in degree
+    real(kind=8) :: REcoM_T(1)           ! temperature again, for mocsy minimum defined as -2
+    real(kind=8) :: REcoM_S(1)           ! temperature again, for mocsy minimum defined as 21
+
+! atm pressure, now read in as forcing!!
+    !!---- atm pressure
+    real(kind=8) :: Patm(1)              ! atmospheric pressure [atm]
+
+    !!---- Subroutine o2flux /mocsy 
+    real(kind=8) :: ppo(1)               ! atmospheric pressure, divided by 1 atm 
+    real(kind=8) :: REcoM_O2(1)          ! [mmol/m3] Conc of O2 in the surface water, used to calculate O2 flux
+
+    !!---- Diagnostics
+    integer :: idiags,k
 
     !!---- Subroutine Depth
 
-    real(kind=8),dimension(mesh%nl)           :: zF                   ! [m] Depth of fluxes
-    real(kind=8),dimension(mesh%nl,6)         :: SinkVel              ! [m/day]
-    real(kind=8),dimension(mesh%nl-1)         :: thick                ! [m] Vertical distance between two nodes = Thickness 
-    real(kind=8),dimension(mesh%nl-1)         :: recipthick           ! [1/m] reciprocal of thick
-
-    !!---- Subroutine CO2Flux /mocsy
-    real(kind=8)                              :: REcoM_DIC(1)         ! [mol/m3] Conc of DIC in the surface water, used to calculate CO2 flux
-    real(kind=8)                              :: REcoM_Alk(1)         ! [mol/m3] Conc of Alk in the surface water, used to calculate CO2 flux
-    real(kind=8)                              :: REcoM_Si(1)          ! [mol/m3] Conc of Si in the surface water, used to calculate CO2 flux
-    real(kind=8)                              :: REcoM_Phos(1)        ! [mol/m3] Conc of Phos in the surface water, used to calculate the CO2 flux
-    real(kind=8)                              :: Sali(1)              ! Salinity of current surface layer
-    real(kind=8)                              :: Latd(1)              ! latitude in degree
-    real(kind=8)                              :: Lond(1)              ! longitude in degree
-    real(kind=8)                              :: REcoM_T(1)           ! temperature again, for mocsy minimum defined as -2
-    real(kind=8)                              :: REcoM_S(1)           ! temperature again, for mocsy minimum defined as 21
-! atm pressure, now read in as forcing!!
-    !!---- atm pressure
-    real(kind=8)                              :: Patm(1)              ! atmospheric pressure [atm]
-
-    !!---- Subroutine o2flux /mocsy 
-    real(kind=8)                              :: ppo(1)               ! atmospheric pressure, divided by 1 atm 
-    real(kind=8)                              :: REcoM_O2(1)          ! [mmol/m3] Conc of O2 in the surface water, used to calculate O2 flux
+    real(kind=8),dimension(nl)           :: zF                   ! [m] Depth of fluxes
+    real(kind=8),dimension(nl,6)         :: SinkVel              ! [m/day]
+    real(kind=8),dimension(nl-1)         :: thick                ! [m] Vertical distance between two nodes = Thickness 
+    real(kind=8),dimension(nl-1)         :: recipthick           ! [1/m] reciprocal of thick
 
     !!---- Subroutine REcoM_sms
-    real(kind=8),dimension(mesh%nl-1,bgc_num) :: sms                  ! matrix that entail changes in tracer concentrations
-
-    !!---- Diagnostics
-    integer                                   :: idiags,k
-
-    integer                    :: tr_num
-
-    integer, pointer   :: mype
-    integer, pointer                :: myDim_nod2D, eDim_nod2D
-    real(kind=WP), dimension(:,:), pointer :: geo_coord_nod2D
-
-    mype            => partit%mype
-    myDim_nod2D     => partit%myDim_nod2D
-    eDim_nod2D      => partit%eDim_nod2D
-
-    geo_coord_nod2D(1:2,1:myDim_nod2D+eDim_nod2D)              => mesh%geo_coord_nod2D(:,:)
+    real(kind=8), dimension(nl-1, bgc_num) :: sms                  ! matrix that entail changes in tracer concentrations
 
     tiny_N   = tiny_chl/chl2N_max   ! 0.00001/ 3.15d0   Chl2N_max [mg CHL/mmol N] Maximum CHL a : N ratio = 0.3 gCHL gN^-1
     tiny_N_d = tiny_chl/chl2N_max_d ! 0.00001/ 4.2d0
@@ -111,8 +147,8 @@ if (enable_coccos) then
     tiny_C_p = tiny_N_p/NCmax_p     ! NCmax_c = 0.15d0
 endif
 
-    call Cobeta(daynew, ndpyr, partit%myDim_nod2D, partit%eDim_nod2D, mesh%geo_coord_nod2D)
-    call Depth_calculations(n, Nn,SinkVel,zF,thick,recipthick, partit%myDim_nod2D, partit%eDim_nod2D, mesh%nl, mesh%hnode, mesh%zbar_3d_n)
+    call Cobeta(daynew, ndpyr, myDim_nod2D, eDim_nod2D, geo_coord_nod2D)
+    call Depth_calculations(n, Nn,SinkVel,zF,thick,recipthick, myDim_nod2D, eDim_nod2D, nl, hnode, zbar_3d_n)
 
     !! *** Mocsy ***
 
@@ -130,7 +166,7 @@ endif
     REcoM_T    = min(REcoM_T, 40.d0) 
 
     !!---- minimum set to 21: K1/K2 Lueker valid between 2degC-35degC and 19-43psu, else causes trouble in regions with S between 19 and 21 and ice conc above 97%
-    REcoM_S    = max(21.d0, Sali(1)) 
+    REcoM_S    = max(21.d0, Sali)
     !!---- maximum set to 43: K1/K2 Lueker valid between 2degC-35degC and 19-43psu, else causes trouble   REcoM_S    = min(REcoM_S, 43.d0)  !!!!!!!!
 
     !!---- convert from Pa to atm.
@@ -231,20 +267,18 @@ endif
 
 if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> REcoM_sms'//achar(27)//'[0m'
 
-!  call REcoM_sms(n, Nn, state, thick, recipthick, SurfSW, sms, Temp ,zF, PAR, mesh)
-
   call REcoM_sms(n, Nn, state, thick, SurfSW, sms, Temp, Sali_depth, &
-                 CO2_watercolumn,                                                & ! MOCSY [mol/m3]
-                 pH_watercolumn,                                                 & ! MOCSY on total scale
-                 pCO2_watercolumn,                                               & ! MOCSY [uatm]
-                 HCO3_watercolumn,                                               & ! MOCSY [mol/m3]
-                 CO3_watercolumn,                                                & ! DISS [mol/m3]
-                 OmegaC_watercolumn,                                             & ! DISS calcite saturation state
-                 kspc_watercolumn,                                               & ! DISS stoichiometric solubility product [mol^2/kg^2]
-                 rhoSW_watercolumn,                                              & ! DISS in-situ density of seawater [kg/m3]
-                 Loc_slp,                                                        &
-                 zF, PAR, Latd, daynew, dt, kappa, mstep, partit%MPI_COMM_FESOM, &
-                 partit%mype, partit%myDim_nod2D, partit%eDim_nod2D, mesh%nl, mesh%geo_coord_nod2D)
+                 CO2_watercolumn,                                               & ! MOCSY [mol/m3]
+                 pH_watercolumn,                                                & ! MOCSY on total scale
+                 pCO2_watercolumn,                                              & ! MOCSY [uatm]
+                 HCO3_watercolumn,                                              & ! MOCSY [mol/m3]
+                 CO3_watercolumn,                                               & ! DISS [mol/m3]
+                 OmegaC_watercolumn,                                            & ! DISS calcite saturation state
+                 kspc_watercolumn,                                              & ! DISS stoichiometric solubility product [mol^2/kg^2]
+                 rhoSW_watercolumn,                                             & ! DISS in-situ density of seawater [kg/m3]
+                 Loc_slp,                                                       &
+                 zF, PAR, Latd, daynew, dt, kappa, mstep, MPI_COMM_FESOM, mype, &
+                 myDim_nod2D, eDim_nod2D, nl, geo_coord_nod2D)
 
   state(1:nn,:)      = max(tiny,state(1:nn,:) + sms(1:nn,:))
 
