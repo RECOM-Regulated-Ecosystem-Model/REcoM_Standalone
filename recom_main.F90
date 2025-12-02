@@ -662,11 +662,6 @@ subroutine bio_fluxes(tracers, partit, mesh)
     !___________________________________________________________________________
     real(kind=WP), dimension(:,:), pointer :: alkalinity
 
-#include "../associate_part_def.h"
-#include "../associate_mesh_def.h"
-#include "../associate_part_ass.h"
-#include "../associate_mesh_ass.h"
-
     alkalinity => tracers%data(2+ialk)%values(:,:) ! 1 temp, 2 salt, 3 din, 4 dic, 5 alk
 !___________________________________________________________________
 ! on freshwater inflow/outflow or virtual alkalinity:
@@ -694,7 +689,7 @@ subroutine bio_fluxes(tracers, partit, mesh)
 
     !___________________________________________________________________________
     ! Balance alkalinity restoring to climatology
-    do n=1, myDim_nod2D+eDim_nod2D
+    do n=1, partit%myDim_nod2D + partit%eDim_nod2D
 !        relax_alk(n)=surf_relax_Alk * (Alk_surf(n) - tracers%data(2+ialk)%values(1, n)) 
 !        relax_alk(n)=surf_relax_Alk * (Alk_surf(n) - alkalinity(ulevels_nod2d(n),n)
         relax_alk(n)=surf_relax_Alk * (Alk_surf(n) - alkalinity(1, n))
@@ -710,6 +705,6 @@ subroutine bio_fluxes(tracers, partit, mesh)
   ! 3. restoring to Alkalinity climatology
     call integrate_nod_2D_recom(relax_alk, net, partit%MPI_COMM_FESOM, partit%myDim_nod2D, partit%eDim_nod2D, mesh%ulevels_nod2D, mesh%areasvol)
 
-    relax_alk=relax_alk-net/ocean_area  ! at ocean surface layer
+    relax_alk = relax_alk - net / mesh%ocean_area  ! at ocean surface layer
 
 end subroutine bio_fluxes
