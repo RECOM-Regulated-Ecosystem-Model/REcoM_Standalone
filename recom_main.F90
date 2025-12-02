@@ -23,21 +23,9 @@ end module
 module bio_fluxes_interface
     interface
         subroutine bio_fluxes(tracers, partit, mesh)
-            use recom_declarations
-            use recom_locvar
-            use recom_glovar
-            use recom_config
-
-            use mod_mesh
-            use MOD_PARTIT
-            use MOD_PARSUP
-            use mod_tracer
-
-            use g_config
-            use o_arrays
-            use g_comm_auto
-            use g_forcing_arrays
-            use g_support
+            use mod_mesh, only: t_mesh
+            use MOD_PARTIT, only: t_partit
+            use mod_tracer, only: t_tracer
 
             type(t_tracer), intent(inout), target :: tracers
             type(t_partit), intent(inout), target :: partit
@@ -638,18 +626,12 @@ subroutine bio_fluxes(tracers, partit, mesh)
     use recom_locvar
     use recom_glovar
     use recom_config
-
-    use mod_mesh
-    use MOD_PARTIT
-    use MOD_PARSUP
-    use mod_tracer
-
-    use g_config
-    use o_arrays
-    use g_comm_auto
-    use g_forcing_arrays
-    use g_support
     use recom_extra, only: integrate_nod_2d_recom
+
+    use mod_mesh, only: t_mesh
+    use MOD_PARTIT, only: t_partit
+    use mod_tracer, only: t_tracer
+    use g_config, only: wp
 
     implicit none
     integer                               :: n, elem, elnodes(3),n1
