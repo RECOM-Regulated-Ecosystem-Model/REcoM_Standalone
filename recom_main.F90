@@ -708,7 +708,7 @@ subroutine bio_fluxes(tracers, partit, mesh)
 
 
   ! 3. restoring to Alkalinity climatology
-    call integrate_nod_2D_recom(relax_alk, net, partit, mesh)
+    call integrate_nod_2D_recom(relax_alk, net, partit%MPI_COMM_FESOM, partit%myDim_nod2D, partit%eDim_nod2D, mesh%ulevels_nod2D, mesh%areasvol)
 
     relax_alk=relax_alk-net/ocean_area  ! at ocean surface layer
 
