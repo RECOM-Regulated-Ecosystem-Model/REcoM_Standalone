@@ -1,5 +1,5 @@
 !> \file sw_ptmp.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with sw_ptmp function - compute potential T from in-situ T
 MODULE msw_ptmp
 CONTAINS
@@ -30,7 +30,7 @@ FUNCTION sw_ptmp  (s,t,p,pr)
   REAL(kind=r8) :: t
   !> pressure [db]
   REAL(kind=r8) :: p
-  !> reference pressure  [db]  
+  !> reference pressure  [db]
   REAL(kind=r8) :: pr
 
 ! local arguments
@@ -41,7 +41,7 @@ FUNCTION sw_ptmp  (s,t,p,pr)
 ! REAL(kind=r8) :: sw_adtg
 ! EXTERNAL sw_adtg
 
-! Output 
+! Output
   REAL(kind=r8) :: sw_ptmp
 
   ! theta1
@@ -100,7 +100,7 @@ FUNCTION sw_ptmp_DNAD  (s,t,p,pr)
   TYPE(DUAL_NUM) :: t
   !> pressure [db]
   TYPE(DUAL_NUM) :: p
-  !> reference pressure  [db]  
+  !> reference pressure  [db]
   TYPE(DUAL_NUM) :: pr
 
 ! local arguments
@@ -108,7 +108,7 @@ FUNCTION sw_ptmp_DNAD  (s,t,p,pr)
   REAL(kind=r8) :: onehalf, two, three
   PARAMETER (onehalf = 0.5d0, two = 2.d0, three = 3.d0 )
 
-! Output 
+! Output
   TYPE(DUAL_NUM) :: sw_ptmp_DNAD
 
   ! theta1

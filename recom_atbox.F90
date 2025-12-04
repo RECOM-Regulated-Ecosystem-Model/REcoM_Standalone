@@ -12,7 +12,7 @@ end module recom_atbox_module
 
     subroutine recom_atbox(MPI_COMM_FESOM, myDim_nod2D, eDim_nod2D, ulevels_nod2D, areasvol)
 !     Simple 0-d box model to calculate the temporal evolution of atmospheric CO2.
-!     Initially the box model was part of module recom_ciso. Now it can be run also 
+!     Initially the box model was part of module recom_ciso. Now it can be run also
 !     without carbon isotopes (ciso==.false.)
 !     mbutzin, 2021-07-08
       use REcoM_GloVar
@@ -20,7 +20,7 @@ end module recom_atbox_module
       use recom_ciso
       use recom_extra, only: integrate_nod_2d_recom
       use g_config, only: dt, wp
-      
+
       implicit none
 
       integer,       intent(in) :: MPI_COMM_FESOM, myDim_nod2D, eDim_nod2D
@@ -42,7 +42,7 @@ end module recom_atbox_module
 !     mass of the dry atmosphere = 5.1352e18 kg (Trenberth & Smith 2005, doi:10.1175/JCLI-3299.1)
 !     mean density of air = 0.02897 kg / mol (https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html)
 !     => total molecular inventory of the dry atmosphere: moles_atm = 1.7726e20 mol == constant.
-!     mol_co2atm    = mol_co2atm    - total_co2flux    * dt 
+!     mol_co2atm    = mol_co2atm    - total_co2flux    * dt
 !     Atmospheric mixing ratios in ppm
 !     x_co2atm(1)    = mol_co2atm    / mol_allatm * 1.e6 ! ppm
       x_co2atm(1) = x_co2atm(1) - total_co2flux / mol_allatm * dt * 1.e6
@@ -58,7 +58,7 @@ end module recom_atbox_module
                                     areasvol)
 
 !       Atmospheric carbon-13 budget (mol)
-!       mol_co2atm_13 = mol_co2atm_13 - total_co2flux_13 * dt 
+!       mol_co2atm_13 = mol_co2atm_13 - total_co2flux_13 * dt
 !       Budget in terms of the 13C / 12C volume mixing ratio
 !       x_co2atm_13(1) = mol_co2atm_13 / mol_allatm * 1.e6
         x_co2atm_13(1) = x_co2atm_13(1) - total_co2flux_13 / mol_allatm * dt * 1.e6

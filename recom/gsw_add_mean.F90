@@ -4,7 +4,7 @@ pure subroutine gsw_add_mean (data_in, data_out)
 !
 ! Replaces NaN's with non-nan mean of the 4 adjacent neighbours
 !
-! data_in   : data set of the 4 adjacent neighbours   
+! data_in   : data set of the 4 adjacent neighbours
 !
 ! data_out : non-nan mean of the 4 adjacent neighbours     [unitless]
 !--------------------------------------------------------------------------

@@ -1,12 +1,12 @@
 !==========================================================================
-elemental function gsw_sa_from_sp (sp, p, long, lat)       
+elemental function gsw_sa_from_sp (sp, p, long, lat)
 !==========================================================================
 !
 ! Calculates Absolute Salinity, SA, from Practical Salinity, SP
 !
 ! sp     : Practical Salinity                              [unitless]
 ! p      : sea pressure                                    [dbar]
-! long   : longitude                                       [DEG E]     
+! long   : longitude                                       [DEG E]
 ! lat    : latitude                                        [DEG N]
 !
 ! gsw_sa_from_sp   : Absolute Salinity                     [g/kg]
@@ -22,7 +22,7 @@ use gsw_mod_kinds
 
 implicit none
 
-real (r8), intent(in) :: sp, p, long, lat       
+real (r8), intent(in) :: sp, p, long, lat
 
 real (r8) :: gsw_sa_from_sp
 

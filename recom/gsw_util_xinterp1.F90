@@ -2,10 +2,10 @@
 pure function gsw_util_xinterp1 (x, y, n, x0)
 !==========================================================================
 !
-! Linearly interpolate a real array   
+! Linearly interpolate a real array
 !
-! x      : x array (must be monotonic)               
-! y      : y array     
+! x      : x array (must be monotonic)
+! y      : y array
 ! n      : length of X and Y arrays
 ! x0     : value to be interpolated
 !

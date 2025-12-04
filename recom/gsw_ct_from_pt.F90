@@ -1,8 +1,8 @@
 !==========================================================================
-elemental function gsw_ct_from_pt (sa, pt) 
+elemental function gsw_ct_from_pt (sa, pt)
 !==========================================================================
 !
-! Calculates Conservative Temperature from potential temperature of seawater  
+! Calculates Conservative Temperature from potential temperature of seawater
 !
 ! sa      : Absolute Salinity                              [g/kg]
 ! pt      : potential temperature with                     [deg C]
@@ -17,7 +17,7 @@ use gsw_mod_kinds
 
 implicit none
 
-real (r8), intent(in) :: sa, pt 
+real (r8), intent(in) :: sa, pt
 
 real (r8) :: gsw_ct_from_pt
 

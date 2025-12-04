@@ -25,7 +25,7 @@ module recom_sms_module
             real(kind=8),  intent(in) :: Loc_slp     ![Pa] sea-level pressure
             real(kind=8),  intent(in) :: Latd(1)     ! latitude in degree
 
-            real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness 
+            real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness
             real(kind=8),  intent(in),    dimension(nl - 1) :: Temp            !< [degrees C] Ocean temperature
             real(kind=8),  intent(in),    dimension(nl - 1) :: Sali_depth      !< NEW MOCSY Salinity for the whole water column
             real(kind=8),  intent(in),    dimension(nl)     :: zF              !< [m] Depth of fluxes
@@ -72,7 +72,7 @@ subroutine REcoM_sms(n, Nn, state, thick, SurfSR, sms, Temp, Sali_depth, CO2_wat
     real(kind=8),  intent(in)    :: Loc_slp     ![Pa] sea-level pressure
     real(kind=8),  intent(in)    :: Latd(1)     ! latitude in degree
 
-    real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness 
+    real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness
     real(kind=8),  intent(in),    dimension(nl - 1) :: Temp            !< [degrees C] Ocean temperature
     real(kind=8),  intent(in),    dimension(nl - 1) :: Sali_depth      !< NEW MOCSY Salinity for the whole water column
     real(kind=8),  intent(in),    dimension(nl)   :: zF              !< [m] Depth of fluxes
@@ -108,7 +108,7 @@ subroutine REcoM_sms(n, Nn, state, thick, SurfSR, sms, Temp, Sali_depth, CO2_wat
     real(kind=8)                    :: REcoM_Alk_depth(1)
     real(kind=8)                    :: REcoM_Si_depth(1)
     real(kind=8)                    :: REcoM_Phos_depth(1)
-    real(kind=8)                    :: mocsy_step_per_day 
+    real(kind=8)                    :: mocsy_step_per_day
     real(kind=8), dimension(nl - 1) :: Sink
 
 ! --- Biogeochemical state variables ---
@@ -2339,7 +2339,7 @@ real(kind=8) :: &
                     print*, '  PARave =', PARave
                     print*, '  pMax_phaeo =', pMax_phaeo
                     stop
-                end if 
+                end if
             endif
 
         !===============================================================================
@@ -2517,7 +2517,7 @@ real(kind=8) :: &
         !===============================================================================
         ! MESOZOOPLANKTON GRAZING
         !===============================================================================
-        ! Simulates mesozooplankton grazing on multiple prey types using a Holling 
+        ! Simulates mesozooplankton grazing on multiple prey types using a Holling
         ! Type III functional response with food-dependent preferences and efficiency.
         !
         ! This module calculates:
@@ -2992,7 +2992,7 @@ real(kind=8) :: &
            !===========================================================================
            ! 4. CARBON ASSIMILATION
            !===========================================================================
-           ! Converts grazed nitrogen to assimilated carbon flux using prey-specific 
+           ! Converts grazed nitrogen to assimilated carbon flux using prey-specific
            ! C:N ratios and constant grazing efficiency.
            !
            ! Variables:
@@ -3074,7 +3074,7 @@ real(kind=8) :: &
            !===========================================================================
            ! 1. FOOD AVAILABILITY AND GRAZING PREFERENCES
            !===========================================================================
-           ! Calculates which phytoplankton prey types are available and their 
+           ! Calculates which phytoplankton prey types are available and their
            ! relative preferences.
            ! Two modes:
            !   - Variable preferences: Adjust based on relative prey abundance
@@ -4007,7 +4007,7 @@ real(kind=8) :: &
                                                                 ) * dt_b + sms(k,idic)
 
 !  if((Latd(1)<-45.0) .and. ((state(k,idic)+sms(k,idic))>2500)) then
-!     !co2flux(1)=0.0  
+!     !co2flux(1)=0.0
 !      print*,'ERROR: strange dic !'
 !      print*,'state(k,idic): ', state(k,idic)
 !      print*,'sms Cphot: ', -Cphot*PhyC
@@ -5544,7 +5544,7 @@ real(kind=8) :: &
                 - kScavFe * DetC * FreeFe                                  & ! Slow-sinking detritus
                 - kScavFe * DetZ2C * FreeFe * is_3zoo2det                  & ! Fast-sinking detritus
                                                                           ) * dt_b + sms(k,ife)
- 
+
         !===============================================================================
         ! 34. PHYTOPLANKTON CALCITE (PhyCalc)
         !===============================================================================

@@ -1,5 +1,5 @@
 !> \file gasx.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with routines needed to compute gas exchange (flxco2, scco2, atmospheric xCO2 and pCO2)
 MODULE gasx
 CONTAINS
@@ -15,7 +15,7 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   !
   !     INPUT variables:
   !     ================
-  !     kw660   = gas transfer velocity (piston velocity) for CO2 [m/s] 
+  !     kw660   = gas transfer velocity (piston velocity) for CO2 [m/s]
   !               without T-dependant Schmidt number correction
   !               BUT accounting for sea ice fraction (See OCMIP2 design & HOWTO documents for details)
   !     xco2    = atmospheric mole fraction of CO2 [ppm]
@@ -73,7 +73,7 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2
   !     ---------
-  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -90,18 +90,18 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   !     ----------
   !     lat:  latitude in degrees North
   !     ----------
-  !        lat and lon are optional; they may be used when optS is "Sabs" as conversion parameters 
+  !        lat and lon are optional; they may be used when optS is "Sabs" as conversion parameters
   !           from Absolute to Practical Salinity.
   !
-  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient 
-  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition, 
-  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat' 
-  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location. 
+  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient
+  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition,
+  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat'
+  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location.
   !
   !        Alternative when optS is 'Sabs' :
   !        -------------------------------
   !        When silicate and phosphate concentrations are known, nitrate concentration is inferred from phosphate
-  !        (using Redfield ratio), then practical salinity is computed from absolute salinity, 
+  !        (using Redfield ratio), then practical salinity is computed from absolute salinity,
   !        total alcalinity (alk), DIC (dic), silicate (sil) and phosphate (phos).
   !        In that case, do not pass optional parameter 'lon' an 'lat'
   !
@@ -148,7 +148,7 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   !>     number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> salinity <b>[psu]</b>
@@ -167,10 +167,10 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: xco2
   !> atmospheric pressure <b>[atm]</b>
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: Patm
-  !> thickness of the surface layer of the model <b>[m]</b> 
+  !> thickness of the surface layer of the model <b>[m]</b>
   REAL(kind=rx), INTENT(in) :: dz1
 
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
 !f2py character*6 optional, intent(in) :: optCON='mol/m3'
   CHARACTER(6), OPTIONAL, INTENT(in) :: optCON
@@ -181,18 +181,18 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
 !f2py character*2 optional, intent(in) :: optP='m'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='u74'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -247,12 +247,12 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   REAL(kind=r8) :: tmp, co2star, co2starair, kwco2 ! K0
   REAL(kind=rx), DIMENSION(N) :: pCO2atm, fCO2atm
   REAL(kind=rx), DIMENSION(N) :: depth0, lat0
- 
+
   ! local 1-long array version of scalar variables
   REAL(kind=r8), DIMENSION(1) :: sa1, s1, p1, lon1, lat1
   REAL(kind=r8), DIMENSION(1) :: tc1, ta1, sit1, nt1
-  
-  ! practical salinity [psu] computed when absolute saliniry is given 
+
+  ! practical salinity [psu] computed when absolute saliniry is given
   REAL(kind=rx), DIMENSION(N) :: salprac
   REAL(kind=rx), DIMENSION(N) :: kspc_out    ! NEW
 
@@ -270,7 +270,7 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   CHARACTER(4) :: opS
 
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaration
 !        Those !f2py statements should be consistent w/ defaults below
   IF (PRESENT(optCON)) THEN
@@ -336,7 +336,7 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
   IF (TRIM(opS) == 'Sprc') THEN
     salprac(:) = sal(:)
   ENDIF
-  
+
 ! Compute pCO2atm [uatm] from xCO2 [ppm], atmospheric pressure [atm], & vapor pressure of seawater
 ! pCO2atm = (Patm - pH20(i)) * xCO2,   where pH20 is the vapor pressure of seawater [atm]
   CALL x2pCO2atm(xco2, temp, salprac, Patm, N, pco2atm)
@@ -368,7 +368,7 @@ SUBROUTINE flxco2(co2flux, co2ex, dpco2,                                        
         co2starair = K0(i) * DBLE(fco2atm(i)) * 1.0e-6_r8 * DBLE(rhoSW(i)) !Equil. [CO2*] for atm CO2 at Patm & sfc-water T,S [mol/m3]
         co2star = DBLE(co2(i))                                          !Oceanic [CO2*] in [mol/m3] from vars.f90
         co2flux(i) = SGLE(kwco2 * (co2starair - co2star))               !Air-sea CO2 flux [mol/(m2 * s)]
-!       the conversion from co2flux to impact on dic is done in recom_forcing/recom_sms 
+!       the conversion from co2flux to impact on dic is done in recom_forcing/recom_sms
         co2ex(i) = co2flux(i) ! / dz1                                     !Change in sfc DIC due to gas exchange [mol/[m3 * s)]
         dpco2(i) = pco2(i) - pco2atm(i)                                 !Delta pCO2 (oceanic - atmospheric pCO2) [uatm]
      ENDIF
@@ -391,7 +391,7 @@ SUBROUTINE pCO2atm2xCO2(pCO2atm, temp, salt, Patm, N, xCO2)
   INTEGER, intent(in) :: N
 
 ! INPUT variables
-  !> atmospheric partial pressure of CO2 [uatm] 
+  !> atmospheric partial pressure of CO2 [uatm]
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: pCO2atm
   !> in situ temperature [C]
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: temp
@@ -461,7 +461,7 @@ SUBROUTINE pistonvel(windspeed, Fice, N, kw660)
 
 ! Conversion factor to convert from cm/h to m/s
   xfac = 0.01d0 / 3600d0
-  
+
   DO i = 1,N
      kw660(i) = a * windspeed(i)**2 * (1.0d0 - Fice(i)) * xfac
   END DO
@@ -483,7 +483,7 @@ FUNCTION sccfc11(temp)
    REAL(kind=r8) :: sccfc11
 
    sccfc11 = 3579.2_r8 - 222.63_r8*temp + 7.5749_r8*temp**2 - 0.14595_r8*temp**3  + 0.0011874_r8*temp**4
-   
+
    RETURN
 END FUNCTION sccfc11
 
@@ -501,7 +501,7 @@ FUNCTION sccfc12(Tc)
    REAL(kind=r8) :: sccfc12
 
    sccfc12 = 3828.1_r8 - 249.86_r8*Tc + 8.7603_r8*Tc**2 - 0.1716_r8*Tc**3   + 0.001408_r8*Tc**4
-      
+
    RETURN
 END FUNCTION sccfc12
 
@@ -519,7 +519,7 @@ FUNCTION scsf6(Tc)
    REAL(kind=r8) :: scsf6
 
    scsf6 = 3177.5_r8 - 200.57_r8*Tc + 6.8865_r8*Tc**2 - 0.13335_r8*Tc**3 + 0.0010877_r8*Tc**4
-      
+
    RETURN
 END FUNCTION scsf6
 
@@ -583,7 +583,7 @@ SUBROUTINE x2pCO2atm(xCO2, temp, salt, Patm, N, pCO2atm)
 !f2py optional , depend(temp) :: n=len(temp)
 
 ! OUTPUT variables:
-  !> oceanic partial pressure of CO2 [uatm] 
+  !> oceanic partial pressure of CO2 [uatm]
   REAL(kind=rx), INTENT(out), DIMENSION(N) :: pCO2atm
 
 ! LOCAL variables:
@@ -606,10 +606,10 @@ SUBROUTINE x2pCO2atm(xCO2, temp, salt, Patm, N, pCO2atm)
   RETURN
 END SUBROUTINE x2pCO2atm
 
-!>    Compute solubilities of CFC-11, CFC-12, SF6, CO2, and N20 at 1 atm pressure, i.e., Phi0 (atm), in mol L-1 atm-1 
+!>    Compute solubilities of CFC-11, CFC-12, SF6, CO2, and N20 at 1 atm pressure, i.e., Phi0 (atm), in mol L-1 atm-1
 SUBROUTINE phizero(gasname, temp, salt, N, phi0)
   !    Purpose:
-  !    Compute solubilities of CFC-11, CFC-12, SF6, CO2, and N20 at 1 atm pressure, i.e., Phi0 (atm), in mol L-1 atm-1 
+  !    Compute solubilities of CFC-11, CFC-12, SF6, CO2, and N20 at 1 atm pressure, i.e., Phi0 (atm), in mol L-1 atm-1
   !    Phi0 = K0 * Cf * (Pa0 - pH20),
   !    where
   !    * K0 is the solubility of a given gas,
@@ -620,15 +620,15 @@ SUBROUTINE phizero(gasname, temp, salt, N, phi0)
   !    Usage: this routine must be called once for each gas, e.g.,
   !           call phizero('co2', temp, salt, 20, phi0_co2)
   !           call phizero('sf6', temp, salt, 20, phi0_sf6)
-  
+
   ! James Orr, LSCE/IPSL, CEA-CNRS-UVSQ, Université Paris Saclay, France
   ! 5 August 2016
-  
+
   USE msingledouble
   IMPLICIT NONE
 
   INTEGER, PARAMETER :: ngas = 5
-  
+
   !> number of records
   INTEGER, intent(in) :: N
 
@@ -642,7 +642,7 @@ SUBROUTINE phizero(gasname, temp, salt, N, phi0)
   CHARACTER(*), INTENT(in) :: gasname
 
 ! OUTPUT variables:
-  !> solubility of gas in seawater, Phi0 = K0 * Cf * (Pa0 - pH20), with units of [mol L-1 atm-1] 
+  !> solubility of gas in seawater, Phi0 = K0 * Cf * (Pa0 - pH20), with units of [mol L-1 atm-1]
   REAL(kind=r8), INTENT(out), DIMENSION(N) ::  phi0
 
 ! LOCAL variables:
@@ -692,10 +692,10 @@ SUBROUTINE phizero(gasname, temp, salt, N, phi0)
           STOP
   END SELECT
 
-! Compute phi0  
+! Compute phi0
   DO i = 1, N
       tk = 273.15d0 + DBLE(temp(i))     !Absolute temperature (Kelvin)
-      dsalt = DBLE(salt(i))             
+      dsalt = DBLE(salt(i))
       tk100 = tk/100.d0
       ! Phi0 for the chosen gas:
       ln_phi0 = a(ig,1) + a(ig,2)/tk100 + a(ig,3)*log(tk100) + a(ig,4)*tk100**2  &
@@ -706,28 +706,28 @@ SUBROUTINE phizero(gasname, temp, salt, N, phi0)
   RETURN
 END SUBROUTINE phizero
 
-!>    Compute K' of CFC-11, CFC-12, and SF6; units are in mol L-1 atm-1 
+!>    Compute K' of CFC-11, CFC-12, and SF6; units are in mol L-1 atm-1
 SUBROUTINE kprime(gasname, temp, salt, N, kp)
   !    Purpose:
-  !    Compute K' of CFC-11, CFC-12, and SF6; units are in mol L-1 atm-1 
+  !    Compute K' of CFC-11, CFC-12, and SF6; units are in mol L-1 atm-1
   !    To avoid confusion this can be used directly in the ocean solubility equation
   !    (Eq 21 from Orr et al., 2016) and in the atmospheric saturation equation (Eq 14),
-  !    The atmospheric saturation would then need to separately account for atmospheric pressure 
+  !    The atmospheric saturation would then need to separately account for atmospheric pressure
   !    and humidity (vapress routine).
 
   !    Usage: this routine should be called once for each gas, e.g.,
   !           call kprime('cfc11', temp, salt, 20, kp_cfc11)
   !           call kprime('cfc12', temp, salt, 20, kp_cfc12)
   !           call kprime('sf6',   temp, salt, 20, kp_sf6)
-  
+
   ! James Orr, LSCE/IPSL, CEA-CNRS-UVSQ, Université Paris Saclay, France
   ! 8 August 2016
-  
+
   USE msingledouble
   IMPLICIT NONE
 
   INTEGER, PARAMETER :: ngas = 3
-  
+
   !> number of records
   INTEGER, intent(in) :: N
 
@@ -742,11 +742,11 @@ SUBROUTINE kprime(gasname, temp, salt, N, kp)
   CHARACTER(*), INTENT(in) :: gasname
 
 ! OUTPUT variables:
-  !> solubility of gas in seawater, in units of [mol L-1 atm-1] 
+  !> solubility of gas in seawater, in units of [mol L-1 atm-1]
   REAL(kind=r8), INTENT(out), DIMENSION(N) ::  kp
 
 ! LOCAL variables:
-  ! Coefficients to compute K' 
+  ! Coefficients to compute K'
   REAL(kind=r8), DIMENSION(6,ngas) :: Kpcoeffs  !Array of coeffs (a1, a2, a3, b1, b2, b3) times 3 gases
   REAL(kind=r8), DIMENSION(ngas,6) :: a         !Transpose of above array
   ! Absolute temperature and salinity
@@ -785,10 +785,10 @@ SUBROUTINE kprime(gasname, temp, salt, N, kp)
           STOP
   END SELECT
 
-! Compute K' 
+! Compute K'
   DO i = 1, N
       tk = 273.15d0 + DBLE(temp(i))     !Absolute temperature (Kelvin)
-      dsalt = DBLE(salt(i))             
+      dsalt = DBLE(salt(i))
       tk100 = tk/100.d0
       ! Phi0 for the chosen gas:
       ln_kp = a(ig,1) + a(ig,2)/tk100 + a(ig,3)*log(tk100)                   &
@@ -799,24 +799,24 @@ SUBROUTINE kprime(gasname, temp, salt, N, kp)
   RETURN
 END SUBROUTINE kprime
 
-!>    Compute K0 of CO2 and N20; units are in mol L-1 atm-1 
+!>    Compute K0 of CO2 and N20; units are in mol L-1 atm-1
 SUBROUTINE kzero(gasname, temp, salt, N, k0)
   !    Purpose:
-  !    Compute K0 of CO2 and N20; units are in mol L-1 atm-1 
+  !    Compute K0 of CO2 and N20; units are in mol L-1 atm-1
   !    Uses same form of the equation 24 (given for K') in Orr et al. (2016)
 
   !    Usage: this routine should be called once for each gas, e.g.,
   !           call kzero('co2', temp, salt, 20, k0_co2)
   !           call kzero('n2o', temp, salt, 20, kp_n2o)
-  
+
   ! James Orr, LSCE/IPSL, CEA-CNRS-UVSQ, Université Paris Saclay, France
   ! 8 August 2016
-  
+
   USE msingledouble
   IMPLICIT NONE
 
   INTEGER, PARAMETER :: ngas = 2
-  
+
   !> number of records
   INTEGER, intent(in) :: N
 
@@ -831,11 +831,11 @@ SUBROUTINE kzero(gasname, temp, salt, N, k0)
   CHARACTER(*), INTENT(in) :: gasname
 
 ! OUTPUT variables:
-  !> solubility of gas in seawater, in units of [mol L-1 atm-1] 
+  !> solubility of gas in seawater, in units of [mol L-1 atm-1]
   REAL(kind=r8), INTENT(out), DIMENSION(N) ::  k0
 
 ! LOCAL variables:
-  ! Coefficients to compute K' 
+  ! Coefficients to compute K'
   REAL(kind=r8), DIMENSION(6,ngas) :: K0coeffs  !Array of coeffs (a1, a2, a3, b1, b2, b3) times 3 gases
   REAL(kind=r8), DIMENSION(ngas,6) :: a         !Transpose of above array
   ! Absolute temperature and salinity
@@ -873,7 +873,7 @@ SUBROUTINE kzero(gasname, temp, salt, N, k0)
 ! Compute K0
   DO i = 1, N
       tk = 273.15d0 + DBLE(temp(i))     !Absolute temperature (Kelvin)
-      dsalt = DBLE(salt(i))             
+      dsalt = DBLE(salt(i))
       tk100 = tk/100.d0
       ! k0 for the chosen gas:
       ln_k0 = a(ig,1) + a(ig,2)/tk100 + a(ig,3)*log(tk100)                   &
@@ -903,7 +903,7 @@ SUBROUTINE vapress(temp, salt, N, vpsw)
 !f2py optional , depend(temp) :: n=len(temp)
 
 ! OUTPUT variables:
-  !> vapor pressure of seawater [atm] 
+  !> vapor pressure of seawater [atm]
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: vpsw
 
 ! LOCAL variables:
@@ -927,7 +927,7 @@ SUBROUTINE o2sato(T, S, N, o2sat_molm3)
   !
   !    ********************************************************************
   !    Computes the oxygen saturation concentration at 1 atm total pressure
-  !    in mol/m^3 given sea surface temperature T (deg C) and salinity S (permil) 
+  !    in mol/m^3 given sea surface temperature T (deg C) and salinity S (permil)
   !
   !    From: Garcia & Gordon (1992) Oxygen solubility in seawater: better fitting equations,
   !          Limnol. Oceanogr., 37(6), 1307-1312.
@@ -940,7 +940,7 @@ SUBROUTINE o2sato(T, S, N, o2sat_molm3)
   !
   !    'o2sat' is fit between T(freezing) <= T <= 40(deg C)  and  0 <= S <= 42 permil
   !
-  !    CHECK VALUE:  T = 10.0 deg C, S = 35.0 permil, 
+  !    CHECK VALUE:  T = 10.0 deg C, S = 35.0 permil,
   !    o2sat_molm3 = 0.282015 mol/m^3
   !    ********************************************************************
 
@@ -958,7 +958,7 @@ SUBROUTINE o2sato(T, S, N, o2sat_molm3)
 !f2py optional , depend(temp) :: n=len(temp)
 
 ! OUTPUT variables:
-  !> O2 saturation concentration of seawater [mol/m3] 
+  !> O2 saturation concentration of seawater [mol/m3]
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: o2sat_molm3
 
 ! LOCAL variables:
@@ -966,15 +966,15 @@ SUBROUTINE o2sato(T, S, N, o2sat_molm3)
   REAL(kind=r8) :: B0, B1, B2, B3
   REAL(kind=r8) :: C0
   REAL(kind=r8) :: tmp
-  REAL(kind=r8) :: o2sat_mlL 
+  REAL(kind=r8) :: o2sat_mlL
   REAL(kind=r8) :: tt, tk, ts, ts2, ts3, ts4, ts5
   INTEGER :: i
-  
+
   DATA A0/ 2.00907_r8   /, A1/ 3.22014_r8   /, A2/ 4.05010_r8 /,  &
        A3/ 4.94457_r8   /, A4/-2.56847E-1_r8/, A5/ 3.88767_r8 /
   DATA B0/-6.24523E-3_r8/, B1/-7.37614E-3_r8/, B2/-1.03410E-2_r8/, B3/-8.17083E-3_r8/
   DATA C0/-4.88682E-7_r8/
-      
+
   DO i = 1, N
       tt  = 298.15_r8 - T(i)
       tk  = 273.15_r8 + T(i)
@@ -985,7 +985,7 @@ SUBROUTINE o2sato(T, S, N, o2sat_molm3)
       ts4 = ts**4
       ts5 = ts**5
 
-!     O2 saturation concentration (ml/L) 
+!     O2 saturation concentration (ml/L)
       tmp  = A0 + A1*ts + A2*ts2 + A3*ts3 + A4*ts4 + A5*ts5  &
                + S(i)*(B0 + B1*ts + B2*ts2 + B3*ts3)         &
                + C0*(S(i)*S(i))
@@ -994,7 +994,7 @@ SUBROUTINE o2sato(T, S, N, o2sat_molm3)
 !     Convert from ml/L to mol/m^3
       o2sat_molm3(i) = o2sat_mlL / 22391.6_r8*1000.0_r8
   END DO
-   
+
   RETURN
 END SUBROUTINE o2sato
 
@@ -1062,15 +1062,15 @@ SUBROUTINE o2flux(T, S, kw660, ppo, o2,  N, o2ex)
   REAL(kind=r8) :: kwo2, o2sat
   REAL(kind=r8), DIMENSION(N) :: o2sat_1atm
   INTEGER :: i
-  
-! Dissolved O2 saturation concentraion [mol/m^3] (in equilibrium with atmosphere) at 1 atm pressure 
+
+! Dissolved O2 saturation concentraion [mol/m^3] (in equilibrium with atmosphere) at 1 atm pressure
   CALL o2sato(T, S, N, o2sat_1atm)
 !jh  CALL o2sato(SGLE(T), SGLE(S), N, o2sat_1atm)
 
   DO i = 1, N
 !     Transfer velocity for O2 in m/s [4]
       kwo2 = (kw660(i) * (660._r8/sco2(T(i)))**0.5)
-      
+
 !     O2 saturation concentration at given atm pressure [3]
       o2sat = o2sat_1atm(i) * ppo(i)
 
@@ -1102,4 +1102,3 @@ END MODULE gasx
 !
 !  Weiss, R. F. and Price, B. A.: Nitrous oxide solubility in water and seawater,
 !  Mar. Chem., 8, 347–359, 1980.
-
