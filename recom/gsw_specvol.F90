@@ -1,8 +1,8 @@
 !==========================================================================
 elemental function gsw_specvol (sa, ct, p)
 !==========================================================================
-! 
-!  Calculates specific volume from Absolute Salinity, Conservative 
+!
+!  Calculates specific volume from Absolute Salinity, Conservative
 !  Temperature and pressure, using the computationally-efficient
 !  polynomial expression for specific volume (Roquet et al., 2014).
 !
@@ -43,7 +43,7 @@ gsw_specvol = v000 + xs*(v010 + xs*(v020 + xs*(v030 + xs*(v040 + xs*(v050 &
     + v501*ys)))) + z*(v002 + xs*(v012 + xs*(v022 + xs*(v032 + v042*xs))) &
     + ys*(v102 + xs*(v112 + xs*(v122 + v132*xs)) + ys*(v202 + xs*(v212 &
     + v222*xs) + ys*(v302 + v312*xs + v402*ys))) + z*(v003 + xs*(v013 &
-    + v023*xs) + ys*(v103 + v113*xs + v203*ys) + z*(v004 + v014*xs + v104*ys &  
+    + v023*xs) + ys*(v103 + v113*xs + v203*ys) + z*(v004 + v014*xs + v104*ys &
     + z*(v005 + v006*z)))))
 
 return

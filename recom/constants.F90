@@ -1,7 +1,7 @@
 !> \file constants.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with contants subroutine - computes carbonate system constants
-!! from S,T,P 
+!! from S,T,P
 MODULE mconstants
 CONTAINS
 !> Compute thermodynamic constants
@@ -62,7 +62,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2
   !     ---------
-  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -77,13 +77,13 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !     ---------
   !     lon:  longitude in degrees East
   !     ----------
-  !        Optional, it may be used along with latitude when optS is "Sabs" as conversion parameters 
+  !        Optional, it may be used along with latitude when optS is "Sabs" as conversion parameters
   !           from Absolute to Practical Salinity.
   !
-  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient 
-  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition, 
-  !        mainly silicate and nitrate concentration. When parameters 'lon' and 'lat' are given, 
-  !        absolute salinity conversion is based on WOA silicate concentration at given location. 
+  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient
+  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition,
+  !        mainly silicate and nitrate concentration. When parameters 'lon' and 'lat' are given,
+  !        absolute salinity conversion is based on WOA silicate concentration at given location.
   !
   !        When 'lon' and 'lat' are unknown, an arbitrary geographic point is chosen:
   !        which is mid equatorial Atlantic. Note that this implies an error on computed practical salinity up to 0.02 psu.
@@ -113,7 +113,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !>     number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> in <b>situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> in <b>situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) [degree C]
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> depth in <b>meters</b> (when optP='m') or <b>decibars</b> (when optP='db')
@@ -126,7 +126,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !> atmospheric pressure <b>[atm]</b>
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: Patm
 
-  !> for temp input, choose \b 'Tinsitu' for in situ Temp or 
+  !> for temp input, choose \b 'Tinsitu' for in situ Temp or
   !! \b 'Tpot' for potential temperature (in situ Temp is computed, needed for models)
   CHARACTER(7), INTENT(in) :: optT
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
@@ -134,7 +134,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
   !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='u74'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
@@ -143,7 +143,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) or \b 'w14' (Waters et al., 2014)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -163,13 +163,13 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: K1
   !> K2 for the dissociation of carbonic acid from Lueker et al. (2000) or Millero (2010), depending on optK1K2
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: K2
-  !> equilibrium constant for dissociation of boric acid 
+  !> equilibrium constant for dissociation of boric acid
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: Kb
   !> equilibrium constant for the dissociation of water (Millero, 1995)
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: Kw
   !> equilibrium constant for the dissociation of bisulfate (Dickson, 1990)
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: Ks
-  !> equilibrium constant for the dissociation of hydrogen fluoride 
+  !> equilibrium constant for the dissociation of hydrogen fluoride
   !! either from Dickson and Riley (1979) or from Perez and Fraga (1987), depending on optKf
   REAL(kind=r8), INTENT(out), DIMENSION(N) :: Kf
   !> solubility product for calcite (Mucci, 1983)
@@ -257,7 +257,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   DATA b2 /12*0.0_r8/
 
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
   IF (PRESENT(optB)) THEN
     opB = optB
@@ -348,7 +348,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
         tempis68  = (tempis - 0.0002_rx) / 0.99975_rx
      ELSE
         PRINT *,"optT must be either 'Tpot, 'Tinsitu' or 'Tcsv'"
-        PRINT *,"you specified optT =", trim(optT) 
+        PRINT *,"you specified optT =", trim(optT)
         STOP
      ENDIF
 
@@ -469,7 +469,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
           mb1 = -530.659d0*sqrts - 5.8210d0*s
           mc1 = -2.0664d0*sqrts
           pK1 = pK1o + ma1 + mb1*invtk + mc1*dlogtk
-          K1(i) = 10.0d0**(-pK1) 
+          K1(i) = 10.0d0**(-pK1)
 
           pK2o = 5143.692d0*invtk + 14.613358d0*dlogtk -90.18333d0
           ma2 = 21.3728d0*sqrts + 0.1218d0*s - (3.688e-4_r8)*s2
@@ -484,7 +484,7 @@ SUBROUTINE constants(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
           mb1 = -531.3642d0*sqrts - 5.713d0*s
           mc1 = -2.0669166d0*sqrts
           pK1 = pK1o + ma1 + mb1*invtk + mc1*dlogtk
-          K1(i) = 10.0d0**(-pK1) 
+          K1(i) = 10.0d0**(-pK1)
 
           pK2o = 5143.692d0*invtk + 14.613358d0*dlogtk -90.18333d0
           ma2 = 21.225890d0*sqrts + 0.12450870d0*s - (3.7243e-4_r8)*s2
@@ -769,7 +769,7 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2
   !     ---------
-  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -784,13 +784,13 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !     ---------
   !     lon:  longitude in degrees East
   !     ----------
-  !        Optional, it may be used along with latitude when optS is "Sabs" as conversion parameters 
+  !        Optional, it may be used along with latitude when optS is "Sabs" as conversion parameters
   !           from Absolute to Practical Salinity.
   !
-  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient 
-  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition, 
-  !        mainly silicate and nitrate concentration. When parameters 'lon' and 'lat' are given, 
-  !        absolute salinity conversion is based on WOA silicate concentration at given location. 
+  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient
+  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition,
+  !        mainly silicate and nitrate concentration. When parameters 'lon' and 'lat' are given,
+  !        absolute salinity conversion is based on WOA silicate concentration at given location.
   !
   !        When 'lon' and 'lat' are unknown, an arbitrary geographic point is chosen:
   !        which is mid equatorial Atlantic. Note that this implies an error on computed practical salinity up to 0.02 psu.
@@ -814,7 +814,7 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
 ! Input variables
   !>     number of records
   INTEGER, INTENT(in) :: N
-  !> in <b>situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> in <b>situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) [degree C]
   TYPE(DUAL_NUM), INTENT(in),    DIMENSION(N) :: temp
   !> depth in <b>meters</b> (when optP='m') or <b>decibars</b> (when optP='db')
@@ -828,7 +828,7 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !> atmospheric pressure <b>[atm]</b>
   TYPE(DUAL_NUM), INTENT(in), DIMENSION(N) :: Patm
 
-  !> for temp input, choose \b 'Tinsitu' for in situ Temp or 
+  !> for temp input, choose \b 'Tinsitu' for in situ Temp or
   !! \b 'Tpot' for potential temperature (in situ Temp is computed, needed for models)
   CHARACTER(7), INTENT(in) :: optT
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
@@ -836,16 +836,16 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
   !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='l10'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -865,13 +865,13 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   TYPE(DUAL_NUM), INTENT(out), DIMENSION(N) :: K1
   !> K2 for the dissociation of carbonic acid from Lueker et al. (2000) or Millero (2010), depending on optK1K2
   TYPE(DUAL_NUM), INTENT(out), DIMENSION(N) :: K2
-  !> equilibrium constant for dissociation of boric acid 
+  !> equilibrium constant for dissociation of boric acid
   TYPE(DUAL_NUM), INTENT(out), DIMENSION(N) :: Kb
   !> equilibrium constant for the dissociation of water (Millero, 1995)
   TYPE(DUAL_NUM), INTENT(out), DIMENSION(N) :: Kw
   !> equilibrium constant for the dissociation of bisulfate (Dickson, 1990)
   TYPE(DUAL_NUM), INTENT(out), DIMENSION(N) :: Ks
-  !> equilibrium constant for the dissociation of hydrogen fluoride 
+  !> equilibrium constant for the dissociation of hydrogen fluoride
   !! either from Dickson and Riley (1979) or from Perez and Fraga (1987), depending on optKf
   TYPE(DUAL_NUM), INTENT(out), DIMENSION(N) :: Kf
   !> solubility product for calcite (Mucci, 1983)
@@ -961,7 +961,7 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
   DATA b2 /12*0.0_r8/
 
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
   IF (PRESENT(optB)) THEN
     opB = optB
@@ -1055,7 +1055,7 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
         tempis68  = (tempis - 0.0002_r8) / 0.99975_r8
      ELSE
         PRINT *,"optT must be either 'Tpot, 'Tinsitu' or 'Tcsv'"
-        PRINT *,"you specified optT =", trim(optT) 
+        PRINT *,"you specified optT =", trim(optT)
         STOP
      ENDIF
 
@@ -1180,7 +1180,7 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
 !         mb1 = -531.095d0*sqrts - 5.7789d0*s
 !         mc1 = -2.0663d0*sqrts
 !         pK1 = pK1o + ma1 + mb1*invtk + mc1*dlogtk
-!         K1(i) = ten**(-pK1) 
+!         K1(i) = ten**(-pK1)
 
 !         pK2o = 5143.692d0*invtk + 14.613358d0*dlogtk -90.18333d0
 !         ma2 = 21.5724d0*sqrts + 0.1212d0*s - (3.714e-4)*s2
@@ -1195,7 +1195,7 @@ SUBROUTINE constants_DNAD(K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa,  &
           mb1 = -530.659d0*sqrts - 5.8210d0*s
           mc1 = -2.0664d0*sqrts
           pK1 = pK1o + ma1 + mb1*invtk + mc1*dlogtk
-          K1(i) = ten**(-pK1) 
+          K1(i) = ten**(-pK1)
 
           pK2o = 5143.692d0*invtk + 14.613358d0*dlogtk -90.18333d0
           ma2 = 21.3728d0*sqrts + 0.1218d0*s - (3.688e-4)*s2

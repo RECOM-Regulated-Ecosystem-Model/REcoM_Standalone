@@ -1,5 +1,5 @@
 !> \file p2fCO2.f90
-!! \BRIEF 
+!! \BRIEF
 !>    Module with p2fCO2 subroutine - compute fCO2 from pCO2, in situ T, atm pressure, hydrostatic pressure
 MODULE mp2fCO2
 CONTAINS
@@ -32,7 +32,7 @@ SUBROUTINE p2fCO2(pCO2, temp, Patm, p, N, fCO2)
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: p
 
 ! OUTPUT variables:
-  !> fugacity of CO2 [uatm] 
+  !> fugacity of CO2 [uatm]
   REAL(kind=rx), INTENT(out), DIMENSION(N) :: fCO2
 
 ! LOCAL variables:
@@ -60,7 +60,7 @@ SUBROUTINE p2fCO2(pCO2, temp, Patm, p, N, fCO2)
 !    x2 = 1 - x1 = 1 - xCO2 (it is very close to 1, but not quite)
 !    Let's assume that xCO2 = pCO2. Resulting fugcoeff is identical to 8th digit after the decimal.
      xCO2approx = dpCO2 * 1.e-6_r8
-     xc2 = (1.0d0 - xCO2approx)**2 
+     xc2 = (1.0d0 - xCO2approx)**2
      fugcoeff = EXP( Ptot*(B + 2.0d0*xc2*Del)/(Rgas_atm*tk) )
      dfCO2 = dpCO2 * fugcoeff
      fCO2(i) = SGLE(dfCO2)

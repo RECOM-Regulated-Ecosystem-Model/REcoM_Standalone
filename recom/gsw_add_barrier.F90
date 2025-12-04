@@ -5,7 +5,7 @@ pure subroutine gsw_add_barrier (input_data, long, lat, long_grid, &
 !
 !  Adds a barrier through Central America (Panama) and then averages
 !  over the appropriate side of the barrier
-! 
+!
 !  data_in      : data                                            [unitless]
 !  long         : Long of data in decimal degs east               [ 0 ... +360 ]
 !  lat          : Lat of data in decimal degs north               [-90 ... +90 ]
@@ -14,7 +14,7 @@ pure subroutine gsw_add_barrier (input_data, long, lat, long_grid, &
 !  dlongs_grid  : Long difference of regular grid in decimal degs [ deg long ]
 !  dlats_grid   : Lat difference of regular grid in decimal degs  [ deg lat ]
 !
-! output_data   : average of data depending on which side of the 
+! output_data   : average of data depending on which side of the
 !                 Panama canal it is on                           [unitless]
 !--------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ else
    above_line(4) = 0
 end if
 
-call gsw_util_indx(longs_pan,npan,long_grid+dlong_grid,k)    ! the 2 & 3 points 
+call gsw_util_indx(longs_pan,npan,long_grid+dlong_grid,k)    ! the 2 & 3 points
 r = (long_grid+dlong_grid-longs_pan(k))/(longs_pan(k+1)-longs_pan(k))
 lats_line = lats_pan(k) + r*(lats_pan(k+1)-lats_pan(k))
 
@@ -77,7 +77,7 @@ else
    above_line(3) = 0
 end if
 
-nmean = 0 
+nmean = 0
 data_mean = 0.0_r8
 
 do kk = 1,4

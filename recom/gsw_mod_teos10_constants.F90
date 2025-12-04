@@ -19,7 +19,7 @@ real (r8), parameter :: rad2deg = 180.0_r8/pi
 real (r8), parameter :: gamma = 2.26e-7_r8
 
 !  cp0  =  The "specific heat" for use                         [ J/(kg K) ]
-!          with Conservative Temperature   
+!          with Conservative Temperature
 
 real (r8), parameter :: gsw_cp0 = 3991.86795711963_r8
 
@@ -61,7 +61,7 @@ real (r8), parameter :: gsw_soncl = 1.80655_r8
 
 real (r8), parameter :: gsw_valence_factor = 1.2452898_r8
 
-!  atomic_weight = mole-weighted atomic weight of sea salt of Reference 
+!  atomic_weight = mole-weighted atomic weight of sea salt of Reference
 !                  Composition                                    [ g/mol ]
 
 real (r8), parameter :: gsw_atomic_weight = 31.4038218_r8

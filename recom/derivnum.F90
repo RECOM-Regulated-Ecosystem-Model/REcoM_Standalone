@@ -1,12 +1,12 @@
 !> \file derivnum.f90
-!! \BRIEF 
-!> Module with derivnum subroutine - compute numerical derivatives of carbonate system vars 
+!! \BRIEF
+!> Module with derivnum subroutine - compute numerical derivatives of carbonate system vars
 !> with respect to DIC, Alk, total phosphorus, total silicon, T, S
 MODULE mderivnum
 CONTAINS
 
 
-!>    Computes numerical derivatives of standard carbonate system variables  
+!>    Computes numerical derivatives of standard carbonate system variables
 !>    (H+, pCO2, fCO2, CO2*, HCO3- and CO3--, OmegaA, OmegaC) with respect to one given input variable
 !!    Input variables are :
 !!    temperature, salinity, pressure,
@@ -17,7 +17,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
                      temp, sal, alk, dic, sil, phos, Patm, depth, lat, N, derivar,   &
                      optCON, optT, optP, optB, optK1K2, optKf, optGAS, optS, lon     )
   !   Purpose:
-  !     Computes numerical derivatives of standard carbonate system variables 
+  !     Computes numerical derivatives of standard carbonate system variables
   !     (H+, pCO2, fCO2, CO2*, HCO3- and CO3--, OmegaA, OmegaC) with respect to one given input variable
   !     FROM:
   !     temperature, salinity, pressure,
@@ -89,7 +89,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2
   !     ---------
-  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -107,15 +107,15 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
   !        Optional, it may be used along with latitude when optS is "Sabs".
   !        Then, they are parameters for conversion from Absolute to Practical Salinity.
   !
-  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient 
-  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition, 
-  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat' 
-  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location. 
+  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient
+  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition,
+  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat'
+  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location.
   !
   !        Alternative when optS is 'Sabs' :
   !        -------------------------------
   !        When silicate and phosphate concentrations are known, nitrate concentration is inferred from phosphate
-  !        (using Redfield ratio), then practical salinity is computed from absolute salinity, 
+  !        (using Redfield ratio), then practical salinity is computed from absolute salinity,
   !        total alcalinity (alk), DIC (dic), silicate (sil) and phosphate (phos).
   !        In that case, do not pass optional parameter 'lon'.
   !
@@ -138,14 +138,14 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
 
   USE msingledouble
   USE mvars
-  
+
   IMPLICIT NONE
 
 ! Input variables
   !>     number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: temp
   !> salinity <b>[psu] or [g/kg]</b>
@@ -168,7 +168,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
   ! ('alk', 'dic', 'pho', 'sil', 'tem', 'sal'
   CHARACTER(3), INTENT(in) ::  derivar
 
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
   CHARACTER(6), INTENT(in) :: optCON
   !> choose \b 'Tinsitu' for in situ temperature or \b 'Tpot' for potential temperature (in situ Temp is computed, needed for models)
@@ -176,18 +176,18 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
   CHARACTER(2), INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='u74'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -255,7 +255,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
   REAL(kind=rx), DIMENSION(1) :: aPatm
   REAL(kind=rx), DIMENSION(1) :: adepth
   REAL(kind=rx), DIMENSION(1) :: alat
- 
+
   ! value of small delta to apply to input variable when computing numerical derivative
   ! it is actually the ratio of delta relative to input variable value
   REAL(kind=rx) :: rel_delta_x
@@ -263,7 +263,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
   REAL(kind=rx) :: input_value
   REAL(kind=rx), DIMENSION(1) :: ainput1, ainput2
   REAL(kind=rx) :: abs_delta, dX
-  
+
 ! Arrays to pass optional arguments into or use defaults (Dickson et al., 2007)
   CHARACTER(3) :: opB
   CHARACTER(3) :: opK1K2
@@ -281,12 +281,12 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
 
 ! Multiplicative conversion factor to convert from umol/kg to optCON units (mol/kg or mol/m3)
   REAL(kind=rx) :: xfac
-  
+
 ! Reference value (typically global surface means, for calculating consistent absolute derivatives)
   REAL(kind=rx) :: ref_value
-  
+
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
   IF (PRESENT(optB)) THEN
     opB = optB
@@ -358,7 +358,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
           var_index = 7
           deriv_K   = .TRUE.
       CASE ('bt')
-          ! For Bt (propotional to S): call vars_pertK but treat slightly differently than other constants   
+          ! For Bt (propotional to S): call vars_pertK but treat slightly differently than other constants
           var_index = 8
           deriv_K   = .FALSE.
       CASE DEFAULT
@@ -366,9 +366,9 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
           PRINT *," or a 2-char dissoc. constant name : 'k0', 'k1', 'k2', 'kb', 'kw', 'ka', 'kc', 'bt'"
           STOP
   END SELECT
-  
+
   DO i = 1, N
-  
+
     ! Copy input values
     atemp(1)  = temp(i)
     asal(1)   = sal(i)
@@ -384,13 +384,13 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
         ! Choose value of absolute perturbation
         abs_delta = K_values(var_index) * 1.d-3   ! 0.1 percent of Kx value
         dx = 2 * abs_delta
-    
+
         ! Call routine vars_pertK() with request to increase one K value
         call vars_pertK(ph(:,1), pco2(:,1), fco2(:,1), co2(:,1), hco3(:,1), co3(:,1),      &
                         OmegaA(:,1), OmegaC(:,1),                                          &
                         atemp, asal, aalk, adic, asil, aphos, aPatm, adepth, alat, 1,      &
                         var_index, -abs_delta,                                             &
-                        optCON, optT, optP, opB, opK1K2, opKf, opGAS,  optS, lon           ) 
+                        optCON, optT, optP, opB, opK1K2, opKf, opGAS,  optS, lon           )
         ! Call routine vars_pertK() with request to decrease the same K value
         call vars_pertK(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),      &
                         OmegaA(:,2), OmegaC(:,2),                                          &
@@ -406,7 +406,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
        ELSE
           xfac = 1.025d-3 !Factor to convert umol/kg to mol/m3
        ENDIF
-       
+
         ! Select input value to vary slightly
         ! values for individual rel_delta_x determined by minimizing difference
         ! between numerical derivatives and mocsy-dnad automatic derivatives
@@ -437,7 +437,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
                 ref_value = 35.0d0 ! global surface mean (C)
                 rel_delta_x = 1.0d-4
             CASE (8)
-                ! For Bt (propotional to salinity)    
+                ! For Bt (propotional to salinity)
                 input_value = 0.0002414d0 * (sal(i)  / 1.80655d0) / 10.811d0
                 ref_value   = 0.0002414d0 * (35.0d0 / 1.80655d0) / 10.811d0
                 rel_delta_x = 1.0d-3
@@ -449,23 +449,23 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
         ainput2(1) = input_value + abs_delta
         ! Compute total absolue delta
         dx = ainput2(1) - ainput1(1)
-    
+
         ! Call routine vars() twice with two slightly different values of selected input
         SELECT CASE (var_index)
             CASE (1)
                 call vars(ph(:,1), pco2(:,1), fco2(:,1), co2(:,1), hco3(:,1), co3(:,1),               &
                                 OmegaA(:,1), OmegaC(:,1), BetaD, rhoSW, p, tempis,                    &
                                 atemp, asal, ainput1, adic, asil, aphos, aPatm, adepth, alat, 1,      &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon, verbose=.false. ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon, verbose=.false. )
                 call vars(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),               &
                                 OmegaA(:,2), OmegaC(:,2), BetaD, rhoSW, p, tempis,                    &
                                 atemp, asal, ainput2, adic, asil, aphos, aPatm, adepth, alat, 1,      &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon               ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon               )
             CASE (2)
                 call vars(ph(:,1), pco2(:,1), fco2(:,1), co2(:,1), hco3(:,1), co3(:,1),               &
                                 OmegaA(:,1), OmegaC(:,1), BetaD, rhoSW, p, tempis,                    &
                                 atemp, asal, aalk, ainput1, asil, aphos, aPatm, adepth, alat, 1,      &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon, verbose=.false. ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon, verbose=.false. )
                 call vars(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),               &
                                 OmegaA(:,2), OmegaC(:,2), BetaD, rhoSW, p, tempis,                    &
                                 atemp, asal, aalk, ainput2, asil, aphos, aPatm, adepth, alat, 1,      &
@@ -478,7 +478,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
                 call vars(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),               &
                                 OmegaA(:,2), OmegaC(:,2), BetaD, rhoSW, p, tempis,                    &
                                 atemp, asal, aalk, adic, asil, ainput2, aPatm, adepth, alat, 1,       &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             )
             CASE (4)
                 call vars(ph(:,1), pco2(:,1), fco2(:,1), co2(:,1), hco3(:,1), co3(:,1),               &
                                 OmegaA(:,1), OmegaC(:,1), BetaD, rhoSW, p, tempis,                    &
@@ -487,7 +487,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
                 call vars(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),               &
                                 OmegaA(:,2), OmegaC(:,2), BetaD, rhoSW, p, tempis,                    &
                                 atemp, asal, aalk, adic, ainput2, aphos, aPatm, adepth, alat, 1,      &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             )
             CASE (5)
                 call vars(ph(:,1), pco2(:,1), fco2(:,1), co2(:,1), hco3(:,1), co3(:,1),               &
                                 OmegaA(:,1), OmegaC(:,1), BetaD, rhoSW, p, tempis,                    &
@@ -496,7 +496,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
                 call vars(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),               &
                                 OmegaA(:,2), OmegaC(:,2), BetaD, rhoSW, p, tempis,                    &
                                 ainput2, asal, aalk, adic, asil, aphos, aPatm, adepth, alat, 1,       &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             )
             CASE (6)
                 call vars(ph(:,1), pco2(:,1), fco2(:,1), co2(:,1), hco3(:,1), co3(:,1),               &
                                 OmegaA(:,1), OmegaC(:,1), BetaD, rhoSW, p, tempis,                    &
@@ -505,7 +505,7 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
                 call vars(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),               &
                                 OmegaA(:,2), OmegaC(:,2), BetaD, rhoSW, p, tempis,                    &
                                 atemp, ainput2, aalk, adic, asil, aphos, aPatm, adepth, alat, 1,      &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon             )
             CASE (8)
                 ! For Bt (must treat with vars_pertK, but not quite like other 'constants' to account for proportionality to S)
                 ! Call routine vars_pertK() with request to increase one Bt value
@@ -513,20 +513,20 @@ SUBROUTINE derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              
                                 OmegaA(:,1), OmegaC(:,1),                                          &
                                 atemp, asal, aalk, adic, asil, aphos, aPatm, adepth, alat, 1,      &
                                 var_index, -abs_delta,                                             &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon            ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon            )
                 ! Call routine vars_pertK() with request to decrease the same Bt value
                 call vars_pertK(ph(:,2), pco2(:,2), fco2(:,2), co2(:,2), hco3(:,2), co3(:,2),      &
                                 OmegaA(:,2), OmegaC(:,2),                                          &
                                 atemp, asal, aalk, adic, asil, aphos, aPatm, adepth, alat, 1,      &
                                 var_index, abs_delta,                                              &
-                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon            ) 
+                                optCON, optT, optP, opB, opK1K2, opKf, opGAS, optS, lon            )
         END SELECT
     ENDIF
-    
+
     ! H+ concentration from ph
     h(1,1) = 10**(-ph(1,1))
     h(1,2) = 10**(-ph(1,2))
-    
+
     ! Compute derivatives (centered differences)
     dh_dx(i)      = (h(1,2)    - h(1,1))    / dx
     dpco2_dx(i)   = (pco2(1,2) - pco2(1,1)) / dx

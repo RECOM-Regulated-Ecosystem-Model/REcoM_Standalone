@@ -1,61 +1,61 @@
 !> \file errors.f90
-!! \BRIEF 
-!> Module with errors subroutine - Propagate standard error (or uncertainty) in carbonate system vars 
+!! \BRIEF
+!> Module with errors subroutine - Propagate standard error (or uncertainty) in carbonate system vars
 MODULE merrors
 CONTAINS
 
 
-!>    Compute standard errors (or uncertainties) of standard carbonate system variables  
+!>    Compute standard errors (or uncertainties) of standard carbonate system variables
 !>    (H+, pCO2, fCO2, CO2*, HCO3- and CO3--, OmegaA, OmegaC) based on uncertainties
 !!    in input variables, which are Alk, DIC, Total Silicate and Phosphate, T and S
 !!    and in dissociations constants  K0, K1, K2, Kb, Kw, Kspa, Kspc
 SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
                 temp, sal, alk, dic, sil, phos, Patm, depth, lat, N,          &
                 etemp, esal, ealk, edic, esil, ephos,                         &
-                optCON, optT, optP, optB, optK1K2, optKf, optGAS, optS, lon,  & 
+                optCON, optT, optP, optB, optK1K2, optKf, optGAS, optS, lon,  &
                 r, epK, ebt )
-         
-!     This subroutine does error propagation on the computation of carbonate system variables 
-!     from errors (or uncertainties) on six input 
+
+!     This subroutine does error propagation on the computation of carbonate system variables
+!     from errors (or uncertainties) on six input
 !      - Alk and DIC
 !      - nutrients (silicate and phosphate concentrations)
 !      - temperature and salinity
 !     plus errors on dissociation constants pK0, pK1, pK2, pKb, pKw, pKspa and pKspc
-!    
+!
 !     It computes numerical derivatives then applies error propagation using the method of moments.
 !     The method of moments is a very general technique for estimating the second moment of a variable z
 !     (variance or standard deviation) based on a first-order approximation to z.
-!    
+!
 !     INPUT variables:
 !     ================
 !     - temp, sal, alk, dic, sil, phos, Patm, depth, lat :  same as input of subroutine  vars() : vectors
-!    
+!
 !     - N              :  number of data points (= size of input and output vectors)
 !     - ealk, edic     :  standard error (or uncertainty) on alk and DIC
 !     - esal, etemp    :  standard error (or uncertainty) on Salinity and Temperature
 !     - ephos, esil    :  standard error (or uncertainty) on Phosphate and Silicate total concentrations
 !     - epK            :  standard error (or uncertainty) on all seven dissociation constants (a vector) [pK units]
 !     - ebt            :  standard error (or uncertainty) on total boron fractional error [default=0.01], i.e., 1%
-!    
-!       All parameters are vectors of length N except epK 
+!
+!       All parameters are vectors of length N except epK
 !         epK must be vector of seven values : errors of pK0, pK1, pK2, pKb, pKw, pKspa and pKspc
 !         these errors are assumed to be equal for all data points.
 !         In constrast, ealk, edic, esal, etemp, ephos and esilt are errors associated with each data point.
 !
 !       epK is optional :  if not given, following default error values will be taken :
 !                   pK0     pK1    pK2,   pKb    pKw    pKspa   pKspc
-!                   0.004   0.015  0.03   0.01   0.01   0.02    0.02 
+!                   0.004   0.015  0.03   0.01   0.01   0.02    0.02
 !
 !       ebt is optional :  if not given, the default error is 0.01 (i.e., 1%)
 !                   Bt (rel. err)
 !                   0.01
-!    
+!
 !     INPUT options:
 !     ==============
-!    
-!     - optCON, optT, optP, opB, optK1K2, optKf, optGAS, optS, lon :  same as for input of subroutine vars() 
-!    
-!    
+!
+!     - optCON, optT, optP, opB, optK1K2, optKf, optGAS, optS, lon :  same as for input of subroutine vars()
+!
+!
 !     OUTPUT variables:
 !     =================
 !
@@ -81,12 +81,12 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   USE mderivnum
 
   IMPLICIT NONE
-  
+
 ! Input variables
   !>     number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> salinity <b>[psu]</b>
@@ -126,9 +126,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   REAL(kind=rx), OPTIONAL, INTENT(in) :: r
   !> standard error (or uncertainty) on total boron (Bt) - a single number, not a vector like other errors
 !f2py  real intent(in), optional :: ebt=0.01
-  REAL(kind=rx), OPTIONAL, INTENT(in) :: ebt 
+  REAL(kind=rx), OPTIONAL, INTENT(in) :: ebt
 
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
   CHARACTER(6), INTENT(in) :: optCON
   !> choose \b 'Tinsitu' for in situ temperature or \b 'Tpot' for potential temperature (in situ Temp is computed, needed for models)
@@ -136,18 +136,18 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
   CHARACTER(2), INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='u74'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -191,7 +191,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
 
   ! Default value for error on Total Boron (ebt)
   REAL(kind=rx) :: ebt_local = 0.01_rx
-! REAL(kind=rx) :: ebt_local 
+! REAL(kind=rx) :: ebt_local
 
   ! Default value for correlation between ALK & DIC
   REAL(kind=rx) :: r_local = 0.0_r8
@@ -225,7 +225,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   REAL(kind=rx), DIMENSION(N) :: r_dhco3_dx
   ! covariance tmp array for derivative of (CO3--) concentration, either in <b>[mol/m^3]</b> or <b>[mol/kg]</b> depending on choice for optCON
   REAL(kind=rx), DIMENSION(N) :: r_dco3_dx
-  ! covariance tmp array for derivative of Omega for aragonite, i.e., the aragonite saturation state 
+  ! covariance tmp array for derivative of Omega for aragonite, i.e., the aragonite saturation state
   REAL(kind=rx), DIMENSION(N) :: r_dOmegaA_dx
   ! covariance tmp array for Omega for calcite, i.e., the calcite saturation state
   REAL(kind=rx), DIMENSION(N) :: r_dOmegaC_dx
@@ -248,7 +248,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
 ! *******************************************************************
 
 ! Set defaults for optional arguments (in Fortran90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
 
   epKstd = (/0.004d0, 0.015d0, 0.03d0, 0.01d0, 0.01d0, 0.02d0, 0.02d0/)
@@ -319,7 +319,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   ELSE
      ebt_local = 0.01_rx
   ENDIF
-  
+
   ! initialise total square error
   eH(:) = 0
   epCO2(:) = 0
@@ -329,10 +329,10 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   eCO3(:) = 0
   eOmegaA(:) = 0
   eOmegaC(:) = 0
-    
+
   ! Contribution of Alk to squared standard error
   ! ---------------------------------------------
-  
+
   ! Compute sensitivities (partial derivatives)
   CALL derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              &
             dco3_dx, dOmegaA_dx, dOmegaC_dx,                                &
@@ -360,9 +360,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   dco3_dx(:)    = dco3_dx(:)    * ealk(:)
   dOmegaA_dx(:) = dOmegaA_dx(:) * ealk(:)
   dOmegaC_dx(:) = dOmegaC_dx(:) * ealk(:)
-  ! Square 
+  ! Square
   dh_dx(:)      = dh_dx(:) * dh_dx(:)
-  dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:) 
+  dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:)
   dfco2_dx(:)   = dfco2_dx(:) * dfco2_dx(:)
   dco2_dx(:)    = dco2_dx(:)  * dco2_dx(:)
   dhco3_dx(:)   = dhco3_dx(:) * dhco3_dx(:)
@@ -387,7 +387,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
             dco3_dx, dOmegaA_dx, dOmegaC_dx,                                &
             temp, sal, alk, dic, sil, phos, Patm, depth, lat, N, 'dic',     &
             optCON, optT, optP, opB, opK1K2, opKf, opGAS                    )
-  
+
   ! Covariance (only when R is not zero) = 2*r*(dvar/dAt)*(dvar/dCt)*sigma1*sigma2
   IF (r_local .NE. 0.0_r8) THEN
      eH(:)      = eH(:)      + 2.0_r8 * r_local * r_dh_dx(:)      * dh_dx(:)      * edic(:)
@@ -409,9 +409,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   dco3_dx(:)    = dco3_dx(:)    * edic(:)
   dOmegaA_dx(:) = dOmegaA_dx(:) * edic(:)
   dOmegaC_dx(:) = dOmegaC_dx(:) * edic(:)
-  ! Square 
+  ! Square
   dh_dx(:)      = dh_dx(:) * dh_dx(:)
-  dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:) 
+  dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:)
   dfco2_dx(:)   = dfco2_dx(:) * dfco2_dx(:)
   dco2_dx(:)    = dco2_dx(:)  * dco2_dx(:)
   dhco3_dx(:)   = dhco3_dx(:) * dhco3_dx(:)
@@ -438,7 +438,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
                 temp, sal, alk, dic, sil, phos, Patm, depth, lat, N, 'sil',     &
                 optCON, optT, optP, opB, opK1K2, opKf, opGAS                )
 
-      ! Cancels derivative where Sil = 0 
+      ! Cancels derivative where Sil = 0
       !   because computation of derivative w/ respect to sil fails in that case
       WHERE (sil(:) .EQ. 0)
           dh_dx(:)      = 0
@@ -450,7 +450,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
           dOmegaA_dx(:) = 0
           dOmegaC_dx(:) = 0
       END WHERE
-      
+
       ! multiply derivatives by error
       dh_dx(:)      = dh_dx(:)      * esil(:)
       dpco2_dx(:)   = dpco2_dx(:)   * esil(:)
@@ -460,9 +460,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
       dco3_dx(:)    = dco3_dx(:)    * esil(:)
       dOmegaA_dx(:) = dOmegaA_dx(:) * esil(:)
       dOmegaC_dx(:) = dOmegaC_dx(:) * esil(:)
-      ! Square 
+      ! Square
       dh_dx(:)      = dh_dx(:) * dh_dx(:)
-      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:) 
+      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:)
       dfco2_dx(:)   = dfco2_dx(:) * dfco2_dx(:)
       dco2_dx(:)    = dco2_dx(:)  * dco2_dx(:)
       dhco3_dx(:)   = dhco3_dx(:) * dhco3_dx(:)
@@ -491,7 +491,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
                 temp, sal, alk, dic, sil, phos, Patm, depth, lat, N, 'pho',     &
                 optCON, optT, optP, opB, opK1K2, opKf, opGAS                )
 
-      ! Cancels derivative where Phos = 0 
+      ! Cancels derivative where Phos = 0
       !   because computation of derivative w/ respect to phos fails in that case
       WHERE (phos(:) .EQ. 0)
           dh_dx(:)      = 0
@@ -503,7 +503,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
           dOmegaA_dx(:) = 0
           dOmegaC_dx(:) = 0
       END WHERE
-      
+
       ! multiply derivatives by error
       dh_dx(:)      = dh_dx(:)      * ephos(:)
       dpco2_dx(:)   = dpco2_dx(:)   * ephos(:)
@@ -513,9 +513,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
       dco3_dx(:)    = dco3_dx(:)    * ephos(:)
       dOmegaA_dx(:) = dOmegaA_dx(:) * ephos(:)
       dOmegaC_dx(:) = dOmegaC_dx(:) * ephos(:)
-      ! Square 
+      ! Square
       dh_dx(:)      = dh_dx(:) * dh_dx(:)
-      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:) 
+      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:)
       dfco2_dx(:)   = dfco2_dx(:) * dfco2_dx(:)
       dco2_dx(:)    = dco2_dx(:)  * dco2_dx(:)
       dhco3_dx(:)   = dhco3_dx(:) * dhco3_dx(:)
@@ -535,7 +535,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
 
   ! Contribution of temperature to squared standard error
   ! -----------------------------------------------------
-  
+
   IF (any (etemp .ne. 0.0)) THEN
       ! Compute sensitivities (partial derivatives)
       CALL derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              &
@@ -552,9 +552,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
       dco3_dx(:)    = dco3_dx(:)    * etemp(:)
       dOmegaA_dx(:) = dOmegaA_dx(:) * etemp(:)
       dOmegaC_dx(:) = dOmegaC_dx(:) * etemp(:)
-      ! Square 
+      ! Square
       dh_dx(:)      = dh_dx(:) * dh_dx(:)
-      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:) 
+      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:)
       dfco2_dx(:)   = dfco2_dx(:) * dfco2_dx(:)
       dco2_dx(:)    = dco2_dx(:)  * dco2_dx(:)
       dhco3_dx(:)   = dhco3_dx(:) * dhco3_dx(:)
@@ -575,7 +575,7 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
 
   ! Contribution of salinity to squared standard error
   ! --------------------------------------------------
-  
+
   IF (any (esal .ne. 0.0)) THEN
       ! Compute sensitivities (partial derivatives)
       CALL derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              &
@@ -592,9 +592,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
       dco3_dx(:)    = dco3_dx(:)    * esal(:)
       dOmegaA_dx(:) = dOmegaA_dx(:) * esal(:)
       dOmegaC_dx(:) = dOmegaC_dx(:) * esal(:)
-      ! Square 
+      ! Square
       dh_dx(:)      = dh_dx(:) * dh_dx(:)
-      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:) 
+      dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:)
       dfco2_dx(:)   = dfco2_dx(:) * dfco2_dx(:)
       dco2_dx(:)    = dco2_dx(:)  * dco2_dx(:)
       dhco3_dx(:)   = dhco3_dx(:) * dhco3_dx(:)
@@ -614,14 +614,14 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
 
   ! Contribution of the equil constants and Bt to squared standard error
   ! --------------------------------------------------------------------
-  
+
   ! Make vector of (epK_local, ebt_local), i.e., adding 1 value at end of epK (for testing below)
   epK_local8(1:7) = epK_local
   epK_local8(8)   = ebt_local
-  
+
   ! Preliminary calculations for dissociation constants and total boron
   IF (any (epK_local8 .NE. 0) ) THEN
-  
+
       ! Get all equilibrium constants and total concentrations of SO4, F, B
       CALL constants (K0, K1, K2, Kb, Kw, Ks, Kf,                &
                   Kspc, Kspa, K1p, K2p, K3p, Ksi, St, Ft, Bt,    &
@@ -653,9 +653,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
               CASE(8)
                   ! for convenience we tag on ebt here, even though Bt is not an equilibrium constant
                   ! For Bt, we start from % error in Bt (not from absolute delta pK, so no log(10) conversion)
-                  eK(:) =  ebt_local    * Bt(:) 
+                  eK(:) =  ebt_local    * Bt(:)
               END SELECT
-              
+
               ! Compute sensitivities (partial derivatives)
               CALL derivnum (dh_dx, dpco2_dx, dfco2_dx, dco2_dx, dhco3_dx,              &
                         dco3_dx, dOmegaA_dx, dOmegaC_dx,                                &
@@ -671,9 +671,9 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
               dco3_dx(:)    = dco3_dx(:)    * eK(:)
               dOmegaA_dx(:) = dOmegaA_dx(:) * eK(:)
               dOmegaC_dx(:) = dOmegaC_dx(:) * eK(:)
-              ! Square 
+              ! Square
               dh_dx(:)      = dh_dx(:) * dh_dx(:)
-              dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:) 
+              dpco2_dx(:)   = dpco2_dx(:) * dpco2_dx(:)
               dfco2_dx(:)   = dfco2_dx(:) * dfco2_dx(:)
               dco2_dx(:)    = dco2_dx(:)  * dco2_dx(:)
               dhco3_dx(:)   = dhco3_dx(:) * dhco3_dx(:)
@@ -694,12 +694,12 @@ SUBROUTINE errors  (eH, epCO2, efCO2, eCO2, eHCO3, eCO3, eOmegaA, eOmegaC,    &
   ENDIF
 
   ! Compute resulting total error (or uncertainty)
-  eH       = sqrt(eH)   
+  eH       = sqrt(eH)
   epCO2    = sqrt(epCO2)
   efCO2    = sqrt(efCO2)
-  eCO2     = sqrt(eCO2) 
+  eCO2     = sqrt(eCO2)
   eHCO3    = sqrt(eHCO3)
-  eCO3     = sqrt(eCO3) 
+  eCO3     = sqrt(eCO3)
   eOmegaA  = sqrt(eOmegaA)
   eOmegaC  = sqrt(eOmegaC)
 
