@@ -1,5 +1,5 @@
 !> \file f2pCO2.f90
-!! \BRIEF 
+!! \BRIEF
 !>    Module with f2pCO2 subroutine - compute pCO2 from fCO2, in situ T, atm pressure, hydrostatic pressure
 MODULE mf2pCO2
 CONTAINS
@@ -32,7 +32,7 @@ SUBROUTINE f2pCO2(fCO2, temp, Patm, p, N, pCO2)
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: p
 
 ! OUTPUT variables:
-  !> oceanic partial pressure of CO2 [uatm] 
+  !> oceanic partial pressure of CO2 [uatm]
   REAL(kind=rx), INTENT(out), DIMENSION(N) :: pCO2
 
 ! LOCAL variables:
@@ -60,7 +60,7 @@ SUBROUTINE f2pCO2(fCO2, temp, Patm, p, N, pCO2)
 !    x2 = 1 - x1 = 1 - xCO2 (it is very close to 1, but not quite)
 !    Let's assume that xCO2 = fCO2. Resulting fugcoeff is identical to 8th digit after the decimal.
      xCO2approx = dfCO2 * 1.e-6_r8
-     xc2 = (1.0d0 - xCO2approx)**2 
+     xc2 = (1.0d0 - xCO2approx)**2
      fugcoeff = exp( Ptot*(B + 2.0d0*xc2*Del)/(Rgas_atm*tk) )
      dpCO2 = dfCO2 / fugcoeff
      pCO2(i) = SGLE(dpCO2)

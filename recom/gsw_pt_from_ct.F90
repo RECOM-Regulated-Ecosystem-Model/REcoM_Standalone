@@ -1,5 +1,5 @@
 !==========================================================================
-elemental function gsw_pt_from_ct (sa, ct) 
+elemental function gsw_pt_from_ct (sa, ct)
 !==========================================================================
 !
 ! potential temperature of seawater from conservative temperature
@@ -20,7 +20,7 @@ use gsw_mod_kinds
 
 implicit none
 
-real (r8), intent(in) :: sa, ct 
+real (r8), intent(in) :: sa, ct
 
 real (r8) :: gsw_pt_from_ct
 
@@ -52,7 +52,7 @@ pt = pt_num*pt_recden
 dpt_dct = (ct_factor + a5ct - (b2 + b3ct + b3ct)*pt)*pt_recden
 
 ! Start the 1.5 iterations through the modified Newton-Rapshon iterative,
-! method, which is also known as the Newton-McDougall method. 
+! method, which is also known as the Newton-McDougall method.
 
 ct_diff = gsw_ct_from_pt(sa,pt) - ct
 pt_old = pt
@@ -66,7 +66,7 @@ ct_diff = gsw_ct_from_pt(sa,pt) - ct
 pt_old = pt
 gsw_pt_from_ct = pt_old - ct_diff*dpt_dct
 
-return 
+return
 end function
 
 !--------------------------------------------------------------------------

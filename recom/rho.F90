@@ -1,5 +1,5 @@
 !> \file rho.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with rho function - computes in situ density from S, T, P
 MODULE mrho
 CONTAINS
@@ -120,7 +120,7 @@ FUNCTION rho_DNAD(salt, temp, pbar)
   TYPE (DUAL_NUM) :: rhow, rho0
   TYPE (DUAL_NUM) :: a, b, c
   TYPE (DUAL_NUM) :: Ksbmw, Ksbm0, Ksbm
-  
+
   TYPE (DUAL_NUM) :: rho_DNAD
 
   !     Input arguments:

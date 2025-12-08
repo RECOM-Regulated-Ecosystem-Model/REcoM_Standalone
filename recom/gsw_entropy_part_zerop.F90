@@ -6,7 +6,7 @@ elemental function gsw_entropy_part_zerop (sa, pt0)
 !
 ! sa     : Absolute Salinity                               [g/kg]
 ! pt0    : insitu temperature                              [deg C]
-! 
+!
 ! gsw_entropy_part_zerop : entropy part at the sea surface
 !--------------------------------------------------------------------------
 

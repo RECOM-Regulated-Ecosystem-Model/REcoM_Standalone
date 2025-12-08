@@ -1,8 +1,8 @@
 !==========================================================================
 elemental function gsw_rho (sa, ct, p)
 !==========================================================================
-! 
-!  Calculates in-situ density from Absolute Salinity and Conservative 
+!
+!  Calculates in-situ density from Absolute Salinity and Conservative
 !  Temperature, using the computationally-efficient expression for
 !  specific volume in terms of SA, CT and p (Roquet et al., 2014).
 !

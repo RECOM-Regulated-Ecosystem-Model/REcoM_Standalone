@@ -25,7 +25,7 @@ module recom_sms_module
             real(kind=8),  intent(in) :: Loc_slp     ![Pa] sea-level pressure
             real(kind=8),  intent(in) :: Latd(1)     ! latitude in degree
 
-            real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness 
+            real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness
             real(kind=8),  intent(in),    dimension(nl - 1) :: Temp            !< [degrees C] Ocean temperature
             real(kind=8),  intent(in),    dimension(nl - 1) :: Sali_depth      !< NEW MOCSY Salinity for the whole water column
             real(kind=8),  intent(in),    dimension(nl)     :: zF              !< [m] Depth of fluxes
@@ -72,7 +72,7 @@ subroutine REcoM_sms(n, Nn, state, thick, SurfSR, sms, Temp, Sali_depth, CO2_wat
     real(kind=8),  intent(in)    :: Loc_slp     ![Pa] sea-level pressure
     real(kind=8),  intent(in)    :: Latd(1)     ! latitude in degree
 
-    real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness 
+    real(kind=8),  intent(in),    dimension(nl - 1) :: thick           !< [m] Vertical distance between two nodes = Thickness
     real(kind=8),  intent(in),    dimension(nl - 1) :: Temp            !< [degrees C] Ocean temperature
     real(kind=8),  intent(in),    dimension(nl - 1) :: Sali_depth      !< NEW MOCSY Salinity for the whole water column
     real(kind=8),  intent(in),    dimension(nl)   :: zF              !< [m] Depth of fluxes
@@ -108,7 +108,7 @@ subroutine REcoM_sms(n, Nn, state, thick, SurfSR, sms, Temp, Sali_depth, CO2_wat
     real(kind=8)                    :: REcoM_Alk_depth(1)
     real(kind=8)                    :: REcoM_Si_depth(1)
     real(kind=8)                    :: REcoM_Phos_depth(1)
-    real(kind=8)                    :: mocsy_step_per_day 
+    real(kind=8)                    :: mocsy_step_per_day
     real(kind=8), dimension(nl - 1) :: Sink
 
 ! --- Biogeochemical state variables ---
@@ -2340,7 +2340,7 @@ real(kind=8) :: &
                     print*, '  PARave =', PARave
                     print*, '  pMax_phaeo =', pMax_phaeo
                     stop
-                end if 
+                end if
             endif
 
         !===============================================================================
@@ -2518,7 +2518,7 @@ real(kind=8) :: &
         !===============================================================================
         ! MESOZOOPLANKTON GRAZING
         !===============================================================================
-        ! Simulates mesozooplankton grazing on multiple prey types using a Holling 
+        ! Simulates mesozooplankton grazing on multiple prey types using a Holling
         ! Type III functional response with food-dependent preferences and efficiency.
         !
         ! This module calculates:
@@ -2993,7 +2993,7 @@ real(kind=8) :: &
            !===========================================================================
            ! 4. CARBON ASSIMILATION
            !===========================================================================
-           ! Converts grazed nitrogen to assimilated carbon flux using prey-specific 
+           ! Converts grazed nitrogen to assimilated carbon flux using prey-specific
            ! C:N ratios and constant grazing efficiency.
            !
            ! Variables:
@@ -3075,7 +3075,7 @@ real(kind=8) :: &
            !===========================================================================
            ! 1. FOOD AVAILABILITY AND GRAZING PREFERENCES
            !===========================================================================
-           ! Calculates which phytoplankton prey types are available and their 
+           ! Calculates which phytoplankton prey types are available and their
            ! relative preferences.
            ! Two modes:
            !   - Variable preferences: Adjust based on relative prey abundance
@@ -4008,7 +4008,7 @@ real(kind=8) :: &
                                                                 ) * dt_b + sms(k,idic)
 
 !  if((Latd(1)<-45.0) .and. ((state(k,idic)+sms(k,idic))>2500)) then
-!     !co2flux(1)=0.0  
+!     !co2flux(1)=0.0
 !      print*,'ERROR: strange dic !'
 !      print*,'state(k,idic): ', state(k,idic)
 !      print*,'sms Cphot: ', -Cphot*PhyC
@@ -6535,7 +6535,7 @@ real(kind=8) :: &
         + grazingFlux_Dia * recipQuota_Dia * grazEff           &  ! Diatoms
         + grazingFlux_Det * recipDet * grazEff                 &  ! Detritus 1
         ) * recipbiostep
-       
+
         if (enable_coccos) then
             vertgrazmeso_tot(k) = vertgrazmeso_tot(k) + ( &
             + grazingFlux_Cocco * recipQuota_Cocco * grazEff &  ! Coccolithophores
@@ -6552,12 +6552,12 @@ real(kind=8) :: &
 
         ! Prey-specific mortality (loss terms, no efficiency applied)
         ! These track carbon removal from each prey population
-        
+
         ! Small phytoplankton mortality
         vertgrazmeso_n(k) = vertgrazmeso_n(k) + ( &
         + grazingFlux_phy * recipQuota             &
         ) * recipbiostep
-        
+
         ! Diatom mortality
         vertgrazmeso_d(k) = vertgrazmeso_d(k) + ( &
         + grazingFlux_dia * recipQuota_dia         &
@@ -6579,13 +6579,13 @@ real(kind=8) :: &
         vertgrazmeso_det(k) = vertgrazmeso_det(k) + ( &
         + grazingFlux_Det * recipDet                   &
         ) * recipbiostep
-        
+
         if (enable_3zoo2det) then
             ! Microzooplankton mortality (intraguild predation)
             vertgrazmeso_mic(k) = vertgrazmeso_mic(k) + ( &
             + grazingFlux_miczoo * recipQZoo3              &
             ) * recipbiostep
-            
+
             ! Detritus 2 consumption
             vertgrazmeso_det2(k) = vertgrazmeso_det2(k) + ( &
             + GrazingFlux_DetZ2 * recipDet2                 &
@@ -6636,7 +6636,7 @@ real(kind=8) :: &
 !---------------------------------------------------------------------------
 
         if (enable_3zoo2det) then
-            
+
             ! Total assimilated grazing (with efficiency applied)
             vertgrazmacro_tot(k) = vertgrazmacro_tot(k) + (    &
             + grazingFlux_phy2 * recipQuota * grazEff2          &  ! Small phytoplankton
@@ -6646,7 +6646,7 @@ real(kind=8) :: &
             + grazingFlux_Det2 * recipDet * grazEff2            &  ! Detritus 1
             + grazingFlux_DetZ22 * recipDet2 * grazEff2         &  ! Detritus 2
             ) * recipbiostep
-            
+
             if (enable_coccos) then
                 vertgrazmacro_tot(k) = vertgrazmacro_tot(k) + ( &
                 + grazingFlux_Cocco2 * recipQuota_Cocco * grazEff2 &  ! Coccolithophores
@@ -6656,17 +6656,17 @@ real(kind=8) :: &
 
             ! Prey-specific mortality (loss terms, no efficiency applied)
             ! These track carbon removal from each prey population
-            
+
             ! Small phytoplankton mortality
             vertgrazmacro_n(k) = vertgrazmacro_n(k) + ( &
             + grazingFlux_phy2 * recipQuota              &
             ) * recipbiostep
-            
+
             ! Diatom mortality
             vertgrazmacro_d(k) = vertgrazmacro_d(k) + ( &
             + grazingFlux_Dia2 * recipQuota_Dia          &
             ) * recipbiostep
-            
+
             if (enable_coccos) then
                 ! Coccolithophore mortality
                 vertgrazmacro_c(k) = vertgrazmacro_c(k) + ( &
@@ -6678,27 +6678,27 @@ real(kind=8) :: &
                 + grazingFlux_Phaeo2 * recipQuota_Phaeo      &
                 ) * recipbiostep
             endif
-            
+
             ! Mesozooplankton mortality (carnivory)
             vertgrazmacro_mes(k) = vertgrazmacro_mes(k) + ( &
             + grazingFlux_het2 * recipQZoo                   &
             ) * recipbiostep
-            
+
             ! Detritus 1 consumption
             vertgrazmacro_det(k) = vertgrazmacro_det(k) + ( &
             + grazingFlux_Det2 * recipDet                    &
             ) * recipbiostep
-            
+
             ! Microzooplankton mortality
             vertgrazmacro_mic(k) = vertgrazmacro_mic(k) + ( &
             + grazingFlux_miczoo2 * recipQZoo3               &
             ) * recipbiostep
-            
+
             ! Detritus 2 consumption
             vertgrazmacro_det2(k) = vertgrazmacro_det2(k) + ( &
             + GrazingFlux_DetZ22 * recipDet2                   &
             ) * recipbiostep
-            
+
         endif
 
 !===========================================================================
@@ -6735,33 +6735,33 @@ real(kind=8) :: &
 !---------------------------------------------------------------------------
 
         if (enable_3zoo2det) then
-            
+
             ! Total assimilated grazing (with efficiency applied)
             vertgrazmicro_tot(k) = vertgrazmicro_tot(k) + (     &
             + grazingFlux_phy3 * recipQuota * grazEff3           &  ! Small phytoplankton
             + grazingFlux_Dia3 * recipQuota_Dia * grazEff3       &  ! Diatoms
             ) * recipbiostep
-            
+
             if (enable_coccos) then
                 vertgrazmicro_tot(k) = vertgrazmicro_tot(k) + ( &
                 + grazingFlux_Cocco3 * recipQuota_Cocco * grazEff3 &  ! Coccolithophores
                 + grazingFlux_Phaeo3 * recipQuota_Phaeo * grazEff3 &  ! Phaeocystis
                 ) * recipbiostep
             endif
-            
+
             ! Prey-specific mortality (loss terms, no efficiency applied)
             ! These track carbon removal from each prey population
-            
+
             ! Small phytoplankton mortality
             vertgrazmicro_n(k) = vertgrazmicro_n(k) + ( &
             + grazingFlux_phy3 * recipQuota              &
             ) * recipbiostep
-            
+
             ! Diatom mortality
             vertgrazmicro_d(k) = vertgrazmicro_d(k) + ( &
             + grazingFlux_Dia3 * recipQuota_Dia          &
             ) * recipbiostep
-            
+
             if (enable_coccos) then
                 ! Coccolithophore mortality
                 vertgrazmicro_c(k) = vertgrazmicro_c(k) + ( &
@@ -6773,9 +6773,9 @@ real(kind=8) :: &
                 + grazingFlux_Phaeo3 * recipQuota_Phaeo      &
                 ) * recipbiostep
             endif
-            
+
         endif
-        
+
     end if ! Grazing_detritus
 
                 !===========================================================================

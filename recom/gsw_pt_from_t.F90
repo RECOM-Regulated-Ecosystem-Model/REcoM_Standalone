@@ -1,8 +1,8 @@
 !==========================================================================
-elemental function gsw_pt_from_t (sa, t, p, p_ref) 
+elemental function gsw_pt_from_t (sa, t, p, p_ref)
 !==========================================================================
-!   
-! Calculates potential temperature of seawater from in-situ temperature 
+!
+! Calculates potential temperature of seawater from in-situ temperature
 !
 ! sa     : Absolute Salinity                               [g/kg]
 ! t      : in-situ temperature                             [deg C]
@@ -20,7 +20,7 @@ use gsw_mod_kinds
 
 implicit none
 
-real (r8), intent(in) :: sa, t, p, p_ref 
+real (r8), intent(in) :: sa, t, p, p_ref
 
 real (r8) :: gsw_pt_from_t
 
@@ -47,7 +47,7 @@ true_entropy_part = gsw_entropy_part(sa,t,p)
 do no_iter = 1, 2
     pt_old = pt
     dentropy = gsw_entropy_part(sa,pt_old,p_ref) - true_entropy_part
-    pt = pt_old - dentropy/dentropy_dt 
+    pt = pt_old - dentropy/dentropy_dt
     ptm = 0.5_r8*(pt + pt_old)
     dentropy_dt = -gsw_gibbs(n0,n2,n0,sa,ptm,p_ref)
     pt = pt_old - dentropy/dentropy_dt

@@ -1,8 +1,8 @@
 !==========================================================================
-elemental function gsw_pt0_from_t (sa, t, p) 
+elemental function gsw_pt0_from_t (sa, t, p)
 !==========================================================================
-!   
-! Calculates potential temperature with reference pressure, p_ref = 0 dbar. 
+!
+! Calculates potential temperature with reference pressure, p_ref = 0 dbar.
 !
 ! sa     : Absolute Salinity                               [g/kg]
 ! t      : in-situ temperature                             [deg C]
@@ -20,7 +20,7 @@ use gsw_mod_kinds
 
 implicit none
 
-real (r8), intent(in) :: sa, t, p 
+real (r8), intent(in) :: sa, t, p
 
 real (r8) :: gsw_pt0_from_t
 
@@ -45,7 +45,7 @@ true_entropy_part = gsw_entropy_part(sa,t,p)
 do no_iter = 1, 2
     pt0_old = pt0
     dentropy = gsw_entropy_part_zerop(sa,pt0_old) - true_entropy_part
-    pt0 = pt0_old - dentropy/dentropy_dt 
+    pt0 = pt0_old - dentropy/dentropy_dt
     pt0m = 0.5_r8*(pt0 + pt0_old)
     dentropy_dt = -gsw_gibbs_pt0_pt0(sa,pt0m)
     pt0 = pt0_old - dentropy/dentropy_dt

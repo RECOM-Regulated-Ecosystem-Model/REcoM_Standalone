@@ -114,8 +114,8 @@ subroutine REcoM_Forcing(n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali_depth, 
     !!---- atm pressure
     real(kind=8) :: Patm(1)              ! atmospheric pressure [atm]
 
-    !!---- Subroutine o2flux /mocsy 
-    real(kind=8) :: ppo(1)               ! atmospheric pressure, divided by 1 atm 
+    !!---- Subroutine o2flux /mocsy
+    real(kind=8) :: ppo(1)               ! atmospheric pressure, divided by 1 atm
     real(kind=8) :: REcoM_O2(1)          ! [mmol/m3] Conc of O2 in the surface water, used to calculate O2 flux
 
     !!---- Diagnostics
@@ -125,7 +125,7 @@ subroutine REcoM_Forcing(n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali_depth, 
 
     real(kind=8),dimension(nl)           :: zF                   ! [m] Depth of fluxes
     real(kind=8),dimension(nl,6)         :: SinkVel              ! [m/day]
-    real(kind=8),dimension(nl-1)         :: thick                ! [m] Vertical distance between two nodes = Thickness 
+    real(kind=8),dimension(nl-1)         :: thick                ! [m] Vertical distance between two nodes = Thickness
     real(kind=8),dimension(nl-1)         :: recipthick           ! [1/m] reciprocal of thick
 
     !!---- Subroutine REcoM_sms
@@ -135,7 +135,7 @@ subroutine REcoM_Forcing(n, Nn, state, SurfSW, Loc_slp, Temp, Sali, Sali_depth, 
     tiny_N_d = tiny_chl/chl2N_max_d ! 0.00001/ 4.2d0
 
     tiny_C   = tiny_N  /NCmax       ! NCmax   = 0.2d0   [mmol N/mmol C] Maximum cell quota of nitrogen (N:C)
-    tiny_C_d = tiny_N_d/NCmax_d     ! NCmax_d = 0.2d0 
+    tiny_C_d = tiny_N_d/NCmax_d     ! NCmax_d = 0.2d0
 
     tiny_Si  = tiny_C_d/SiCmax      ! SiCmax = 0.8d0
 
@@ -143,7 +143,7 @@ if (enable_coccos) then
     tiny_N_c = tiny_chl/chl2N_max_c ! 0.00001/ 3.5d0
     tiny_C_c = tiny_N_c/NCmax_c     ! NCmax_c = 0.15d0
 
-    tiny_N_p = tiny_chl/chl2N_max_p ! 0.00001/ 3.5d0 
+    tiny_N_p = tiny_chl/chl2N_max_p ! 0.00001/ 3.5d0
     tiny_C_p = tiny_N_p/NCmax_p     ! NCmax_c = 0.15d0
 endif
 
@@ -163,14 +163,14 @@ endif
     !!---- minimum set to 2 degC: K1/K2 Lueker valid between 2degC-35degC and 19-43psu
     REcoM_T    = max(2.d0, Temp(1))
     !!---- maximum set to 40 degC: K1/K2 Lueker valid between 2degC-35degC and 19-43psu
-    REcoM_T    = min(REcoM_T, 40.d0) 
+    REcoM_T    = min(REcoM_T, 40.d0)
 
     !!---- minimum set to 21: K1/K2 Lueker valid between 2degC-35degC and 19-43psu, else causes trouble in regions with S between 19 and 21 and ice conc above 97%
     REcoM_S    = max(21.d0, Sali)
     !!---- maximum set to 43: K1/K2 Lueker valid between 2degC-35degC and 19-43psu, else causes trouble   REcoM_S    = min(REcoM_S, 43.d0)  !!!!!!!!
 
     !!---- convert from Pa to atm.
-    Patm = Loc_slp/Pa2atm  
+    Patm = Loc_slp/Pa2atm
 
     !!---- lon
     Lond=geo_coord_nod2D(1,n)/rad !! convert from rad to degree
@@ -191,7 +191,7 @@ endif
     !! *** check ***
 
     if((REcoM_DIC(1) > 10000.d0)) then               ! NEW: added this entire print statement (if to endif)
-        print*, 'NEW ERROR: DIC !'  
+        print*, 'NEW ERROR: DIC !'
         print*, 'pco2surf: ',pco2surf
         print*, 'co2: ',co2
         print*, 'rhoSW: ', rhoSW
@@ -221,7 +221,7 @@ endif
 
 ! changed optK1K2='l  ' to 'm10'
   if((co2flux(1)>1.e10) .or. (co2flux(1)<-1.e10)) then
-!     co2flux(1)=0.0  
+!     co2flux(1)=0.0
       print*, 'ERROR: co2 flux !'
       print*, 'pco2surf: ',pco2surf
       print*, 'co2: ',co2
@@ -236,10 +236,10 @@ endif
       print*, 'kw660: ',kw660
       print*, 'LocAtmCO2: ', LocAtmCO2
       print*, 'Patm: ', Patm
-      print*, 'thick(One): ',thick(One) 
+      print*, 'thick(One): ',thick(One)
       print*, 'Nmocsy: ', Nmocsy
       print*, 'Lond: ', Lond
-      print*, 'Latd: ', Latd   
+      print*, 'Latd: ', Latd
       print*, 'ULoc: ', ULoc
       print*, 'Loc_ice_conc: ', Loc_ice_conc
       stop
@@ -261,7 +261,7 @@ endif
 
    call  o2flux(REcoM_T, REcoM_S, kw660, ppo, REcoM_O2, Nmocsy, o2ex)
    oflux     = o2ex * 1.e3 *SecondsPerDay  !* (1.d0 - Loc_ice_conc) [mmol/m2/d]
-   o2flux_seaicemask = o2ex * 1.e3 ! back to mmol here [mmol/m2/s] 
+   o2flux_seaicemask = o2ex * 1.e3 ! back to mmol here [mmol/m2/s]
 
 ! Source-Minus-Sinks
 
@@ -423,8 +423,8 @@ endif
                 locgrazmicro_c   = sum(vertgrazmicro_c(1:nn) * thick(1:nn))
                 locgrazmicro_p   = sum(vertgrazmicro_p(1:nn) * thick(1:nn))
             endif
-        
-        endif        
+
+        endif
      endif
 
   end if

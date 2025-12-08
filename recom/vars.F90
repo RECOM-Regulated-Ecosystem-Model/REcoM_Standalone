@@ -1,5 +1,5 @@
 !> \file vars.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with vars subroutine - compute carbonate system vars from DIC,Alk,T,S,P,nuts
 MODULE mvars
 CONTAINS
@@ -26,7 +26,7 @@ SUBROUTINE vars(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, BetaD, rhoSW, p,
   !     depth   = depth [m]     (with optP='m', i.e., for a z-coordinate model vertical grid is depth, not pressure)
   !             = pressure [db] (with optP='db')
   !     lat     = latitude [degrees] (needed to convert depth to pressure, i.e., when optP='m')
-  !             = also be used to convert absolute to practical salinity, when optS='Sabs' 
+  !             = also be used to convert absolute to practical salinity, when optS='Sabs'
   !             = dummy array (unused when optP='db' and optS='Sprc')
   !     temp    = potential temperature [degrees C] (with optT='Tpot', i.e., models carry tempot, not in situ temp)
   !             = in situ   temperature [degrees C] (with optT='Tinsitu', e.g., for data)
@@ -80,7 +80,7 @@ SUBROUTINE vars(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, BetaD, rhoSW, p,
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2
   !     ---------
-  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -98,15 +98,15 @@ SUBROUTINE vars(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, BetaD, rhoSW, p,
   !        Optional, it may be used along with latitude when optS is "Sabs".
   !        Then, they are parameters for conversion from Absolute to Practical Salinity.
   !
-  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient 
-  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition, 
-  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat' 
-  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location. 
+  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient
+  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition,
+  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat'
+  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location.
   !
   !        Alternative when optS is 'Sabs' :
   !        -------------------------------
   !        When silicate and phosphate concentrations are known, nitrate concentration is inferred from phosphate
-  !        (using Redfield ratio), then practical salinity is computed from absolute salinity, 
+  !        (using Redfield ratio), then practical salinity is computed from absolute salinity,
   !        total alcalinity (alk), DIC (dic), silicate (sil) and phosphate (phos).
   !        In that case, do not pass optional parameter 'lon'.
   !
@@ -151,7 +151,7 @@ SUBROUTINE vars(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, BetaD, rhoSW, p,
   !> N: number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> salinity <b>[psu] or [g/kg]</b>
@@ -171,7 +171,7 @@ SUBROUTINE vars(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, BetaD, rhoSW, p,
   !> latitude <b>[degrees north]</b>
   REAL(kind=rx), INTENT(in), DIMENSION(N) :: lat
 
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
   CHARACTER(6), INTENT(in) :: optCON
   !> choose \b 'Tinsitu' for in situ temperature or \b 'Tpot' for potential temperature
@@ -180,18 +180,18 @@ SUBROUTINE vars(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, BetaD, rhoSW, p,
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
   CHARACTER(2), INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) [default] or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='l10'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) [default] or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) [default] or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -237,12 +237,12 @@ SUBROUTINE vars(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, BetaD, rhoSW, p,
   ! practical salinity (psu)
   REAL(kind=rx), DIMENSION(N) :: salprac
   REAL(kind=rx), DIMENSION(N) :: kspc_out     ! NEW
-  
+
   ! Call the subroutine that actually computes
   call vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out, BetaD, rhoSW, p, tempis,  & ! NEW: added kspc_out
                 temp, sal, alk, dic, sil, phos, Patm, depth, lat, N,                         &
                 optCON, optT, optP, optB, optK1K2, optKf, optGAS, optS, lon, salprac, verbose   )
-                
+
 END SUBROUTINE vars
 
 
@@ -270,7 +270,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
   !>     number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> salinity <b>[psu] or [g/kg]</b>
@@ -290,7 +290,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
   !> latitude <b>[degrees north]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: lat
 
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
   CHARACTER(6), INTENT(in) :: optCON
   !> choose \b 'Tinsitu' for in situ temperature or \b 'Tpot' for potential temperature
@@ -299,18 +299,18 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
   CHARACTER(2), INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) [default] or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='u74'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) [default] or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) [default] or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) [default] or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -368,7 +368,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
   REAL(kind=rx), DIMENSION(1) :: sabs1, spra1, p1, lon1, lat1
   REAL(kind=rx), DIMENSION(1) :: tc1, ta1, sit1, nt1
   REAL(kind=rx), DIMENSION(1) :: sal1
-  
+
   REAL(kind=r8) :: Patmd
   REAL(kind=r8) :: Ptot
   REAL(kind=r8) :: Phydro_atm
@@ -379,7 +379,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
   REAL(kind=r8) :: s
   REAL(kind=r8) :: tc, ta
   REAL(kind=r8) :: sit, pt
-  
+
   REAL(kind=r8), DIMENSION(2) :: dicdel, pco2del
   REAL(kind=r8) :: dx, Rf
   REAL(kind=r8) :: dph, dpco2, dfco2, dco2, dhco3, dco3, dOmegaA, dOmegaC
@@ -396,7 +396,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
   LOGICAL      :: verbosity
 
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
   IF (PRESENT(optB)) THEN
     opB = optB
@@ -497,7 +497,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
         tempis68  = (tempis90 - 0.0002_r8) / 0.99975_r8
      ELSE
         PRINT *,"optT must be either 'Tpot, 'Tinsitu' or 'Tcsv'"
-        PRINT *,"you specified optT =", trim(optT) 
+        PRINT *,"you specified optT =", trim(optT)
         STOP
      ENDIF
      tempis(i) = SGLE(tempis90)
@@ -631,7 +631,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
            s = DBLE(spra1(1))
            IF (PRESENT(salprac)) salprac(i) = SGLE(s)
         ENDIF
-          
+
 !       Get all equilibrium constants and total concentrations of SO4, F, B
         sal1(1) = SGLE(s)
         CALL constants (aK0, aK1, aK2, aKb, aKw, aKs, aKf,            &
@@ -647,7 +647,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
                     tempis90, s, ta, tc, pt, sit,                                &
                     aBt(1), aSt(1), aFt(1),                                      &
                     aK0(1), aK1(1), aK2(1), aKb(1), aKw(1), aKs(1), aKf(1),      &
-                    aKspc(1), aKspa(1), aK1p(1), aK2p(1), aK3p(1), aKsi(1),      & 
+                    aKspc(1), aKspa(1), aK1p(1), aK2p(1), aK3p(1), aKsi(1),      &
                     Patmd, prb, drho, opGAS                   )
 
 !       Convert all output variables from double to single precision, if necessary
@@ -670,7 +670,7 @@ SUBROUTINE vars_sprac (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC, kspc_out,
                 tempis90, s, ta, dicdel(j), pt, sit,                         &
                 aBt(1), aSt(1), aFt(1),                                      &
                 aK0(1), aK1(1), aK2(1), aKb(1), aKw(1), aKs(1), aKf(1),      &
-                aKspc(1), aKspa(1), aK1p(1), aK2p(1), aK3p(1), aKsi(1),      & 
+                aKspc(1), aKspa(1), aK1p(1), aK2p(1), aK3p(1), aKsi(1),      &
                 Patmd, prb, drho, opGAS                        )
             pco2del(j) = dpco2
         END DO
@@ -706,20 +706,20 @@ END SUBROUTINE vars_sprac
 
 
 !>    Same routine as vars() above
-!!    except that it perturbs slightly one dissociation constant 
+!!    except that it perturbs slightly one dissociation constant
 SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
                 temp, sal, alk, dic, sil, phos, Patm, depth, lat, N,        &
                 var_index, abs_delta,                                       &
                 optCON, optT, optP, optB, optK1K2, optKf, optGAS, optS, lon, verbose )
 
   !   Purpose:
-  !     
-  !     Same routine as vars() above except that it perturbs slightly one dissociation constant 
+  !
+  !     Same routine as vars() above except that it perturbs slightly one dissociation constant
   !     before proceeding to computation of carbonate system variables (call to varsolver())
   !
   !     This routine is intended only to be called internally by derivnum.f90
   !     which computes numerical derivatives.
-  
+
 
   !     INPUT variables:
   !     ================
@@ -757,7 +757,7 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
   !>     number of records
 !f2py optional , depend(sal) :: n=len(sal)
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> salinity <b>[psu]</b>
@@ -780,8 +780,8 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
   INTEGER, INTENT(in)  ::  var_index
   !> Perturbation value
   REAL(kind=rx), INTENT(in)  :: abs_delta
-  
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
   CHARACTER(6), INTENT(in) :: optCON
   !> choose \b 'Tinsitu' for in situ temperature or \b 'Tpot' for potential temperature (in situ Temp is computed, needed for models)
@@ -789,18 +789,18 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
   CHARACTER(2), INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='l10'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -852,8 +852,8 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
 
   REAL(kind=rx), DIMENSION(1) :: sabs1, spra1, p1, lon1, lat1
   REAL(kind=rx), DIMENSION(1) :: tc1, ta1, sit1, nt1
-  REAL(kind=rx), DIMENSION(1) :: sal1 
-  
+  REAL(kind=rx), DIMENSION(1) :: sal1
+
   REAL(kind=r8) :: Patmd
   REAL(kind=r8) :: Ptot
   REAL(kind=r8) :: Phydro_atm
@@ -864,7 +864,7 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
   REAL(kind=r8) :: s
   REAL(kind=r8) :: tc, ta
   REAL(kind=r8) :: sit, pt
-  
+
   REAL(kind=r8) :: dph, dpco2, dfco2, dco2, dhco3, dco3, dOmegaA, dOmegaC
 
 ! Arrays to pass optional arguments into or use defaults (Dickson et al., 2007)
@@ -876,17 +876,17 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
   LOGICAL      :: verbosity
 
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
   IF (PRESENT(optB)) THEN
 !   print *,"optB present:"
-!   print *,"optB = ", optB 
+!   print *,"optB = ", optB
     opB = optB
   ELSE
 !   Default is Lee et al (2010) for total boron
 !   print *,"optB NOT present:"
     opB = 'l10'
-!   print *,"opB = ", opB 
+!   print *,"opB = ", opB
   ENDIF
   IF (PRESENT(optKf)) THEN
 !   print *,"optKf = ", optKf
@@ -986,7 +986,7 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
         tempis68  = (tempis90 - 0.0002_r8) / 0.99975_r8
      ELSE
         PRINT *,"optT must be either 'Tpot, 'Tinsitu' or 'Tcsv'"
-        PRINT *,"you specified optT =", trim(optT) 
+        PRINT *,"you specified optT =", trim(optT)
         STOP
      ENDIF
 
@@ -1118,7 +1118,7 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
            ENDIF
            s = DBLE(spra1(1))
         ENDIF
-          
+
 !       Get all equilibrium constants and total concentrations of SO4, F, B
         sal1(1) = SGLE(s)
         CALL constants (aK0, aK1, aK2, aKb, aKw, aKs, aKf,            &
@@ -1154,7 +1154,7 @@ SUBROUTINE vars_pertK(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
                     tempis90, s, ta, tc, pt, sit,                                &
                     aBt(1), aSt(1), aFt(1),                                      &
                     aK0(1), aK1(1), aK2(1), aKb(1), aKw(1), aKs(1), aKf(1),      &
-                    aKspc(1), aKspa(1), aK1p(1), aK2p(1), aK3p(1), aKsi(1),      & 
+                    aKspc(1), aKspa(1), aK1p(1), aK2p(1), aK3p(1), aKsi(1),      &
                     Patmd, prb, drho, opGAS                   )
 
 !       Convert all output variables from double to single precision, if necessary

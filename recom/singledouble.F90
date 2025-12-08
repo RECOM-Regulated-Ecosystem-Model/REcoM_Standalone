@@ -1,6 +1,6 @@
 
 !> \file singledouble.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module that defines single and double precision - used by all other modules
 MODULE msingledouble
 ! INTEGER, PARAMETER :: r4 = SELECTED_REAL_KIND(6)

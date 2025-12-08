@@ -1,5 +1,5 @@
 !> \file tis.f90
-!! \BRIEF 
+!! \BRIEF
 !>    Module with tis subroutine - compute in situ T from S,T,P
 MODULE mtis
 CONTAINS
@@ -29,7 +29,7 @@ SUBROUTINE tis(salt, tempot, press, pressref, N, tempis)
   REAL(kind=rx), INTENT(in) :: pressref
 
 ! OUTPUT variables:
-  !> in situ temperature [C] 
+  !> in situ temperature [C]
   REAL(kind=rx), INTENT(out), DIMENSION(N) :: tempis
 
 ! REAL(kind=r8) :: dsalt, dtempis, dpress, dpressref

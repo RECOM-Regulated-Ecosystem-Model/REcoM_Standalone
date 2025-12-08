@@ -1,7 +1,7 @@
 ! 24.03.2023
 ! OG
 !===============================================================================
-! Main REcoM 
+! Main REcoM
 module recom_interface
     interface
         subroutine recom(ice, dynamics, tracers, partit, mesh)
@@ -89,7 +89,7 @@ subroutine recom(ice, dynamics, tracers, partit, mesh)
     integer                    :: idiags
 
     real(kind=8)               :: Sali
-    logical                    :: do_update = .false. 
+    logical                    :: do_update = .false.
 
     real(kind=8),  allocatable :: Temp(:), Sali_depth(:), zr(:), PAR(:)
     real(kind=8),  allocatable :: C(:,:)
@@ -196,7 +196,7 @@ subroutine recom(ice, dynamics, tracers, partit, mesh)
        if (ciso) then
          LocAtmCO2_13              = AtmCO2_13(month)
          if (ciso_14) then
-!          Latitude of nodal point n 
+!          Latitude of nodal point n
            lat_val = geo_coord_nod2D(2,n) / rad
 !          Zonally binned NH / SH / TZ 14CO2 input values
            LocAtmCO2_14 = AtmCO2_14(lat_zone(lat_val), month)
@@ -346,20 +346,20 @@ subroutine recom(ice, dynamics, tracers, partit, mesh)
 !endif
 !
 !            !! * Allocate 2D diagnostics *
-!            allocate(vertNPPn(nl-1), vertGPPn(nl-1), vertNNAn(nl-1), vertChldegn(nl-1)) 
+!            allocate(vertNPPn(nl-1), vertGPPn(nl-1), vertNNAn(nl-1), vertChldegn(nl-1))
 !            vertNPPn = 0.d0
 !            vertGPPn = 0.d0
 !            vertNNAn = 0.d0
 !            vertChldegn  = 0.d0
 !
-!            allocate(vertNPPd(nl-1), vertGPPd(nl-1), vertNNAd(nl-1), vertChldegd(nl-1)) 
+!            allocate(vertNPPd(nl-1), vertGPPd(nl-1), vertNNAd(nl-1), vertChldegd(nl-1))
 !            vertNPPd = 0.d0
 !            vertGPPd = 0.d0
 !            vertNNAd = 0.d0
 !            vertChldegd  = 0.d0
 !
 !if (enable_coccos) then
-!            allocate(vertNPPc(nl-1), vertGPPc(nl-1), vertNNAc(nl-1), vertChldegc(nl-1)) 
+!            allocate(vertNPPc(nl-1), vertGPPc(nl-1), vertNNAc(nl-1), vertChldegc(nl-1))
 !            vertNPPc = 0.d0
 !            vertGPPc = 0.d0
 !            vertNNAc = 0.d0
@@ -497,7 +497,7 @@ subroutine recom(ice, dynamics, tracers, partit, mesh)
 !if (recom_debug .and. mype==0) print *, achar(27)//'[36m'//'     --> ciso after REcoM_Forcing'//achar(27)//'[0m'
 !
 !            !! * Deallocating 2D diagnostics *
-!            deallocate(vertNPPn, vertGPPn, vertNNAn, vertChldegn) 
+!            deallocate(vertNPPn, vertGPPn, vertNNAn, vertChldegn)
 !            deallocate(vertNPPd, vertGPPd, vertNNAd, vertChldegd)
 !if (enable_coccos) then
 !            deallocate(vertNPPc, vertGPPc, vertNNAc, vertChldegc)
@@ -584,7 +584,7 @@ subroutine recom(ice, dynamics, tracers, partit, mesh)
             call exchange_nod(GloPCO2surf_14, partit)
             call exchange_nod(GloCO2flux_14, partit)
             call exchange_nod(GloCO2flux_seaicemask_14, partit)
-        end if 
+        end if
     end if
     do n=1, benthos_num
         call exchange_nod(Benthos(:,n), partit)
@@ -663,7 +663,7 @@ subroutine recom(ice, dynamics, tracers, partit, mesh)
 end subroutine recom
 
 ! ======================================================================================
-! Alkalinity restoring to climatology                                 	     
+! Alkalinity restoring to climatology
 ! ======================================================================================
 subroutine bio_fluxes(alkalinity, MPI_COMM_FESOM, myDim_nod2D, eDim_nod2D, ocean_area, ulevels_nod2D, areasvol)
     use recom_declarations
@@ -687,32 +687,32 @@ subroutine bio_fluxes(alkalinity, MPI_COMM_FESOM, myDim_nod2D, eDim_nod2D, ocean
 
 !___________________________________________________________________
 ! on freshwater inflow/outflow or virtual alkalinity:
-  ! 1. In zlevel & zstar the freshwater flux is applied in the update of the 
-  ! ssh matrix when solving the continuity equation of vertically 
-  ! integrated flow. The alkalinity concentration in the first layer will 
+  ! 1. In zlevel & zstar the freshwater flux is applied in the update of the
+  ! ssh matrix when solving the continuity equation of vertically
+  ! integrated flow. The alkalinity concentration in the first layer will
   ! be then adjusted according to the change in volume.
 
   ! In this case ralk is forced to be zero by setting ref_alk=0. and ref_alk_local=.false.
 
-  ! 2. In cases where the volume of the upper layer is fixed (i.e. linfs)  the freshwater flux 
-  ! 'ralk*water_flux(n)' is applied as a virtual alkalinity boundary condition via the vertical 
+  ! 2. In cases where the volume of the upper layer is fixed (i.e. linfs)  the freshwater flux
+  ! 'ralk*water_flux(n)' is applied as a virtual alkalinity boundary condition via the vertical
   ! diffusion operator.
 
-  ! --> ralk*water_flux(n) : virtual alkalinity flux 
+  ! --> ralk*water_flux(n) : virtual alkalinity flux
   ! virtual alkalinity flux
 
 !  if (use_virt_alk) then ! OG in case of virtual alkalinity flux
 !     ralk=ref_alk
 !     do n=1, myDim_nod2D+eDim_nod2D
 !        if (ref_alk_local) ralk = tracers%data(2+ialk)%values(1, n)
-!        virtual_alk(n)=ralk*water_flux(n) 
+!        virtual_alk(n)=ralk*water_flux(n)
 !     end do
 !  end if
 
     !___________________________________________________________________________
     ! Balance alkalinity restoring to climatology
     do n=1, myDim_nod2D + eDim_nod2D
-!        relax_alk(n)=surf_relax_Alk * (Alk_surf(n) - tracers%data(2+ialk)%values(1, n)) 
+!        relax_alk(n)=surf_relax_Alk * (Alk_surf(n) - tracers%data(2+ialk)%values(1, n))
 !        relax_alk(n)=surf_relax_Alk * (Alk_surf(n) - alkalinity(ulevels_nod2d(n),n)
         relax_alk(n)=surf_relax_Alk * (Alk_surf(n) - alkalinity(1, n))
     end do

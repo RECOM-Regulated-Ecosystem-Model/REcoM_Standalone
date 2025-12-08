@@ -70,16 +70,16 @@ subroutine Depth_calculations(n, nn, wf, zf, thick, recipthick, myDim_nod2D, eDi
 
 ! ======================================================================================
 !! zbar(nl) allocate the array for storing the standard depths (depth of layers)
-!! zbar is negative 
+!! zbar is negative
 !! Z(nl-1)  mid-depths of layers
 
-    ! zbar_n: depth of layers due to ale thinkness variations at every node n 
+    ! zbar_n: depth of layers due to ale thinkness variations at every node n
 !    allocate(zbar_n(nl))
 !    allocate(zbar_3d_n(nl,myDim_nod2D+eDim_nod2D))
-    
-    ! Z_n: mid depth of layers due to ale thinkness variations at every node n 
+
+    ! Z_n: mid depth of layers due to ale thinkness variations at every node n
 !    allocate(Z_n(nl-1))
-!    allocate(Z_3d_n(nl-1,myDim_nod2D+eDim_nod2D)) 
+!    allocate(Z_3d_n(nl-1,myDim_nod2D+eDim_nod2D))
 ! ============================================================================== modular
 
     !! Background sinking speed
@@ -119,7 +119,7 @@ subroutine Depth_calculations(n, nn, wf, zf, thick, recipthick, myDim_nod2D, eDi
     do k=1, nn+1
         zf(k)=zbar_3d_n(k,n)
     end do
-  
+
 end subroutine Depth_calculations
 
 !===============================================================================
@@ -135,7 +135,7 @@ subroutine Cobeta(daynew, ndpyr, myDim_nod2D, eDim_nod2D, geo_coord_nod2D)
     real(kind=8)                                     :: yearfrac              ! Fraction of year [0 1]
     real(kind=8)                                     :: yDay                  ! Year fraction in radians [0 2*pi]
     real(kind=8)                                     :: declination   = 0.d0  ! Declination of the sun at present lat and time
-    real(kind=8)                                     :: CosAngleNoon  = 0.d0  ! Cosine of Angle of Incidence at noon 
+    real(kind=8)                                     :: CosAngleNoon  = 0.d0  ! Cosine of Angle of Incidence at noon
     integer                                          :: n
 
     ! Constants
@@ -144,11 +144,11 @@ subroutine Cobeta(daynew, ndpyr, myDim_nod2D, eDim_nod2D, geo_coord_nod2D)
     integer, intent(in)                       :: daynew, ndpyr, myDim_nod2D, eDim_nod2D
     real(kind=WP), intent(in), dimension(:,:) :: geo_coord_nod2D
 
-!! find day (****NOTE for year starting in winter*****)  
-!! Paltridge, G. W. and C. M. R. Platt, Radiative Processes 
-!! in Meteorology and Climatology, Developments in 
-!! Atmospheric Sciences, vol. 5, Elsevier Scientific 
-!! Publishing Company, Amsterdam, Oxford, 
+!! find day (****NOTE for year starting in winter*****)
+!! Paltridge, G. W. and C. M. R. Platt, Radiative Processes
+!! in Meteorology and Climatology, Developments in
+!! Atmospheric Sciences, vol. 5, Elsevier Scientific
+!! Publishing Company, Amsterdam, Oxford,
 !! New York, 1976, ISBN 0-444-41444-4.
 
     !! Calculate solar declination using Paltridge & Platt (1976) formula
@@ -161,7 +161,7 @@ subroutine Cobeta(daynew, ndpyr, myDim_nod2D, eDim_nod2D, geo_coord_nod2D)
           	- 0.006758 * cos(2 * yDay) &
         	+ 0.000907 * sin(2 * yDay) &
         	- 0.002697 * cos(3 * yDay) &
-        	+ 0.001480 * sin(3 * yDay) 
+        	+ 0.001480 * sin(3 * yDay)
 
     !! Calculate cosine of angle of incidence for each node
     do n = 1, myDim_nod2D
@@ -187,7 +187,7 @@ subroutine krill_resp(n, daynew, myDim_nod2D, eDim_nod2D, geo_coord_nod2D)
     integer, intent(in)                       :: myDim_nod2D, eDim_nod2D
     real(kind=WP), intent(in), dimension(:,:) :: geo_coord_nod2D
 
-   ! Values from FESOM                                                                                                 
+   ! Values from FESOM
 
    if (geo_coord_nod2D(2,n)<0.0_WP) then  !SH
       if ((daynew .le. 105)) then

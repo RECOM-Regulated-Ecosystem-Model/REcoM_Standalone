@@ -5,7 +5,7 @@ elemental function gsw_saar (p, long, lat)
 ! Calculates the Absolute Salinity Anomaly Ratio, SAAR at a geographic point.
 !
 ! p      : sea pressure                                    [dbar]
-! long   : longitude                                       [deg E]     
+! long   : longitude                                       [deg E]
 ! lat    : latitude                                        [deg N]
 !
 ! gsw_saar : Absolute Salinity Anomaly Ratio               [unitless]
@@ -64,15 +64,15 @@ end do
 ! If we are a long way from the ocean then there will be no valid "ndepth_ref"
 ! values near the point (ie. surrounded by NaNs) - so just return SAAR = 0.0
 if (ndepth_max.eq.-1.0_r8) then
-   gsw_saar = 0.0_r8 
+   gsw_saar = 0.0_r8
    return
-end if 
+end if
 
 p0_original = p
 p_tmp = p
 if (p_tmp.gt.p_ref(int(ndepth_max))) p_tmp = p_ref(int(ndepth_max))
 call gsw_util_indx(p_ref,nz,p_tmp,indz0)
-    
+
 r1 = (long_tmp-longs_ref(indx0))/(longs_ref(indx0+1)-longs_ref(indx0))
 s1 = (lat-lats_ref(indy0))/(lats_ref(indy0+1)-lats_ref(indy0))
 t1 = (p_tmp-p_ref(indz0))/(p_ref(indz0+1)-p_ref(indz0))
@@ -103,7 +103,7 @@ if (  longs_pan(1).le.long_tmp .and. long_tmp.le.longs_pan(npan)-0.001_r8 .and.&
    saar_old = saar
    call gsw_add_barrier(saar_old,long_tmp,lat,longs_ref(indx0), &
    			lats_ref(indy0),dlong,dlat,saar)
-else if (abs(sum(saar)).ge.1e10_r8) then 
+else if (abs(sum(saar)).ge.1e10_r8) then
    saar_old = saar
    call gsw_add_mean(saar_old,saar)
 end if

@@ -1,5 +1,5 @@
 !> \file phsolvers.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with routines needed to solve pH-total alkalinity equation (Munhoven, 2013, GMD)
 MODULE mphsolvers
 !   Module of fastest solvers from Munhoven (2013, Geosci. Model Dev., 6, 1367-1388)
@@ -105,7 +105,7 @@ REAL(KIND=wp), INTENT(IN)            :: K0, K1, K2, Kb, Kw, Ks, Kf
 REAL(KIND=wp), INTENT(IN)            :: K1p, K2p, K3p, Ksi
 REAL(KIND=wp), INTENT(OUT), OPTIONAL :: p_deriveqn
 
-! Local variables 
+! Local variables
 !-----------------
 REAL(KIND=wp) :: znumer_dic, zdnumer_dic, zdenom_dic, zalk_dic, zdalk_dic
 REAL(KIND=wp) :: znumer_bor, zdnumer_bor, zdenom_bor, zalk_bor, zdalk_bor
@@ -250,7 +250,7 @@ TYPE(DUAL_NUM), INTENT(IN)            :: K0, K1, K2, Kb, Kw, Ks, Kf
 TYPE(DUAL_NUM), INTENT(IN)            :: K1p, K2p, K3p, Ksi
 TYPE(DUAL_NUM), INTENT(OUT), OPTIONAL :: p_deriveqn
 
-! Local variables 
+! Local variables
 !-----------------
 TYPE(DUAL_NUM) ::znumer_dic, zdnumer_dic, zdenom_dic, zalk_dic, zdalk_dic
 TYPE(DUAL_NUM) ::znumer_bor, zdnumer_bor, zdenom_bor, zalk_bor, zdalk_bor
@@ -380,13 +380,13 @@ SUBROUTINE ahini_for_at(p_alkcb, p_dictot, p_bortot, K1, K2, Kb, p_hini)
 USE msingledouble
 IMPLICIT NONE
 
-! Argument variables 
+! Argument variables
 !--------------------
 REAL(KIND=wp), INTENT(IN)   ::  p_alkcb, p_dictot, p_bortot
 REAL(KIND=wp), INTENT(IN)   ::  K1, K2, Kb
 REAL(KIND=wp), INTENT(OUT)  ::  p_hini
 
-! Local variables 
+! Local variables
 !-----------------
 REAL(KIND=wp)  ::  zca, zba
 REAL(KIND=wp)  ::  zd, zsqrtd, zhmin
@@ -441,7 +441,7 @@ USE msingledouble
 IMPLICIT NONE
 REAL(KIND=wp) :: SOLVE_AT_GENERAL
 
-! Argument variables 
+! Argument variables
 !--------------------
 REAL(KIND=wp), INTENT(IN)            :: p_alktot
 REAL(KIND=wp), INTENT(IN)            :: p_dictot
@@ -457,7 +457,7 @@ REAL(KIND=wp), INTENT(IN)            :: K1p, K2p, K3p, Ksi
 REAL(KIND=wp), INTENT(IN), OPTIONAL  :: p_hini
 REAL(KIND=wp), INTENT(OUT), OPTIONAL :: p_val
 
-! Local variables 
+! Local variables
 !-----------------
 REAL(KIND=wp)  ::  zh_ini, zh, zh_prev, zh_lnfactor
 REAL(KIND=wp)  ::  zalknw_inf, zalknw_sup
@@ -621,7 +621,7 @@ IF(PRESENT(p_val)) THEN
       p_val = equation_at(p_alktot, zh,       p_dictot, p_bortot,              &
                           p_po4tot, p_siltot,                                  &
                           p_so4tot, p_flutot,                                  &
-                          K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi)    
+                          K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi)
    ELSE
       p_val = HUGE(1._wp)
    ENDIF
@@ -658,7 +658,7 @@ IMPLICIT NONE
 ! value and partial derivatives of [H+] are returned in one objet of type DUAL_NUM
 TYPE(DUAL_NUM) ::SOLVE_AT_GENERAL_DNAD
 
-! Argument variables 
+! Argument variables
 !--------------------
 TYPE(DUAL_NUM), INTENT(IN)            :: p_alktot
 TYPE(DUAL_NUM), INTENT(IN)            :: p_dictot
@@ -674,7 +674,7 @@ TYPE(DUAL_NUM), INTENT(IN)            :: K1p, K2p, K3p, Ksi
 TYPE(DUAL_NUM), INTENT(IN), OPTIONAL  :: p_hini
 TYPE(DUAL_NUM), INTENT(OUT), OPTIONAL :: p_val
 
-! Local variables 
+! Local variables
 !-----------------
 REAL(KIND=wp)  ::  zh_ini
 TYPE(DUAL_NUM) ::  zh, zh_prev, zh_lnfactor
@@ -839,7 +839,7 @@ IF(PRESENT(p_val)) THEN
       p_val = equation_at_DNAD(p_alktot, zh,       p_dictot, p_bortot,         &
                           p_po4tot, p_siltot,                                  &
                           p_so4tot, p_flutot,                                  &
-                          K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi)    
+                          K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi)
    ELSE
       p_val = HUGE(1._wp)
    ENDIF
@@ -853,7 +853,7 @@ FUNCTION solve_at_general_sec(p_alktot, p_dictot, p_bortot,                   &
                               p_po4tot, p_siltot,                             &
                               p_so4tot, p_flutot,                             &
                               K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi, &
-                              p_hini,   p_val) 
+                              p_hini,   p_val)
 
 ! Universal pH solver that converges from any given initial value,
 ! determines upper an lower bounds for the solution if required
@@ -863,7 +863,7 @@ USE msingledouble
 IMPLICIT NONE
 REAL(KIND=wp) :: SOLVE_AT_GENERAL_SEC
 
-! Argument variables 
+! Argument variables
 REAL(KIND=wp), INTENT(IN)            :: p_alktot
 REAL(KIND=wp), INTENT(IN)            :: p_dictot
 REAL(KIND=wp), INTENT(IN)            :: p_bortot
@@ -1057,7 +1057,7 @@ DO
       zh                = SQRT(zh_max * zh_min)
       zh_delta           = zh - zh_1
    ELSE
-      ! \Delta H = -zeqn_1*(h_2 - h_1)/(zeqn_2 - zeqn_1) 
+      ! \Delta H = -zeqn_1*(h_2 - h_1)/(zeqn_2 - zeqn_1)
       ! H_new = H_1 + \Delta H
       zh_delta = -zeqn_1/((zeqn_2-zeqn_1)/(zh_2 - zh_1))
       zh       = zh_1 + zh_delta
@@ -1121,7 +1121,7 @@ END FUNCTION SOLVE_AT_GENERAL_SEC
 
 FUNCTION SOLVE_AT_FAST(p_alktot, p_dictot, p_bortot,                          &
                        p_po4tot, p_siltot,                                    &
-                       p_so4tot, p_flutot,                                    & 
+                       p_so4tot, p_flutot,                                    &
                        K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi,        &
                        p_hini,   p_val)
 
@@ -1131,7 +1131,7 @@ USE msingledouble
 IMPLICIT NONE
 REAL(KIND=wp) :: SOLVE_AT_FAST
 
-! Argument variables 
+! Argument variables
 REAL(KIND=wp), INTENT(IN)            :: p_alktot
 REAL(KIND=wp), INTENT(IN)            :: p_dictot
 REAL(KIND=wp), INTENT(IN)            :: p_bortot
@@ -1176,7 +1176,7 @@ DO
 
    zeqn = equation_at(p_alktot, zh,       p_dictot, p_bortot,                  &
                       p_po4tot, p_siltot,                                      &
-                      p_so4tot, p_flutot,                                      & 
+                      p_so4tot, p_flutot,                                      &
                       K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi,          &
                       P_DERIVEQN = zdeqndh)
 

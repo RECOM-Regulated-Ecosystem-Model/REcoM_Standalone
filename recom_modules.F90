@@ -2,8 +2,8 @@
 !! @par Copyright
 !! This code is subject to the FESOM-REcoM - License - Agreement in it's most recent form.
 !! Please see URL xxx
-!! 
-!! @brief Module for defining variables used in REcoM, ex constant sinking velocity and 
+!!
+!! @brief Module for defining variables used in REcoM, ex constant sinking velocity and
 !! local time step dt
 !!
 !! @remarks This module contains namelist for recom
@@ -64,7 +64,7 @@ module recom_config
                                                         1013, 1014, 1016, 1015, 1025, 1026, 1027, 1028, &
                                                         1029, 1030, 1031, &
                                                         1032, 1033, 1034, &
-                                                        1308, 1321, 1305, 1320, & 
+                                                        1308, 1321, 1305, 1320, &
                                                         1314, 1408, 1421, 1405, 1420, 1414/)
   integer, dimension(8)  :: recom_det_tracer_id     = (/1007, 1008, 1017, 1021, 1308, 1321, 1408, 1421/)
   integer, dimension(8)  :: recom_phy_tracer_id     = (/1004, 1005, 1020, 1305, 1320, 1405, 1420, 1006/)
@@ -80,9 +80,9 @@ module recom_config
   Real(kind=8)                 :: zero           = 0.d0
   Integer                      :: one            = 1
   Real(kind=8)                 :: tiny           = 2.23D-16
-  Real(kind=8)                 :: tiny_chl       = 0.00001 
+  Real(kind=8)                 :: tiny_chl       = 0.00001
   Real(kind=8)                 :: SecondsPerDay  = 86400.d0     ! [s/day]
-  Real(kind=8)                 :: Pa2atm         = 101325.d0    ! [Pa/atm] 
+  Real(kind=8)                 :: Pa2atm         = 101325.d0    ! [Pa/atm]
   Real(kind=8)                 :: redO2C         = 1.453        ! O2:C ratio Anderson and Sarmiento, 1994
 
 !! *** REcoM setup ***
@@ -99,17 +99,17 @@ module recom_config
   integer                :: bgc_base_num          = 22      ! standard tracers
   Integer                :: diags3d_num           = 31      ! Number of diagnostic 3d tracers to be saved
   Real(kind=8)           :: VDet                  = 20.d0   ! Sinking velocity, constant through the water column and positive downwards
-  Real(kind=8)           :: VDet_zoo2             = 200.d0  ! Sinking velocity, constant through the water column 
+  Real(kind=8)           :: VDet_zoo2             = 200.d0  ! Sinking velocity, constant through the water column
   Real(kind=8)           :: VPhy                  = 0.d0    !!! If the number of sinking velocities are different from 3, code needs to be changed !!!
-  Real(kind=8)           :: VDia                  = 0.d0 
-  Real(kind=8)           :: VCocco                = 0.d0    ! NEW 
+  Real(kind=8)           :: VDia                  = 0.d0
+  Real(kind=8)           :: VCocco                = 0.d0    ! NEW
   Real(kind=8)           :: VPhaeo                = 0.d0    ! Phaeocystis
-  Logical                :: allow_var_sinking     = .true.   
-  Integer                :: biostep               = 1          ! Number of times biology should be stepped forward for each time step		 
+  Logical                :: allow_var_sinking     = .true.
+  Integer                :: biostep               = 1          ! Number of times biology should be stepped forward for each time step
   Logical                :: REcoM_Geider_limiter  = .false.              ! Decides what routine should be used to calculate limiters in sms
   Logical                :: REcoM_Grazing_Variable_Preference = .true.  ! Decides if grazing should have preference for phyN or DiaN
-  Logical                :: Grazing_detritus      = .false.    ! Decides grazing on detritus                            
-  Logical                :: het_resp_noredfield   = .true.     ! Decides respiratation of copepods              
+  Logical                :: Grazing_detritus      = .false.    ! Decides grazing on detritus
+  Logical                :: het_resp_noredfield   = .true.     ! Decides respiratation of copepods
   Logical                :: diatom_mucus          = .true.           ! Effect of nutrient limitation on the aggregation
   Logical                :: O2dep_remin           = .true.     ! NEW O2remin Add option for O2 dependency of organic matter remineralization
   Logical                :: use_ballasting        = .true.     ! NEW BALL
@@ -134,7 +134,7 @@ module recom_config
   logical                :: useAeolianN           = .false.    ! When set to true, aeolian nitrogen deposition is activated
   integer                :: firstyearoffesomcycle = 1958       ! The first year of the actual physical forcing (e.g. JRA-55) used
   integer                :: lastyearoffesomcycle  = 2023       ! Last year of the actual physical forcing used
-  integer                :: numofCO2cycles        = 1          ! Number of cycles of the forcing planned 
+  integer                :: numofCO2cycles        = 1          ! Number of cycles of the forcing planned
   integer                :: currentCO2cycle       = 1          ! Which CO2 cycle we are currently running
   Logical                :: DIC_PI                = .true.
   integer                :: Nmocsy                = 1          ! Length of the vector that is passed to mocsy (always one for recom)
@@ -178,8 +178,8 @@ module recom_config
 !!------------------------------------------------------------------------------
 !! *** Sinking ***
   Real(kind=8)                 :: Vdet_a         = 0.0288       ! [1/day]
-  Real(kind=8)                 :: Vcalc          = 0.0216       ! [1/day] depth dependence of calc_diss               
-                                                                                                                           
+  Real(kind=8)                 :: Vcalc          = 0.0216       ! [1/day] depth dependence of calc_diss
+
   namelist /pasinking/ Vdet_a, Vcalc
 !!------------------------------------------------------------------------------
 !! *** Initialization ***
@@ -216,7 +216,7 @@ module recom_config
 
 !!------------------------------------------------------------------------------
 !! *** For limiter function ***
-  Real(kind=8)                 :: NMinSlope      = 50.d0 
+  Real(kind=8)                 :: NMinSlope      = 50.d0
   Real(kind=8)                 :: SiMinSlope     = 1000.d0
   Real(kind=8)                 :: NCmin          = 0.04d0
   Real(kind=8)                 :: NCmin_d        = 0.04d0
@@ -238,7 +238,7 @@ module recom_config
 !! *** For light calculations ***
   Real(kind=8)                 :: k_w            = 0.04d0         ! [1/m]              Light attenuation coefficient
   Real(kind=8)                 :: a_chl          = 0.03d0         ! [1/m * 1/(mg Chl)] Chlorophyll specific attenuation coefficients
-  namelist /palight_calculations/ k_w, a_chl   
+  namelist /palight_calculations/ k_w, a_chl
 !!------------------------------------------------------------------------------
 !! *** Photosynthesis ***
   Real(kind=8)                 :: alfa           = 0.14d0         ! [(mmol C*m2)/(mg Chl*W*day)]
@@ -250,7 +250,7 @@ module recom_config
 !!------------------------------------------------------------------------------
 !! *** Assimilation ***
   Real(kind=8)                 :: V_cm_fact      = 0.7d0          ! scaling factor for temperature dependent maximum of C-specific N-uptake
-  Real(kind=8)                 :: V_cm_fact_d    = 0.7d0  
+  Real(kind=8)                 :: V_cm_fact_d    = 0.7d0
   Real(kind=8)                 :: V_cm_fact_c    = 0.7d0          ! NEW
   Real(kind=8)                 :: V_cm_fact_p    = 0.7d0          ! Phaeocystis
   Real(kind=8)                 :: NMaxSlope      = 1000.d0        ! Max slope for limiting function
@@ -289,28 +289,28 @@ module recom_config
   namelist /pairon_chem/ totalligand, ligandStabConst
 !!------------------------------------------------------------------------------
 !! *** Zooplankton ***
-  Real(kind=8)                 :: graz_max      = 2.4d0           ! [mmol N/(m3 * day)] Maximum grazing loss parameter 
-  Real(kind=8)                 :: epsilonr      = 0.35d0          ! [(mmol N)2 /m6] Half saturation constant for grazing loss 
+  Real(kind=8)                 :: graz_max      = 2.4d0           ! [mmol N/(m3 * day)] Maximum grazing loss parameter
+  Real(kind=8)                 :: epsilonr      = 0.35d0          ! [(mmol N)2 /m6] Half saturation constant for grazing loss
   Real(kind=8)                 :: res_het       = 0.01d0          ! [1/day] Respiration by heterotrophs and mortality (loss to detritus)
   Real(kind=8)                 :: Redfield      = 6.625           ! [mmol C/mmol N] Redfield ratio of C:N = 106:16
   Real(kind=8)                 :: loss_het      = 0.05d0          ! [1/day] Temperature dependent N degradation of extracellular organic N (EON)
   Real(kind=8)                 :: pzDia         = 0.5d0           ! Maximum diatom preference
   Real(kind=8)                 :: sDiaNsq       = 0.d0
-  Real(kind=8)                 :: pzPhy         = 1.0d0           ! Maximum nano-phytoplankton preference 
+  Real(kind=8)                 :: pzPhy         = 1.0d0           ! Maximum nano-phytoplankton preference
   Real(kind=8)                 :: sPhyNsq       = 0.d0
   Real(kind=8)                 :: pzCocco       = 0.5d0           ! NEW (value is just a guess)
   Real(kind=8)                 :: sCoccoNsq     = 0.d0            ! NEW
   Real(kind=8)                 :: pzPhaeo       = 1.0d0           ! Phaeocystis (to be tuned)
-  Real(kind=8)                 :: sPhaeoNsq     = 0.d0            ! Phaeocystis 
+  Real(kind=8)                 :: sPhaeoNsq     = 0.d0            ! Phaeocystis
   Real(kind=8)                 :: pzMicZoo      = 1.0d0           ! NEW 3Zoo Maximum nano-phytoplankton preference
   Real(kind=8)                 :: sMicZooNsq    = 0.d0            ! NEW 3Zoo
   real(kind=8)                 :: tiny_het      = 1.d-5           ! for more stable computation of HetRespFlux (_plus). Value can be > tiny because HetRespFlux ~ hetC**2.
   namelist /pazooplankton/ graz_max, epsilonr, res_het, Redfield, loss_het, pzDia, sDiaNsq, pzPhy, sPhyNsq, pzCocco, sCoccoNsq, pzPhaeo, sPhaeoNsq, pzMicZoo, sMicZooNsq, tiny_het
-!!-------------------------------------------------------------------------------                                                                                                                                                     
+!!-------------------------------------------------------------------------------
 !! *** SecondZooplankton (Macrozooplankton) ***
   Real(kind=8)                 :: graz_max2      = 0.1d0          ! [mmol N/(m3 * day)] Maximum grazing loss parameter
   Real(kind=8)                 :: epsilon2       = 0.0144d0       ! [(mmol N)2 /m6] Half saturation constant for grazing loss
-  Real(kind=8)                 :: res_zoo2       = 0.0107d0       ! [1/day] Respiration by heterotrophs and mortality (loss to detritus)                                                            
+  Real(kind=8)                 :: res_zoo2       = 0.0107d0       ! [1/day] Respiration by heterotrophs and mortality (loss to detritus)
   Real(kind=8)                 :: loss_zoo2      = 0.003d0        ! [1/day] Temperature dependent N degradation of extracellular organic N
   Real(kind=8)                 :: fecal_rate_n   = 0.13d0
   Real(kind=8)                 :: fecal_rate_c   = 0.295d0
@@ -328,11 +328,11 @@ module recom_config
   Real(kind=8)                 :: sHetNsq        = 0.d0
   Real(kind=8)                 :: pzMicZoo2      = 0.8d0          ! NEW Zoo3 Maximum microzooplankton preference
   Real(kind=8)                 :: sMicZooNsq2    = 0.d0           ! NEW Zoo3
-  Real(kind=8)                 :: t1_zoo2        = 28145.d0       ! Krill temp. function constant1                                                                                                       
+  Real(kind=8)                 :: t1_zoo2        = 28145.d0       ! Krill temp. function constant1
   Real(kind=8)                 :: t2_zoo2        = 272.5d0        ! Krill temp. function constant2
-  Real(kind=8)                 :: t3_zoo2        = 105234.d0      ! Krill temp. function constant3                                                                                                      
-  Real(kind=8)                 :: t4_zoo2        = 274.15d0       ! Krill temp. function constant3                                                                                              
-  namelist /pasecondzooplankton/ graz_max2, epsilon2, res_zoo2, & 
+  Real(kind=8)                 :: t3_zoo2        = 105234.d0      ! Krill temp. function constant3
+  Real(kind=8)                 :: t4_zoo2        = 274.15d0       ! Krill temp. function constant3
+  namelist /pasecondzooplankton/ graz_max2, epsilon2, res_zoo2, &
                                  loss_zoo2, fecal_rate_n, fecal_rate_c, fecal_rate_n_mes, fecal_rate_c_mes,     &    ! NEW 3Zoo
                                  pzDia2, sDiaNsq2, pzPhy2, sPhyNsq2, pzCocco2, sCoccoNsq2, pzPhaeo2, sPhaeoNsq2, pzHet, sHetNsq,      &
                                  pzMicZoo2, sMicZooNsq2, &
@@ -353,14 +353,14 @@ module recom_config
   Real(kind=8)                 :: sPhaeoNsq3    = 0.d0            ! Phaeocystis 3Zoo
   namelist /pathirdzooplankton/ graz_max3, epsilon3, loss_miczoo, res_miczoo, pzDia3, sDiaNsq3, pzPhy3, sPhyNsq3, pzCocco3, sCoccoNsq3, pzPhaeo3, sPhaeoNsq3
 
-!-------------------------------------------------------------------------------                                                                                                                          
-!! *** Detritus Grazing Params ***                                                                                                                                                                        
-  Real(kind=8)                 :: pzDet         = 1.d0           ! Maximum small detritus prefence by first zooplankton 
-  Real(kind=8)                 :: sDetNsq       = 0.d0  
+!-------------------------------------------------------------------------------
+!! *** Detritus Grazing Params ***
+  Real(kind=8)                 :: pzDet         = 1.d0           ! Maximum small detritus prefence by first zooplankton
+  Real(kind=8)                 :: sDetNsq       = 0.d0
   Real(kind=8)                 :: pzDetZ2       = 1.d0           ! Maximum large detritus preference by first zooplankton
   Real(kind=8)                 :: sDetZ2Nsq     = 0.d0
   Real(kind=8)                 :: pzDet2        = 1.d0           ! Maximum small detritus prefence by second zooplankton
-  Real(kind=8)                 :: sDetNsq2      = 0.d0  
+  Real(kind=8)                 :: sDetNsq2      = 0.d0
   Real(kind=8)                 :: pzDetZ22      = 1.d0           ! Maximum large detritus preference by second zooplankton
   Real(kind=8)                 :: sDetZ2Nsq2    = 0.d0
   namelist /pagrazingdetritus/ pzDet, sDetNsq, pzDetZ2, sDetZ2Nsq, &
@@ -387,7 +387,7 @@ module recom_config
   namelist /paphytoplankton_N/ lossN, lossN_d, lossN_c, lossN_p
 !!------------------------------------------------------------------------------
 !! *** Phytoplankton C ***
-  Real(kind=8)                 :: lossC         = 0.10d0          ! [1/day] Phytoplankton loss of carbon 
+  Real(kind=8)                 :: lossC         = 0.10d0          ! [1/day] Phytoplankton loss of carbon
   Real(kind=8)                 :: lossC_d       = 0.10d0
   Real(kind=8)                 :: lossC_c       = 0.10d0
   Real(kind=8)                 :: lossC_p       = 0.10d0          ! Phaeocystis
@@ -401,11 +401,11 @@ module recom_config
   namelist /paphytoplankton_ChlA/ deg_Chl, deg_Chl_d, deg_Chl_c, deg_Chl_p
 !!------------------------------------------------------------------------------
 !! *** Detritus N ***
-  Real(kind=8)                 :: gfin          = 0.3d0         ! 3Zoo [] Grazing efficiency (fraction of grazing flux into zooplankton pool) 
-  Real(kind=8)                 :: grazEff2      = 0.8d0         ! 3Zoo [] Grazing efficiency (fraction of grazing flux into second zooplankton pool) 
+  Real(kind=8)                 :: gfin          = 0.3d0         ! 3Zoo [] Grazing efficiency (fraction of grazing flux into zooplankton pool)
+  Real(kind=8)                 :: grazEff2      = 0.8d0         ! 3Zoo [] Grazing efficiency (fraction of grazing flux into second zooplankton pool)
   Real(kind=8)                 :: grazEff3      = 0.8d0         ! 3Zoo [] Grazing efficiency (fraction of grazing flux into microzooplankton pool)
-  Real(kind=8)                 :: reminN        = 0.165d0       ! 3Zoo [1/day] Temperature dependent remineralisation rate of detritus 
-  namelist /padetritus_N/ gfin, grazEff2, grazEff3, reminN      
+  Real(kind=8)                 :: reminN        = 0.165d0       ! 3Zoo [1/day] Temperature dependent remineralisation rate of detritus
+  namelist /padetritus_N/ gfin, grazEff2, grazEff3, reminN
 !!------------------------------------------------------------------------------
 !! *** Detritus C ***
   Real(kind=8)                 :: reminC        = 0.15d0        ! [1/day] Temperature dependent remineralisation rate of detritus
@@ -417,7 +417,7 @@ module recom_config
   Real(kind=8)                 :: lossC_z       = 0.15d0
   namelist /paheterotrophs/ lossN_z, lossC_z
 !!------------------------------------------------------------------------------
-!! *** Second Zooplankton ***             
+!! *** Second Zooplankton ***
   Real(kind=8)                 :: lossN_z2       = 0.02d0
   Real(kind=8)                 :: lossC_z2       = 0.02d0
   namelist /paseczooloss/ lossN_z2, lossC_z2
@@ -426,8 +426,8 @@ module recom_config
   Real(kind=8)                 :: lossN_z3      = 0.05d0         ! 3Zoo
   Real(kind=8)                 :: lossC_z3      = 0.05d0         ! 3Zoo
   namelist /pathirdzooloss/ lossN_z3, lossC_z3
-!!------------------------------------------------------------------------------                                                                                                                                                                                               
-!! *** Parameters for CO2 limitation ***                         
+!!------------------------------------------------------------------------------
+!! *** Parameters for CO2 limitation ***
 
   Real(kind=8)                 :: Cunits         = 976.5625      ! Conversion factor between [mol/m3] (model) and [umol/kg] (function): (1000 * 1000) / 1024
   Real(kind=8)                 :: a_co2_phy      = 1.162e+00     ! [unitless]
@@ -484,7 +484,7 @@ module recom_config
   Real(kind=8)                 :: permeg          = 1.e-6          ! [atm/uatm] Changes units from uatm to atm
   Real(kind=8)                 :: Xacc            = 1.e-12         ! Accuracy for ph-iteration (phacc)
 !  Real(kind=8)                :: pCO2a           = 380.d0         ! [uatm] Atmospheric partial pressure of CO2
-  Real(kind=8)                 :: CO2_for_spinup  = 278.d0         !  
+  Real(kind=8)                 :: CO2_for_spinup  = 278.d0         !
   namelist /paco2_flux_param/ permil, permeg, Xacc, CO2_for_spinup
 !!------------------------------------------------------------------------------
 !! *** Alkalinity restoring ***
@@ -494,7 +494,7 @@ module recom_config
 !! *** Ballasting ***                                              ! NEW BALL
   Real(kind=8)                 :: rho_POC              = 1033.d0   ! kg m-3; density of POC (see Table 1 in Cram et al., 2018)
   Real(kind=8)                 :: rho_PON              = 1033.d0   ! kg m-3; density of PON (see Table 1 in Cram et al., 2018)
-  Real(kind=8)                 :: rho_CaCO3            = 2830.d0   ! kg m-3; density of CaCO3 (see Table 1 in Cram et al., 2018) 
+  Real(kind=8)                 :: rho_CaCO3            = 2830.d0   ! kg m-3; density of CaCO3 (see Table 1 in Cram et al., 2018)
   Real(kind=8)                 :: rho_opal             = 2090.d0   ! kg m-3; density of Opal (see Table 1 in Cram et al., 2018)
   Real(kind=8)                 :: rho_ref_part         = 1230.d0   ! kg m-3; reference particle density (see Cram et al., 2018)
   Real(kind=8)                 :: rho_ref_water        = 1027.d0   ! kg m-3; reference seawater density (see Cram et al., 2018)
@@ -1156,12 +1156,12 @@ Module REcoM_declarations
   Real(kind=8)  :: Chl2N, Chl2N_dia, Chl2N_cocco, Chl2N_phaeo                         ! [mg ChlA/mmol N] Quota between phytoplankton ChlA and N (NEW changed term)
   Real(kind=8)  :: qSiC
   Real(kind=8)  :: qSiN
-  Real(kind=8)  :: recipQZoo                                         ! [mmol C/mmol N]  Quota between heterotrophic C and N 
+  Real(kind=8)  :: recipQZoo                                         ! [mmol C/mmol N]  Quota between heterotrophic C and N
   Real(kind=8)  :: recipQZoo2                                        ! [mmol C/mmol N]  Quota between second zoo  C and N
   Real(kind=8)  :: recipQZoo3                                        ! Zoo3 [mmol C/mmol N] Quota between third zoo C and N
-!!! Grazing detritus Quotas for converting                                         
+!!! Grazing detritus Quotas for converting
   Real(kind=8)  :: recipDet                                          ! [mmol C/mmol N]  Quota between second zoo  C and N
-  Real(kind=8)  :: recipDet2                                         ! [mmol C/mmol N]  Quota between second zoo  C and N 
+  Real(kind=8)  :: recipDet2                                         ! [mmol C/mmol N]  Quota between second zoo  C and N
 
 !!------------------------------------------------------------------------------
 !! *** For limiter function ***
@@ -1208,7 +1208,7 @@ Module REcoM_declarations
   Real(kind=8)  :: logK1, logK2, Klig1, Klig2
 !!------------------------------------------------------------------------------
 !! *** Zooplankton ***
-  Real(kind=8)  :: DiaNsq  
+  Real(kind=8)  :: DiaNsq
   Real(kind=8)  :: varpzdia, fDiaN                       ! Part of Diatoms available for food
   Real(kind=8)  :: PhyNsq
   Real(kind=8)  :: varpzPhy, fPhyN                       ! Part of Nano available for food
@@ -1217,7 +1217,7 @@ Module REcoM_declarations
   Real(kind=8)  :: PhaeoNsq
   Real(kind=8)  :: varpzPhaeo,fPhaeoN
   Real(kind=8)  :: MicZooNsq                             ! NEW 3Zoo
-  Real(kind=8)  :: varpzMicZoo, fMicZooN                 ! NEW 3Zoo Part of microzooplankton available for food 
+  Real(kind=8)  :: varpzMicZoo, fMicZooN                 ! NEW 3Zoo Part of microzooplankton available for food
   Real(kind=8)  :: food, foodsq                          ! [(mmol N)2/m6]
   Real(kind=8)  :: grazingFlux_phy, grazingFlux_Dia, grazingFlux_Cocco, grazingFlux_Phaeo ! [mmol N / (m3 * day)] (NEW changed term)
   Real(kind=8)  :: grazingFlux_miczoo                    ! NEW 3Zoo
@@ -1226,7 +1226,7 @@ Module REcoM_declarations
   Real(kind=8)  :: HetRespFlux                           ! Zooplankton respiration
   Real(kind=8)  :: HetLossFlux                           ! [(mmol N)2/(m6 * day)] Zooplankton mortality (quadratic loss)
 !!------------------------------------------------------------------------------
-!! *** Second Zooplankton  ***                                                                                          
+!! *** Second Zooplankton  ***
      Real(kind=8)  :: DiaNsq2, PhyNsq2, CoccoNsq2, PhaeoNsq2, HetNsq                   ! NEW (changed term)
      Real(kind=8)  :: varpzDia2, fDiaN2, varpzPhy2, fPhyN2, varpzCocco2, fCoccoN2, varpzPhaeo2, fPhaeoN2, varpzHet, fHetN ! Part of Diatoms available for food
      Real(kind=8)  :: MicZooNsq2                         ! NEW Zoo3
@@ -1235,16 +1235,16 @@ Module REcoM_declarations
      Real(kind=8)  :: grazingFlux_phy2, grazingFlux_Dia2, grazingFlux_Cocco2, grazingFlux_Phaeo2, grazingFlux_het2 ! [mmol N / (m3 * day)  (NEW changed term)
      Real(kind=8)  :: grazingFlux_miczoo2                ! NEW Zoo3
      Real(kind=8)  :: grazingFlux2
-     Real(kind=8)  :: Zoo2RespFlux                       ! Zooplankton respiration                   
-     Real(kind=8)  :: Zoo2LossFlux                       ! [(mmol N)2/(m6 * day)] Zooplankton mortality (quadratic loss)  
-     Real(kind=8)  :: Zoo2fecalloss_n                    ! [(mmol N)/(m3*day)] Second zoo fecal pellet                        
-     Real(kind=8)  :: Zoo2fecalloss_c                    ! [(mmol N)/(m3*day)] Second zoo fecal pellet     
+     Real(kind=8)  :: Zoo2RespFlux                       ! Zooplankton respiration
+     Real(kind=8)  :: Zoo2LossFlux                       ! [(mmol N)2/(m6 * day)] Zooplankton mortality (quadratic loss)
+     Real(kind=8)  :: Zoo2fecalloss_n                    ! [(mmol N)/(m3*day)] Second zoo fecal pellet
+     Real(kind=8)  :: Zoo2fecalloss_c                    ! [(mmol N)/(m3*day)] Second zoo fecal pellet
      Real(kind=8)  :: Mesfecalloss_n                     ! NEW Zoo3
-     Real(kind=8)  :: Mesfecalloss_c                     ! NEW Zoo3                          
-     Real(kind=8)  :: recip_res_zoo22 
+     Real(kind=8)  :: Mesfecalloss_c                     ! NEW Zoo3
+     Real(kind=8)  :: recip_res_zoo22
 !!------------------------------------------------------------------------------
-!! *** Grazing Detritus  *** 
-  Real(kind=8)  :: DetNsq, DetZ2Nsq, DetNsq2, DetZ2Nsq2  
+!! *** Grazing Detritus  ***
+  Real(kind=8)  :: DetNsq, DetZ2Nsq, DetNsq2, DetZ2Nsq2
   Real(kind=8)  :: varpzDet, varpzDetZ2, varpzDet2, varpzDetZ22         ! Part of Diatoms available for food
   Real(kind=8)  :: fDetN, fDetZ2N, fDetN2, fDetZ2N2
   Real(kind=8)  :: grazingFlux_Det, grazingFlux_DetZ2                   ! [mmol N / (m3 * day)]
@@ -1265,10 +1265,10 @@ Module REcoM_declarations
   Real(kind=8)  :: grazingFlux3
   Real(kind=8)  :: MicZooRespFlux                    ! Zooplankton respiration
   Real(kind=8)  :: MicZooLossFlux                    ! [(mmol N)2/(m6 * day)] Zooplankton mortality (quadratic loss)
-!!------------------------------------------------------------------------------                                                                                
+!!------------------------------------------------------------------------------
 !! *** Aggregation  ***
   Real(kind=8)  :: AggregationRate                   ! [1/day] AggregationRate (of nitrogen)
-!!------------------------------------------------------------------------------                                                                                
+!!------------------------------------------------------------------------------
 !! *** Calcification  ***
   Real(kind=8)  :: calc_prod_ratio_cocco             ! NEW (before it was defined as a fixed value, but now dependent on cocco and T)
   Real(kind=8)  :: calcification
@@ -1281,7 +1281,7 @@ Module REcoM_declarations
   Real(kind=8)  :: calc_loss_gra3                    ! NEW Zoo3 detritus
   Real(kind=8)  :: Ca                                ! NEW DISS (calcium ion concentration)
   Real(kind=8)  :: CO3_sat                           ! NEW DISS (saturated CO3 concentration, calculated from kspc and Ca)
-!!------------------------------------------------------------------------------                                                                                
+!!------------------------------------------------------------------------------
 !! *** Diagnostics  ***
   Real(kind=8)  :: recipbiostep                         ! 1/number of steps per recom cycle
   Real(kind=8),allocatable,dimension(:,:) :: Diags3Dloc
@@ -1349,7 +1349,7 @@ Module REcoM_declarations
   Real(kind=8),allocatable,dimension(:) :: vertrespmacro
 
 
-!!------------------------------------------------------------------------------                                                                                
+!!------------------------------------------------------------------------------
 !! *** Benthos  ***
   Real(kind=8),allocatable,dimension(:) :: decayBenthos ! [1/day] Decay rate of detritus in the benthic layer
   Real(kind=8),allocatable,dimension(:) :: wFluxDet     ! [mmol/(m2 * day)] Flux of N,C,Si and calc through sinking of detritus
@@ -1358,10 +1358,10 @@ Module REcoM_declarations
   Real(kind=8),allocatable,dimension(:) :: wFluxCocco   ! NEW [mmol/(m2 * day)] Flux of N,C, calc and chl through sinking of coccos
   Real(kind=8),allocatable,dimension(:) :: wFluxPhaeo   ! NEW [mmol/(m2 * day)] Flux of N,C, calc and chl through sinking of Phaeocystis
   Real(kind=8)              :: Vben_det     ! [m/day] speed of sinking into benthos from water column
-  Real(kind=8)              :: Vben_det_seczoo !second zooplankton sinking benthos  
+  Real(kind=8)              :: Vben_det_seczoo !second zooplankton sinking benthos
   Real(kind=8)              :: Vben_phy
   Real(kind=8)              :: Vben_dia
-  Real(kind=8)              :: Vben_coc     
+  Real(kind=8)              :: Vben_coc
   Real(kind=8)              :: Vben_pha     ! Phaeocystis
   Real(kind=8)              :: Ironflux     ! [umol Fe/(m2*day)] Flux of Fe from sediment to water
 !_______________________________________________________________________________
@@ -1369,10 +1369,10 @@ Module REcoM_declarations
 !!---- PAR
 !real(kind=8),allocatable,dimension(:)     :: PAR
 
-! --> multiplication factor for surface boundary condition in 
+! --> multiplication factor for surface boundary condition in
 !     bc_surface for river and erosion
-!     river on/off -->=1.0/0.0 
-!     erosion on/off -->=1.0/0.0 
+!     river on/off -->=1.0/0.0
+!     erosion on/off -->=1.0/0.0
 
 real(kind=8)                               :: is_riverinput
 real(kind=8)                               :: is_erosioninput
@@ -1421,14 +1421,14 @@ Module REcoM_GloVar
   Real(kind=8),allocatable,dimension(:,:)   :: scaling_visc_3D     ! BALL: scaling factor
   Real(kind=8),allocatable,dimension(:,:)   :: seawater_visc_3D    ! BALL: scaling factor
 
-  Real(kind=8),allocatable,dimension(:)     :: GlodPCO2surf       ! [mmol/m2/day] ocean-atmosphere  
+  Real(kind=8),allocatable,dimension(:)     :: GlodPCO2surf       ! [mmol/m2/day] ocean-atmosphere
   Real(kind=8),allocatable,dimension(:,:)   :: GlodecayBenthos  ! [1/day] Decay rate of detritus in the benthic layer saved for oce_ale_tracer.F90
   Real(kind=8),allocatable,dimension(:)     :: PistonVelocity   ! [m s-1]
   Real(kind=8),allocatable,dimension(:)     :: alphaCO2         ! [mol L-1 atm-1]
 
-  Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxDet    ! 
-  Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxPhy    ! 
-  Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxDia    ! 
+  Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxDet    !
+  Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxPhy    !
+  Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxDia    !
   Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxCocco  !
   Real(kind=8),allocatable,dimension(:,:)   :: GlowFluxPhaeo  !
 
@@ -1520,12 +1520,12 @@ Module REcoM_GloVar
   Real(kind=8),allocatable,dimension(:,:)   :: SinkFlx         ! Diagnostics in 2D [4 n2d] or [6 n2d] with ciso
   Real(kind=8),allocatable,dimension(:,:,:) :: SinkFlx_tr      ! kh 25.03.22 buffer sums per tracer index to avoid non bit identical results regarding global sums when running the tracer loop in parallel
   Real(kind=8),allocatable,dimension(:,:)   :: Sinkingvel1     ! Diagnostics for vertical sinking
-  Real(kind=8),allocatable,dimension(:,:)   :: Sinkingvel2     ! Diagnostics for vertical sinking  
-  Real(kind=8),allocatable,dimension(:,:,:) :: Sinkvel1_tr     ! Sinking speed of particle class 1 OG 16.03.23 
-  Real(kind=8),allocatable,dimension(:,:,:) :: Sinkvel2_tr     ! Sinking speed of particle class 2 OG 16.03.23 
+  Real(kind=8),allocatable,dimension(:,:)   :: Sinkingvel2     ! Diagnostics for vertical sinking
+  Real(kind=8),allocatable,dimension(:,:,:) :: Sinkvel1_tr     ! Sinking speed of particle class 1 OG 16.03.23
+  Real(kind=8),allocatable,dimension(:,:,:) :: Sinkvel2_tr     ! Sinking speed of particle class 2 OG 16.03.23
 
   Real(kind=8),allocatable,dimension(:,:)   :: GloSed           ! Yearly input into bottom water from sediments [n2d 5] or [n2d 7] with ciso
-  Real(kind=8),allocatable,dimension(:,:)   :: lb_flux          ! Yearly burial from medusa: [n2d 5] or [n2d 9] with ciso_14 
+  Real(kind=8),allocatable,dimension(:,:)   :: lb_flux          ! Yearly burial from medusa: [n2d 5] or [n2d 9] with ciso_14
 
 ! atmospheric box model:
   Real(kind=8),allocatable,dimension(:)     :: x_co2atm         ! atmospheric CO2 mixing ratio (mole fraction)
@@ -1549,7 +1549,7 @@ Module REcoM_locVar
 
   Real(kind=8),allocatable,dimension(:) :: LocBenthos ! Storing the values for benthos in current watercolumn: N,C,Si and Calc
   Real(kind=8) :: Hplus                     ! [mol/kg] Concentrations of H-plus ions in the surface node
-  Real(kind=8) :: pCO2surf(1)                  ! [uatm] Partial pressure of CO2 in surface layer at current 2D node	
+  Real(kind=8) :: pCO2surf(1)                  ! [uatm] Partial pressure of CO2 in surface layer at current 2D node
   Real(kind=8) :: dflux(1)                     ! [mmol/m2/day] Flux of CO2 into the ocean
   Real(kind=8) :: oflux(1)                     ! [mmol/m2/day] Flux of O2 into the ocean
   Real(kind=8) :: o2ex(1)                     ! [mmol/m2/s] Flux of O2 into the ocean
@@ -1573,7 +1573,7 @@ Module REcoM_locVar
   Real(kind=8) :: p(1)                         ! pressure [decibars]; p = f(depth, latitude) if computed from depth [m] OR p = depth if [db]
   Real(kind=8) :: tempis(1)                    ! in-situ temperature [degrees C]
   Real(kind=8) :: dpos(1)                      ! depth converted to positive values, needed in the mocsy routine
-  Real(kind=8) :: kw660(1)                     ! gas transfer velocity (piston velocity) for CO2 [m/s] 
+  Real(kind=8) :: kw660(1)                     ! gas transfer velocity (piston velocity) for CO2 [m/s]
   Real(kind=8) :: K0(1)                        ! CO2 solubility
   Real(kind=8) :: co2flux_seaicemask(1)        ! air-to-sea flux of CO2 [mmol/m2/s]
   Real(kind=8) :: o2flux_seaicemask(1)         ! air-to-sea flux of CO2 [mmol/m2/s]
@@ -1609,7 +1609,7 @@ Module REcoM_locVar
   Real(kind=8) :: LocRiverDIN, LocRiverDON, LocRiverDOC, LocRiverDSi, LocRiverDIC, LocRiverAlk
 
   Real(kind=8) :: res_zoo2_a, res_zoo2_f
-  Real(kind=8) :: grazingFluxcarbonzoo2     ! grazingfluxcarbon 
+  Real(kind=8) :: grazingFluxcarbonzoo2     ! grazingfluxcarbon
   Real(kind=8) :: grazingFluxcarbon_mes        ! Zoo3
 
   Real(kind=8) :: PICPOCtemp                   ! (added to make the calcification dependent on the temperature, after Krumhardt et al. 2017/2019)
@@ -1632,7 +1632,7 @@ module REcoM_ciso
   logical :: ciso_14               = .false.  ! Include radiocarbon (-> 31 or 38 tracers)
   logical :: ciso_organic_14       = .false.  ! Include organic radiocarbon (-> 38 tracers)
   real(kind=8) :: delta_co2_13        = -6.61
-  real(kind=8) :: big_delta_co2_14(3) = (/0., 0., 0./) 
+  real(kind=8) :: big_delta_co2_14(3) = (/0., 0., 0./)
   real(kind=8) :: lambda_14 = 3.8561e-12      ! Decay constant of carbon-14
 ! for revised atbox 14CO2 implementation
   logical      :: atbox_spinup    = .true.
@@ -1664,7 +1664,7 @@ module REcoM_ciso
   real(kind=8),allocatable,dimension(:)   :: GloPCO2surf_13, GloPCO2surf_14  ! [uatm] Surface ocean 13|14CO2 partial pressure
   real(kind=8),allocatable,dimension(:)   :: GloCO2flux_13, GloCO2flux_14    ! [mmol/m2/day] Positive downwards
   real(kind=8),allocatable,dimension(:)   :: GloCO2flux_seaicemask_13, GloCO2flux_seaicemask_14
-  real(kind=8),allocatable,dimension(:)   :: RiverineDOCOrig_13, RiverineDOCOrig_14, RiverDOC2D_13, RiverDOC2D_14 
+  real(kind=8),allocatable,dimension(:)   :: RiverineDOCOrig_13, RiverineDOCOrig_14, RiverDOC2D_13, RiverDOC2D_14
 
 ! Module REcoM_LocVar:
   real(kind=8) :: pCO2surf_13(1), pCO2surf_14(1), & ! [uatm] Partial pressure of 13|14CO2 in surface layer at current 2D node
@@ -1714,7 +1714,7 @@ module REcoM_ciso
                   r_diac_13, r_diac_14,           & ! diatoms
                   r_iorg_13 = 0.975,              & ! initial ratios of organic matter
                   r_iorg_14 = 0.950
-                  
+
 ! Fractionation factors
   real(kind=8) :: alpha_k_13 = 0.99912,           & ! gas transfer (kinetic fractionation,
                   alpha_k_14 = 0.99824,           & ! mean values for 5-21C by Zhang et al., 1995)
@@ -1820,7 +1820,7 @@ module REcoM_ciso
 !     isotopic fractionation factors for phytoplankton and diatoms due to
 !     photosynthesis (alpha_p_13|14, declared at the head of the module)
 !
-!     Note that we are interested in effective values (implictly including the 
+!     Note that we are interested in effective values (implictly including the
 !     fractionation of dissolved CO2) which are actually derived in field studies
 !     or lab experiments. Young et al. 2013, eq. (5) with values from paragraph [35]
 !
@@ -1839,7 +1839,7 @@ module REcoM_ciso
 
 !     Fractionation wrt carbon-13
       alpha_p_13     = max(1., 1. + 0.001 * (17.6 * (1 - 2.02 / co2aq)))
-      alpha_p_dia_13 = alpha_p_13 
+      alpha_p_dia_13 = alpha_p_13
 
 !     Fractionation wrt carbon-14
       alpha_p_14     = 2. * alpha_p_13 - 1.
@@ -1847,17 +1847,17 @@ module REcoM_ciso
 
     return
     end subroutine recom_ciso_photo
-!   ----------------------------------------------------------------------------------  
- 
- 
+!   ----------------------------------------------------------------------------------
+
+
     function lat_zone(lat_n)
 !   ----------------------------------------------------------------------------------
-!   Assign latitude zones from nodal latitude values 
+!   Assign latitude zones from nodal latitude values
 !   ----------------------------------------------------------------------------------
-    
+
       implicit none
       integer                  :: lat_zone
-    
+
 !     Input: Latitude value corresponding to node n
       real(kind=8), intent(in) :: lat_n
 
@@ -1869,7 +1869,7 @@ module REcoM_ciso
       else                         ! (Sub-) Tropical zone
         lat_zone = 2
       end if
-    
+
       return
     end function lat_zone
 
@@ -1878,11 +1878,11 @@ module REcoM_ciso
 !   ----------------------------------------------------------------------------------
 !    computes wind speed at 10 m height "wind10" from wind stress fields tau_x, tau_y
 !    as long as wind10 is not properly passed from ECHAM in coupled simulations.
-!    We follow Peixoto & Oort (1992, Eq. (10.28), (10,29)) and Charnock (1955); 
+!    We follow Peixoto & Oort (1992, Eq. (10.28), (10,29)) and Charnock (1955);
 !    also see MPI report 349 (2003), Eq. (5.7).
 !   ----------------------------------------------------------------------------------
       implicit none
-     
+
       real(kind=8) :: wind_10
 
 !     Input
@@ -1897,7 +1897,7 @@ module REcoM_ciso
       real(kind=8) :: l_rough_x, l_rough_y
 !     Inverse von-Karman constant (0.4), Charnock constant (0.018) divided by g, inverse density of air (1.3), log(10)
       real(kind=8), parameter :: inv_karm = 2.5, charn_g = 0.00173, inv_dens_air = 0.76923, log_10 = 2.30258
-     
+
 !     Calculate friction velocities (Peixoto & Oort, 1992, Eq. (10.28))
       u_fric = sqrt(abs(windstr_x) * inv_dens_air)
       v_fric = sqrt(abs(windstr_y) * inv_dens_air)
@@ -1909,14 +1909,14 @@ module REcoM_ciso
 !     Calculate wind speed at 10 m (Peixoto & Oort, 1992, Eq. (10.29))
       u_10 = inv_karm * u_fric * (log_10 - log(l_rough_x))
       v_10 = inv_karm * v_fric * (log_10 - log(l_rough_y))
-     
+
       wind_10 = sqrt(u_10**2 + v_10**2)
-     
+
       return
     end function wind_10
 !   ----------------------------------------------------------------------------------
-   
-   
+
+
 end module REcoM_ciso
 
 
@@ -1924,7 +1924,7 @@ end module REcoM_ciso
 module recom_diags_management
     use recom_config
     implicit none
-    
+
 contains
 
 ! ==============================================================================
@@ -1935,15 +1935,15 @@ subroutine allocate_and_init_diags(nl)
     use recom_locvar
     use REcoM_declarations
     implicit none
-    
+
     integer, intent(in) :: nl  ! Number of vertical levels
-    
+
     ! --------------------------------------------------------------------------
     ! Small Phytoplankton
     ! --------------------------------------------------------------------------
     allocate(vertNPPn(nl-1), vertGPPn(nl-1), vertNNAn(nl-1), vertChldegn(nl-1))
     allocate(vertrespn(nl-1), vertdocexn(nl-1), vertaggn(nl-1))
-    
+
     vertNPPn    = 0.d0
     vertGPPn    = 0.d0
     vertNNAn    = 0.d0
@@ -1951,13 +1951,13 @@ subroutine allocate_and_init_diags(nl)
     vertrespn   = 0.d0
     vertdocexn  = 0.d0
     vertaggn    = 0.d0
-    
+
     ! --------------------------------------------------------------------------
     ! Diatoms
     ! --------------------------------------------------------------------------
     allocate(vertNPPd(nl-1), vertGPPd(nl-1), vertNNAd(nl-1), vertChldegd(nl-1))
     allocate(vertrespd(nl-1), vertdocexd(nl-1), vertaggd(nl-1))
-    
+
     vertNPPd    = 0.d0
     vertGPPd    = 0.d0
     vertNNAd    = 0.d0
@@ -1965,7 +1965,7 @@ subroutine allocate_and_init_diags(nl)
     vertrespd   = 0.d0
     vertdocexd  = 0.d0
     vertaggd    = 0.d0
-    
+
     ! --------------------------------------------------------------------------
     ! Coccolithophores (if enabled)
     ! --------------------------------------------------------------------------
@@ -1973,7 +1973,7 @@ subroutine allocate_and_init_diags(nl)
         allocate(vertNPPc(nl-1), vertGPPc(nl-1), vertNNAc(nl-1), vertChldegc(nl-1))
         allocate(vertrespc(nl-1), vertdocexc(nl-1), vertaggc(nl-1))
         allocate(vertcalcdiss(nl-1), vertcalcif(nl-1))
-        
+
         vertNPPc     = 0.d0
         vertGPPc     = 0.d0
         vertNNAc     = 0.d0
@@ -1983,13 +1983,13 @@ subroutine allocate_and_init_diags(nl)
         vertaggc     = 0.d0
         vertcalcdiss = 0.d0
         vertcalcif   = 0.d0
-        
+
         ! ----------------------------------------------------------------------
         ! Phaeocystis
         ! ----------------------------------------------------------------------
         allocate(vertNPPp(nl-1), vertGPPp(nl-1), vertNNAp(nl-1), vertChldegp(nl-1))
         allocate(vertrespp(nl-1), vertdocexp(nl-1), vertaggp(nl-1))
-        
+
         vertNPPp    = 0.d0
         vertGPPp    = 0.d0
         vertNNAp    = 0.d0
@@ -2003,27 +2003,27 @@ subroutine allocate_and_init_diags(nl)
         vertcalcdiss = 0.d0
         vertcalcif   = 0.d0
     endif
-    
+
     ! --------------------------------------------------------------------------
     ! Zooplankton Grazing (if enabled)
     ! --------------------------------------------------------------------------
     if (Grazing_detritus) then
-        
+
         if (enable_3zoo2det) then
             ! Microzooplankton
             allocate(vertgrazmicro_tot(nl-1), vertgrazmicro_n(nl-1), vertgrazmicro_d(nl-1))
             allocate(vertrespmicro(nl-1))
-            
+
             vertgrazmicro_tot = 0.d0
             vertgrazmicro_n   = 0.d0
             vertgrazmicro_d   = 0.d0
             vertrespmicro     = 0.d0
-            
+
             ! Mesozooplankton
             allocate(vertgrazmeso_tot(nl-1), vertgrazmeso_n(nl-1), vertgrazmeso_d(nl-1))
             allocate(vertgrazmeso_det(nl-1), vertgrazmeso_mic(nl-1), vertgrazmeso_det2(nl-1))
             allocate(vertrespmeso(nl-1))
-            
+
             vertgrazmeso_tot  = 0.d0
             vertgrazmeso_n    = 0.d0
             vertgrazmeso_d    = 0.d0
@@ -2031,24 +2031,24 @@ subroutine allocate_and_init_diags(nl)
             vertgrazmeso_mic  = 0.d0
             vertgrazmeso_det2 = 0.d0
             vertrespmeso      = 0.d0
-            
+
             if (enable_coccos) then
                 allocate(vertgrazmicro_c(nl-1), vertgrazmicro_p(nl-1))
                 allocate(vertgrazmeso_c(nl-1), vertgrazmeso_p(nl-1))
-                
+
                 vertgrazmicro_c = 0.d0
                 vertgrazmicro_p = 0.d0
                 vertgrazmeso_c  = 0.d0
                 vertgrazmeso_p  = 0.d0
             endif
         endif
-        
+
         ! Macrozooplankton
         allocate(vertgrazmacro_tot(nl-1), vertgrazmacro_n(nl-1), vertgrazmacro_d(nl-1))
         allocate(vertgrazmacro_mes(nl-1), vertgrazmacro_det(nl-1))
         allocate(vertgrazmacro_mic(nl-1), vertgrazmacro_det2(nl-1))
         allocate(vertrespmacro(nl-1))
-        
+
         vertgrazmacro_tot  = 0.d0
         vertgrazmacro_n    = 0.d0
         vertgrazmacro_d    = 0.d0
@@ -2057,7 +2057,7 @@ subroutine allocate_and_init_diags(nl)
         vertgrazmacro_mic  = 0.d0
         vertgrazmacro_det2 = 0.d0
         vertrespmacro      = 0.d0
-        
+
         if (enable_coccos) then
             allocate(vertgrazmacro_c(nl-1), vertgrazmacro_p(nl-1))
             vertgrazmacro_c = 0.d0
@@ -2072,7 +2072,7 @@ subroutine allocate_and_init_diags(nl)
         allocate(VTPhyCO2(nl-1), VTDiaCO2(nl-1))
         VTPhyCO2  = 0.d0
         VTDiaCO2  = 0.d0
-    
+
         allocate(VTCphotLigLim_phyto(nl-1), VTCphotLigLim_diatoms(nl-1))
         VTCphotLigLim_phyto   = 0.d0
         VTCphotLigLim_diatoms = 0.d0
@@ -2081,7 +2081,7 @@ subroutine allocate_and_init_diags(nl)
         VTCphot_phyto   = 0.d0
         VTCphot_diatoms = 0.d0
 
-    if (enable_coccos) then    
+    if (enable_coccos) then
 
         allocate(VTTemp_diatoms(nl-1), VTTemp_phyto(nl-1))
         VTTemp_diatoms = 0.d0
@@ -2090,7 +2090,7 @@ subroutine allocate_and_init_diags(nl)
         allocate(VTqlimitFac_phyto(nl-1), VTqlimitFac_diatoms(nl-1))
         VTqlimitFac_phyto   = 0.d0
         VTqlimitFac_diatoms = 0.d0
-    
+
         allocate(VTSi_assimDia(nl-1))
         VTSi_assimDia = 0.d0
 
@@ -2101,19 +2101,19 @@ subroutine allocate_and_init_diags(nl)
         allocate(VTTemp_cocco(nl-1), VTTemp_phaeo(nl-1))
         VTTemp_cocco = 0.d0
         VTTemp_phaeo = 0.d0
-        
+
         allocate(VTCoccoCO2(nl-1), VTPhaeoCO2(nl-1))
         VTCoccoCO2 = 0.d0
         VTPhaeoCO2 = 0.d0
-        
+
         allocate(VTqlimitFac_cocco(nl-1), VTqlimitFac_phaeo(nl-1))
         VTqlimitFac_cocco = 0.d0
         VTqlimitFac_phaeo = 0.d0
-        
+
         allocate(VTCphotLigLim_cocco(nl-1), VTCphotLigLim_phaeo(nl-1))
         VTCphotLigLim_cocco = 0.d0
         VTCphotLigLim_phaeo = 0.d0
-        
+
         allocate(VTCphot_cocco(nl-1), VTCphot_phaeo(nl-1))
         VTCphot_cocco = 0.d0
         VTCphot_phaeo = 0.d0
@@ -2131,9 +2131,9 @@ subroutine update_2d_diags(n)
     use recom_glovar
     use REcoM_declarations
     implicit none
-    
+
     integer, intent(in) :: n  ! Node index
-    
+
     ! --------------------------------------------------------------------------
     ! Small Phytoplankton
     ! --------------------------------------------------------------------------
@@ -2141,7 +2141,7 @@ subroutine update_2d_diags(n)
     GPPn(n)    = locGPPn
     NNAn(n)    = locNNAn
     Chldegn(n) = locChldegn
-    
+
     ! --------------------------------------------------------------------------
     ! Diatoms
     ! --------------------------------------------------------------------------
@@ -2149,7 +2149,7 @@ subroutine update_2d_diags(n)
     GPPd(n)    = locGPPd
     NNAd(n)    = locNNAd
     Chldegd(n) = locChldegd
-    
+
     ! --------------------------------------------------------------------------
     ! Coccolithophores and Phaeocystis (if enabled)
     ! --------------------------------------------------------------------------
@@ -2158,13 +2158,13 @@ subroutine update_2d_diags(n)
         GPPc(n)    = locGPPc
         NNAc(n)    = locNNAc
         Chldegc(n) = locChldegc
-        
+
         NPPp(n)    = locNPPp
         GPPp(n)    = locGPPp
         NNAp(n)    = locNNAp
         Chldegp(n) = locChldegp
     endif
-    
+
     ! --------------------------------------------------------------------------
     ! Zooplankton Grazing (if enabled)
     ! --------------------------------------------------------------------------
@@ -2174,16 +2174,16 @@ subroutine update_2d_diags(n)
         grazmeso_n(n)   = locgrazmeso_n
         grazmeso_d(n)   = locgrazmeso_d
         grazmeso_det(n) = locgrazmeso_det
-        
+
         if (enable_coccos) then
             grazmeso_c(n) = locgrazmeso_c
             grazmeso_p(n) = locgrazmeso_p
         endif
-        
+
         if (enable_3zoo2det) then
             grazmeso_mic(n)  = locgrazmeso_mic
             grazmeso_det2(n) = locgrazmeso_det2
-            
+
             ! Macrozooplankton
             grazmacro_tot(n)  = locgrazmacro_tot
             grazmacro_n(n)    = locgrazmacro_n
@@ -2192,24 +2192,24 @@ subroutine update_2d_diags(n)
             grazmacro_det(n)  = locgrazmacro_det
             grazmacro_mic(n)  = locgrazmacro_mic
             grazmacro_det2(n) = locgrazmacro_det2
-            
+
             if (enable_coccos) then
                 grazmacro_c(n) = locgrazmacro_c
                 grazmacro_p(n) = locgrazmacro_p
             endif
-            
+
             ! Microzooplankton
             grazmicro_tot(n) = locgrazmicro_tot
             grazmicro_n(n)   = locgrazmicro_n
             grazmicro_d(n)   = locgrazmicro_d
-            
+
             if (enable_coccos) then
                 grazmicro_c(n) = locgrazmicro_c
                 grazmicro_p(n) = locgrazmicro_p
             endif
         endif
     endif
-    
+
 end subroutine update_2d_diags
 
 ! ==============================================================================
@@ -2221,10 +2221,10 @@ subroutine update_3d_diags(n, nzmax)
     use recom_glovar
     use REcoM_declarations
     implicit none
-    
+
     integer, intent(in) :: n      ! Node index
     integer, intent(in) :: nzmax  ! Maximum vertical level for this node
-    
+
     ! --------------------------------------------------------------------------
     ! Small Phytoplankton
     ! --------------------------------------------------------------------------
@@ -2232,7 +2232,7 @@ subroutine update_3d_diags(n, nzmax)
     docexn(1:nzmax,n) = vertdocexn(1:nzmax)
     respn(1:nzmax,n)  = vertrespn(1:nzmax)
     NPPn3D(1:nzmax,n) = vertNPPn(1:nzmax)
-    
+
     ! --------------------------------------------------------------------------
     ! Diatoms
     ! --------------------------------------------------------------------------
@@ -2240,7 +2240,7 @@ subroutine update_3d_diags(n, nzmax)
     docexd(1:nzmax,n) = vertdocexd(1:nzmax)
     respd(1:nzmax,n)  = vertrespd(1:nzmax)
     NPPd3D(1:nzmax,n) = vertNPPd(1:nzmax)
-    
+
     ! --------------------------------------------------------------------------
     ! Coccolithophores and Phaeocystis (if enabled)
     ! --------------------------------------------------------------------------
@@ -2249,24 +2249,24 @@ subroutine update_3d_diags(n, nzmax)
         docexc(1:nzmax,n) = vertdocexc(1:nzmax)
         respc(1:nzmax,n)  = vertrespc(1:nzmax)
         NPPc3D(1:nzmax,n) = vertNPPc(1:nzmax)
-        
+
         aggp(1:nzmax,n)   = vertaggp(1:nzmax)
         docexp(1:nzmax,n) = vertdocexp(1:nzmax)
         respp(1:nzmax,n)  = vertrespp(1:nzmax)
         NPPp3D(1:nzmax,n) = vertNPPp(1:nzmax)
     endif
-    
+
     ! --------------------------------------------------------------------------
     ! Calcification
     ! --------------------------------------------------------------------------
     calcdiss(1:nzmax,n) = vertcalcdiss(1:nzmax)
     calcif(1:nzmax,n)   = vertcalcif(1:nzmax)
-    
+
     ! --------------------------------------------------------------------------
     ! Zooplankton Respiration
     ! --------------------------------------------------------------------------
     respmeso(1:nzmax,n) = vertrespmeso(1:nzmax)
-    
+
     if (enable_3zoo2det) then
         respmacro(1:nzmax,n) = vertrespmacro(1:nzmax)
         respmicro(1:nzmax,n) = vertrespmicro(1:nzmax)
@@ -2292,7 +2292,7 @@ subroutine update_3d_diags(n, nzmax)
         TTemp_diatoms(1:nzmax,n)       = VTTemp_diatoms(1:nzmax)
         TqlimitFac_diatoms(1:nzmax,n)  = VTqlimitFac_diatoms(1:nzmax)
         TSi_assimDia(1:nzmax,n)        = VTSi_assimDia(1:nzmax)
- 
+
         ! --------------------------------------------------------------------------
         ! Temperature and Photosynthesis Tracking - Coccos/Phaeo (if enabled)
         ! --------------------------------------------------------------------------
@@ -2302,14 +2302,14 @@ subroutine update_3d_diags(n, nzmax)
         TqlimitFac_cocco(1:nzmax,n)    = VTqlimitFac_cocco(1:nzmax)
         TCphotLigLim_cocco(1:nzmax,n)  = VTCphotLigLim_cocco(1:nzmax)
         TCphot_cocco(1:nzmax,n)        = VTCphot_cocco(1:nzmax)
-        
+
         TTemp_phaeo(1:nzmax,n)         = VTTemp_phaeo(1:nzmax)
         TPhaeoCO2(1:nzmax,n)           = VTPhaeoCO2(1:nzmax)
         TqlimitFac_phaeo(1:nzmax,n)    = VTqlimitFac_phaeo(1:nzmax)
         TCphotLigLim_phaeo(1:nzmax,n)  = VTCphotLigLim_phaeo(1:nzmax)
         TCphot_phaeo(1:nzmax,n)        = VTCphot_phaeo(1:nzmax)
     endif
-    
+
 end subroutine update_3d_diags
 
 ! ==============================================================================
@@ -2327,7 +2327,7 @@ subroutine deallocate_diags()
         deallocate(vertNPPn, vertGPPn, vertNNAn, vertChldegn)
         deallocate(vertaggn, vertdocexn, vertrespn)
         deallocate(VTPhyCO2, VTCphotLigLim_phyto, VTCphot_phyto)
-    
+
         ! --------------------------------------------------------------------------
         ! Diatoms
         ! --------------------------------------------------------------------------
@@ -2348,7 +2348,7 @@ subroutine deallocate_diags()
         deallocate(vertcalcdiss, vertcalcif)
         deallocate(VTTemp_cocco, VTCoccoCO2, VTqlimitFac_cocco)
         deallocate(VTCphotLigLim_cocco, VTCphot_cocco)
-        
+
         deallocate(vertNPPp, vertGPPp, vertNNAp, vertChldegp)
         deallocate(vertaggp, vertdocexp, vertrespp)
         deallocate(VTTemp_phaeo, VTPhaeoCO2, VTqlimitFac_phaeo)
@@ -2356,39 +2356,39 @@ subroutine deallocate_diags()
     else
         deallocate(vertcalcdiss, vertcalcif)
     endif
-    
+
     ! --------------------------------------------------------------------------
     ! Zooplankton Grazing (if enabled)
     ! --------------------------------------------------------------------------
     if (Grazing_detritus) then
         deallocate(vertgrazmeso_tot, vertgrazmeso_n, vertgrazmeso_d)
         deallocate(vertgrazmeso_det, vertrespmeso)
-        
+
         if (enable_coccos) then
             deallocate(vertgrazmeso_c, vertgrazmeso_p)
         endif
-        
+
         if (enable_3zoo2det) then
             deallocate(vertgrazmeso_mic, vertgrazmeso_det2)
-            
+
             deallocate(vertgrazmacro_tot, vertgrazmacro_n, vertgrazmacro_d)
             deallocate(vertgrazmacro_mes, vertgrazmacro_det)
             deallocate(vertgrazmacro_mic, vertgrazmacro_det2)
             deallocate(vertrespmacro)
-            
+
             if (enable_coccos) then
                 deallocate(vertgrazmacro_c, vertgrazmacro_p)
             endif
-            
+
             deallocate(vertgrazmicro_tot, vertgrazmicro_n, vertgrazmicro_d)
             deallocate(vertrespmicro)
-            
+
             if (enable_coccos) then
                 deallocate(vertgrazmicro_c, vertgrazmicro_p)
             endif
         endif
     endif
-    
+
 end subroutine deallocate_diags
 
 end module recom_diags_management

@@ -33,7 +33,7 @@ if(z.gt.x(1).and.z.lt.x(n)) then
       endif
    end do
    k=kl
-   if(z.eq.x(k+1)) then 
+   if(z.eq.x(k+1)) then
      k = k+1
    end if
 elseif (z.le.x(1)) then
@@ -46,4 +46,3 @@ return
 end subroutine
 
 !--------------------------------------------------------------------------
-

@@ -1,8 +1,8 @@
 !==========================================================================
-elemental function gsw_t_from_ct (sa, ct, p)  
+elemental function gsw_t_from_ct (sa, ct, p)
 !==========================================================================
 !
-! Calculates in-situ temperature from Conservative Temperature of seawater  
+! Calculates in-situ temperature from Conservative Temperature of seawater
 !
 ! sa      : Absolute Salinity                              [g/kg]
 ! ct      : Conservative Temperature                       [deg C]
@@ -16,7 +16,7 @@ use gsw_mod_kinds
 
 implicit none
 
-real (r8), intent(in) :: sa, ct, p  
+real (r8), intent(in) :: sa, ct, p
 
 real (r8) :: gsw_t_from_ct
 

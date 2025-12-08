@@ -6,8 +6,8 @@ elemental function gsw_gibbs_pt0_pt0 (sa, pt0)
 !
 ! sa     : Absolute Salinity                            [g/kg]
 ! pt0    : potential temperature                        [deg C]
-! 
-! gsw_gibbs_pt0_pt0 : gibbs_tt at (sa,pt,0)         
+!
+! gsw_gibbs_pt0_pt0 : gibbs_tt at (sa,pt,0)
 !--------------------------------------------------------------------------
 
 use gsw_mod_teos10_constants, only : gsw_sfac

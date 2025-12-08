@@ -1,10 +1,10 @@
 !> \file buffesm2.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with buffesm subroutine - compute carbonate system vars from DIC,Alk,T,S,P,nuts
 MODULE mbuffesm
 CONTAINS
 !>    Computes buffer factors of the seawater carbonate system as defined by Egleston et al. (2010)
-!!    (corrected for sign error & modified to account for effects of total dissolved inorganic P and Si acid systems) 
+!!    (corrected for sign error & modified to account for effects of total dissolved inorganic P and Si acid systems)
 !!    as 1D arrays FROM
 !!    temperature, salinity, pressure,
 !!    total alkalinity (ALK), dissolved inorganic carbon (DIC),
@@ -79,7 +79,7 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2
   !     ---------
-  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -97,15 +97,15 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   !        Optional, it may be used along with latitude when optS is "Sabs".
   !        Then, they are parameters for conversion from Absolute to Practical Salinity.
   !
-  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient 
-  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition, 
-  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat' 
-  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location. 
+  !        When seawater is not of standard composition, Practical Salinity alone is not sufficient
+  !        to compute Absolute Salinity and vice-versa. One needs to know the chemical composition,
+  !        mainly silicate and nitrate concentration. When those concentrations are unknown and 'lon' and 'lat'
+  !        are given, absolute salinity conversion is based on WOA silicate concentration at given location.
   !
   !        Alternative when optS is 'Sabs' :
   !        -------------------------------
   !        When silicate and phosphate concentrations are known, nitrate concentration is inferred from phosphate
-  !        (using Redfield ratio), then practical salinity is computed from absolute salinity, 
+  !        (using Redfield ratio), then practical salinity is computed from absolute salinity,
   !        total alcalinity (alk), DIC (dic), silicate (sil) and phosphate (phos).
   !        In that case, do not pass optional parameter 'lon'.
   !
@@ -140,7 +140,7 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   !>     number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> salinity <b>[psu]</b>
@@ -160,7 +160,7 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   !> latitude <b>[degrees north]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: lat
 
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
   CHARACTER(6), INTENT(in) :: optCON
   !> choose \b 'Tinsitu' for in situ temperature or \b 'Tpot' for potential temperature
@@ -169,18 +169,18 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
   CHARACTER(2), INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='u74'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -245,7 +245,7 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   REAL(kind=rx), DIMENSION(N) :: rhoSW
   REAL(kind=rx), DIMENSION(N) :: p
   REAL(kind=rx), DIMENSION(N) :: tempis
-  ! practical salinity [psu] computed when absolute saliniry is given 
+  ! practical salinity [psu] computed when absolute saliniry is given
   REAL(kind=rx), DIMENSION(N) :: salprac
 
   ! 3) Other Local variables (needed to compute buffer factors)
@@ -255,7 +255,7 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   REAL(kind=r8) :: Pt, Sit
   REAL(kind=r8) :: Pegle, Segle, Qegle
   REAL(kind=r8) :: SegleCBW, SeglePt, SegleSit
-  
+
   INTEGER :: i
 ! Arrays to pass optional arguments into or use defaults (Dickson et al., 2007)
   CHARACTER(3) :: opB
@@ -266,7 +266,7 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
   LOGICAL      :: verbosity
 
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
   IF (PRESENT(optB)) THEN
     opB = optB
@@ -336,17 +336,17 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
          Pt = phos(i)
          Sit = sil(i)
 
-         ! Carbonate alkalinity & concentrations of H+, OH-, Borate 
+         ! Carbonate alkalinity & concentrations of H+, OH-, Borate
          h = 10**(-ph(i))          !Total scale
          Alkc = 2*co3(i) + hco3(i)
-         Borate  = Bt(i) / (1 + h/Kb(i) ) 
+         Borate  = Bt(i) / (1 + h/Kb(i) )
          oh = Kw(i) / h
 
          ! Phosphate species
          ! [h2po4-] = K1p * [h3po4] / [H+]
          ! [hpo4--] = K1p * K2p * [h3po4] / [H+]²
          ! [po4---] = K1p * K2p * K3p * [h3po4] / [H+]³
-         ! Pt       = [h3po4] * (1 + K1p/[H+] + K1p*K2p/[H+]² + K1p*K2p*K3p/[H+]³) 
+         ! Pt       = [h3po4] * (1 + K1p/[H+] + K1p*K2p/[H+]² + K1p*K2p*K3p/[H+]³)
 
          h3po4 = Pt / (1 + K1p(i)/h + K1p(i)*K2p(i)/h**2 + K1p(i)*K2p(i)*K3p(i)/h**3)
          h2po4 = K1p(i) * h3po4 / h
@@ -359,7 +359,7 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
 
          sioh4 = Sit /(1 + Ksi(i)/h)
          sioh3 = Ksi(i) * Sit/(h+Ksi(i))
-      
+
         !Segle: (1) corrected from sign error in Egleston et al., and (2) modified to account for P & Si acid systems
         !------------------------------------------------------------------------------------------------------------
          !Segle  =   hco3(i) + 4*co3(i) + (h*Borate/(Kb(i) + h)) + h + oh   !Formula from Egleston et al (2010) with corrected sign error
@@ -370,12 +370,12 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
         ! SeglePt:  contribution of total phosphate     (from J.-M. Epitalon)
         ! SegleSit: contribution of total silicon       (from J.-M. Epitalon)
 
-!         Segle  = hco3(i) + 4*co3(i) + (h*Borate/(Kb(i) + h)) + h + oh     & 
+!         Segle  = hco3(i) + 4*co3(i) + (h*Borate/(Kb(i) + h)) + h + oh     &
 !                    + (- h3po4 * (-h2po4 - 2*hpo4 - 3*po4)                 &
 !                       + hpo4  * (2*h3po4 + h2po4 - po4)                   &
 !                       + 2*po4 * (3*h3po4 + 2*h2po4 + hpo4)                &
 !                      ) / Pt                                               &
-!                    + h * sioh3/(Ksi(i) + h)                               &   
+!                    + h * sioh3/(Ksi(i) + h)                               &
 !                  )
 
          ! Part 1: Carbon, Boron, Water
@@ -395,30 +395,30 @@ SUBROUTINE buffesm(gammaDIC, betaDIC, omegaDIC, gammaALK, betaALK, omegaALK, Rf,
          IF (Sit .EQ. 0.0d0) THEN
             SegleSit = 0.0
          ELSE
-            SegleSit = h * sioh3/(Ksi(i) + h)                           
+            SegleSit = h * sioh3/(Ksi(i) + h)
          ENDIF
 
 !        Add the 3 parts of Segle
          Segle  = SegleCBW + SeglePt + SegleSit
 
-         !print *, 'hco3, co3, h, Borate, Kb, oh = ', hco3(i), co3(i), h, Borate, Kb(i), oh 
+         !print *, 'hco3, co3, h, Borate, Kb, oh = ', hco3(i), co3(i), h, Borate, Kb(i), oh
          !print *, 'h3po4, h2po4, hpo4, po4 =', h3po4, h2po4, hpo4, po4
          !print *, 'Pt = ', Pt
          !print *, 'sioh3, Ksi =', sioh3, Ksi(i)
 
-         Pegle  = 2*co2(i) + hco3(i)                                  
-         Qegle  = 2*Alkc - Segle                                 
+         Pegle  = 2*co2(i) + hco3(i)
+         Qegle  = 2*Alkc - Segle
 
-         ! Compute 6 buffer factors: 
-         !*** NOTE - units of buffer factors depend on optCON (mol/m3 OR mol/kg) 
-         !         - to compare with Egleston, must convert to mmol/kg, e.g., multiply factor in mol/kg by 1000 
+         ! Compute 6 buffer factors:
+         !*** NOTE - units of buffer factors depend on optCON (mol/m3 OR mol/kg)
+         !         - to compare with Egleston, must convert to mmol/kg, e.g., multiply factor in mol/kg by 1000
 
          gammaDIC(i) = dic(i) - (Alkc*Alkc)/Segle
          gammaALK(i) = (Alkc*Alkc - dic(i)*Segle) / Alkc
          betaDIC(i)  = (dic(i)*Segle - Alkc*Alkc) / Alkc
          betaALK(i)  = Alkc*Alkc/dic(i) - Segle
-         omegaDIC(i) = dic(i) - (Alkc * Pegle/Qegle)                   
-         omegaALK(i) = Alkc - dic(i) * Qegle/Pegle                     
+         omegaDIC(i) = dic(i) - (Alkc * Pegle/Qegle)
+         omegaALK(i) = Alkc - dic(i) * Qegle/Pegle
 
          Rf = dic(i) / gammaDIC
          !print *, 'Segle, Pegle, Qegle = ', Segle, Pegle, Qegle

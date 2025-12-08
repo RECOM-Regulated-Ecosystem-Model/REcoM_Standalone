@@ -1,5 +1,5 @@
 !> \file derivauto.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with derivauto subroutine - compute partial derivatives of carbonate system vars from DIC,Alk,T,S,P,nuts
 MODULE mderivauto
 CONTAINS
@@ -79,7 +79,7 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2
   !     ---------
-  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -91,8 +91,8 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
   !     OUTPUT variables:
   !     =================
   !
-  !     For each chemical OUTPUT variable, there is an OPTIONAL one that contains 
-  !     partial derivatives with respect to 6 input variables : 
+  !     For each chemical OUTPUT variable, there is an OPTIONAL one that contains
+  !     partial derivatives with respect to 6 input variables :
   !         alk, dic, phosphate, silicate, temperature and salinity.
   !
   !     ph_deriv   = derivatives of pH on total scale
@@ -118,14 +118,14 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
   USE msw_temp
   USE mvarsolver
   USE Dual_Num_Auto_Diff
-  
+
   IMPLICIT NONE
 
 ! Input variables
   !>     number of records
 !f2py intent(hide) n
   INTEGER, INTENT(in) :: N
-  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data) 
+  !> either <b>in situ temperature</b> (when optT='Tinsitu', typical data)
   !! OR <b>potential temperature</b> (when optT='Tpot', typical models) <b>[degree C]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: temp
   !> salinity <b>[psu]</b>
@@ -145,7 +145,7 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
   !> latitude <b>[degrees north]</b>
   REAL(kind=rx), INTENT(in),    DIMENSION(N) :: lat
 
-  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select 
+  !> choose either \b 'mol/kg' (std DATA units) or \b 'mol/m3' (std MODEL units) to select
   !! concentration units for input (for alk, dic, sil, phos) & output (co2, hco3, co3)
   CHARACTER(6), INTENT(in) :: optCON
   !> choose \b 'Tinsitu' for in situ temperature or \b 'Tpot' for potential temperature (in situ Temp is computed, needed for models)
@@ -153,18 +153,18 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
   !> for depth input, choose \b "db" for decibars (in situ pressure) or \b "m" for meters (pressure is computed, needed for models)
   CHARACTER(2), INTENT(in) :: optP
   !> for total boron, choose either \b 'u74' (Uppstrom, 1974) or \b 'l10' (Lee et al., 2010).
-  !! The 'l10' formulation is based on 139 measurements (instead of 20), 
+  !! The 'l10' formulation is based on 139 measurements (instead of 20),
   !! uses a more accurate method, and
-  !! generally increases total boron in seawater by 4% 
+  !! generally increases total boron in seawater by 4%
 !f2py character*3 optional, intent(in) :: optB='u74'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optB
   !> for Kf, choose either \b 'pf' (Perez & Fraga, 1987) or \b 'dg' (Dickson & Riley, 1979)
 !f2py character*2 optional, intent(in) :: optKf='pf'
   CHARACTER(2), OPTIONAL, INTENT(in) :: optKf
-  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010) 
+  !> for K1,K2 choose either \b 'l' (Lueker et al., 2000) or \b 'm10' (Millero, 2010)
 !f2py character*3 optional, intent(in) :: optK1K2='l'
   CHARACTER(3), OPTIONAL, INTENT(in) :: optK1K2
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -228,7 +228,7 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
   CHARACTER(7) :: opGAS
 
 ! Set defaults for optional arguments (in Fortran 90)
-! Note:  Optional arguments with f2py (python) are set above with 
+! Note:  Optional arguments with f2py (python) are set above with
 !        the !f2py statements that precede each type declaraion
   IF (PRESENT(optB)) THEN
     opB = optB
@@ -307,7 +307,7 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
 !       dtempot   = 0.99975*dtempot68 + 0.0002
      ELSE
         PRINT *,"optT must be either 'Tpot' or 'Tinsitu'"
-        PRINT *,"you specified optT =", trim(optT) 
+        PRINT *,"you specified optT =", trim(optT)
         STOP
      ENDIF
 
@@ -406,7 +406,7 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
            STOP
         ENDIF
 
-!       Initialise ta, tc, pt and sit and their derivatives 
+!       Initialise ta, tc, pt and sit and their derivatives
         ta  = DUAL_NUM(DBLE(salk),  (/1.0D0,0.0D0,0.0D0,0.0D0,0.0D0,0.0D0/)) / drho
         tc  = DUAL_NUM(DBLE(sdic),  (/0.0D0,1.0D0,0.0D0,0.0D0,0.0D0,0.0D0/)) / drho
         pt  = DUAL_NUM(DBLE(sphos), (/0.0D0,0.0D0,1.0D0,0.0D0,0.0D0,0.0D0/)) / drho
@@ -420,7 +420,7 @@ SUBROUTINE derivauto(ph_deriv, pco2_deriv, fco2_deriv, co2_deriv, hco3_deriv, co
                     tempis90, s(1), ta, tc, pt, sit,                                &
                     Bt(1), St(1), Ft(1),                                            &
                     K0(1), K1(1), K2(1), Kb(1), Kw(1), Ks(1), Kf(1),                &
-                    Kspc(1), Kspa(1), K1p(1), K2p(1), K3p(1), Ksi(1),               & 
+                    Kspc(1), Kspa(1), K1p(1), K2p(1), K3p(1), Ksi(1),               &
                     Patmd(1), prb, drho, opGAS                                      )
 
 !       Save derivatives

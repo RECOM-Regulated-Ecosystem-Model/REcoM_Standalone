@@ -7,7 +7,7 @@ elemental function gsw_entropy_part (sa, t, p)
 ! sa     : Absolute Salinity                               [g/kg]
 ! t      : in-situ temperature                             [deg C]
 ! p      : sea pressure                                    [dbar]
-! 
+!
 ! gsw_entropy_part : entropy part
 !--------------------------------------------------------------------------
 

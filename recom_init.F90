@@ -1,6 +1,6 @@
 ! ------------
 ! 23.03.2023
-! OG   
+! OG
 !===============================================================================
 ! allocate & initialise arrays for REcoM
 module recom_init_interface
@@ -33,7 +33,7 @@ subroutine recom_init(tracers, partit, mesh)
     implicit none
 #include "netcdf.inc"
     !___________________________________________________________________________
-    ! pointer on necessary derived types 
+    ! pointer on necessary derived types
     integer                                 :: n, k, row, nzmin, nzmax, i, id
     integer                                 :: elem_size, node_size, num_tracers
 
@@ -352,7 +352,7 @@ subroutine recom_init(tracers, partit, mesh)
     allocate(OmegaC3D     ( nl-1, node_size ))
     allocate(kspc3D       ( nl-1, node_size ))
     allocate(rhoSW3D      ( nl-1, node_size ))
-  
+
     CO23D(:,:)          = 0.d0
     pH3D(:,:)           = 0.d0
     pCO23D(:,:)         = 0.d0
@@ -621,7 +621,7 @@ subroutine recom_init(tracers, partit, mesh)
 
     !< Mask hydrothermal vent in Eastern Equatorial Pacific GO
     do row=1, myDim_nod2D+eDim_nod2D
-        !if (ulevels_nod2D(row)>1) cycle 
+        !if (ulevels_nod2D(row)>1) cycle
         nzmin = ulevels_nod2D(row)
         nzmax = nlevels_nod2D(row)-1
         do k=nzmin, nzmax
@@ -629,7 +629,7 @@ subroutine recom_init(tracers, partit, mesh)
             if (((geo_coord_nod2D(2,row) > -12.5*rad) .and. (geo_coord_nod2D(2,row) < 9.5*rad))&
                 .and.((geo_coord_nod2D(1,row)> -106.0*rad) .and. (geo_coord_nod2D(1,row) < -72.0*rad))) then
                 if (abs(Z_3d_n(k,row))<2000.0_WP) cycle
-                tracers%data(21)%values(k,row) = min(0.3, tracers%data(21)%values(k,row)) ! OG todo: try 0.6 
+                tracers%data(21)%values(k,row) = min(0.3, tracers%data(21)%values(k,row)) ! OG todo: try 0.6
             end if
         end do
     end do
@@ -706,4 +706,3 @@ subroutine recom_init(tracers, partit, mesh)
             is_coccos=0.0_WP
         endif
     end subroutine recom_init
-

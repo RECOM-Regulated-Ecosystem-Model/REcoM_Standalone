@@ -1,6 +1,6 @@
 module diff_ver_recom_expl_interface
   interface
-    subroutine diff_ver_recom_expl(tr_num, tracer, partit, mesh) 
+    subroutine diff_ver_recom_expl(tr_num, tracer, partit, mesh)
         use mod_mesh
         USE MOD_PARTIT
         USE MOD_PARSUP
@@ -145,10 +145,10 @@ subroutine ver_sinking_recom_benthos(tr_num, tracers, partit, mesh)
             if (use_MEDUSA) then
 ! kh 25.03.22 buffer sums per tracer index to avoid non bit identical results regarding global sums when running the tracer loop in parallel
                SinkFlx_tr(n,1,tr_num) = SinkFlx_tr(n,1,tr_num) + add_benthos_2d(n) / area(1,n)/dt ![mmol/m2]
-        ! now SinkFlx hat the unit mmol/time step 
+        ! now SinkFlx hat the unit mmol/time step
         ! but mmol/m2/time is needed for MEDUSA: thus /area
             endif
-            if ((.not.use_MEDUSA).or.(sedflx_num.eq.0)) then  
+            if ((.not.use_MEDUSA).or.(sedflx_num.eq.0)) then
 ! kh 25.03.22 buffer sums per tracer index to avoid non bit identical results regarding global sums when running the tracer loop in parallel
                Benthos_tr(n,1,tr_num)= Benthos_tr(n,1,tr_num) +  add_benthos_2d(n) ![mmol]
             endif
@@ -208,7 +208,7 @@ subroutine ver_sinking_recom_benthos(tr_num, tracers, partit, mesh)
         endif
 
         ! flux of 13C into the sediment
-        if (ciso) then             
+        if (ciso) then
             if( tracers%data(tr_num)%ID==1305 .or. & !iphyc_13
                 tracers%data(tr_num)%ID==1308 .or. & !idetc_13
                 tracers%data(tr_num)%ID==1314 ) then !idiac_14
@@ -239,9 +239,9 @@ subroutine ver_sinking_recom_benthos(tr_num, tracers, partit, mesh)
            endif
 
         endif
-        
+
         ! flux of 14C into the sediment
-        if (ciso .and. ciso_organic_14) then             
+        if (ciso .and. ciso_organic_14) then
            if( tracers%data(tr_num)%ID==1405 .or. & !iphyc_13
                tracers%data(tr_num)%ID==1408 .or. & !idetc_13
                tracers%data(tr_num)%ID==1414 ) then !idiac_14
@@ -311,7 +311,7 @@ subroutine diff_ver_recom_expl(tr_num, tracers, partit, mesh)
     use g_clock
     use o_PARAM
     use g_config
-    use o_param 
+    use o_param
     use o_arrays
     use g_forcing_arrays
     use g_comm_auto
@@ -408,7 +408,7 @@ else
           call par_ex(partit%MPI_COMM_FESOM, partit%mype)
           stop
     END SELECT
-endif ! (use_MEDUSA .and. (sedflux_num .gt. 0))  
+endif ! (use_MEDUSA .and. (sedflux_num .gt. 0))
 #endif
 
     do n=1, myDim_nod2D

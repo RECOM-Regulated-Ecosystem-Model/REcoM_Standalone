@@ -1,5 +1,5 @@
 !> \file varsolver.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with varsolver subroutine - solve for pH and other carbonate system variables
 MODULE mvarsolver
 CONTAINS
@@ -7,7 +7,7 @@ CONTAINS
 SUBROUTINE varsolver(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,             &
                     temp, salt, ta, tc, pt, sit,                                 &
                     Bt, St, Ft,                                                  &
-                    K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi,  & 
+                    K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi,  &
                     Patm, Phydro_bar, rhodum, optGAS                             )
 
   !   Purpose: Solve for pH and other carbonate system variables (with input from vars routine)
@@ -22,14 +22,14 @@ SUBROUTINE varsolver(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,            
   !     Bt      = total dissolved inorganic boron      computed in calling routine (vars)
   !     St      = total dissolved inorganic sulfur     computed in calling routine (vars)
   !     Ft      = total dissolved inorganic fluorine   computed in calling routine (vars)
-  !     K's     = K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi 
+  !     K's     = K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi
   !     Patm    = atmospheric pressure [atm]
   !     Phydro_bar = hydrostatic pressure [bar]
   !     rhodum  = density factor as computed in calling routine  (vars)
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2 (default optGAS = 'Pinsitu')
   !     ---------
-  !       PRESSURE & T corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE & T corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -80,13 +80,13 @@ SUBROUTINE varsolver(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,            
   REAL(kind=r8), INTENT(in) :: K1
   !> K2 for the dissociation of carbonic acid from Lueker et al. (2000) or Millero (2010), depending on optK1K2
   REAL(kind=r8), INTENT(in) :: K2
-  !> equilibrium constant for dissociation of boric acid 
+  !> equilibrium constant for dissociation of boric acid
   REAL(kind=r8), INTENT(in) :: Kb
   !> equilibrium constant for the dissociation of water (Millero, 1995)
   REAL(kind=r8), INTENT(in) :: Kw
   !> equilibrium constant for the dissociation of bisulfate (Dickson, 1990)
   REAL(kind=r8), INTENT(in) :: Ks
-  !> equilibrium constant for the dissociation of hydrogen fluoride 
+  !> equilibrium constant for the dissociation of hydrogen fluoride
   !! from Dickson and Riley (1979) or Perez and Fraga (1987), depending on optKf
   REAL(kind=r8), INTENT(in) :: Kf
   !> solubility product for calcite (Mucci, 1983)
@@ -107,7 +107,7 @@ SUBROUTINE varsolver(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,            
   REAL(kind=r8), INTENT(in) :: Phydro_bar
   !> density factor as computed incalling routine  (vars)
   REAL(kind=r8), INTENT(in) :: rhodum
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -154,11 +154,11 @@ SUBROUTINE varsolver(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,            
 ! Compute pH from constants and total concentrations
 ! - use SolveSAPHE v1.0.1 routines from Munhoven (2013, GMD) modified to use mocsy's Ks instead of its own
 ! 1) Solve for H+ using above result as the initial H+ value
-  H = solve_at_general(ta, tc, Bt,                                         & 
+  H = solve_at_general(ta, tc, Bt,                                         &
                        pt,     sit,                                        &
                        St, Ft,                                             &
                        K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi )
-  
+
 ! 2) Calculate pH from from H+ concentration (mol/kg)
   IF (H > 0.d0) THEN
      pH = -1.*LOG10(H)
@@ -208,7 +208,7 @@ SUBROUTINE varsolver(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,            
      tk0 = tempot + 273.15d0  !potential temperature (K) for fugacity coeff. calc as needed for potential fCO2 & pCO2
      Ptot = Patm              !total pressure (in atm) = atmospheric pressure ONLY
   ELSEIF (trim(opGAS) == 'Pinsitu' .OR. trim(opGAS) == 'pinsitu') THEN
-     !Use in situ temperature and total pressure 
+     !Use in situ temperature and total pressure
      tk0 = tk                             !in situ temperature (K) for fugacity coefficient calculation
      Phydro_atm = Phydro_bar / 1.01325d0  !convert hydrostatic pressure from bar to atm (1.01325 bar / atm)
      Ptot = Patm + Phydro_atm            !total pressure (in atm) = atmospheric pressure + hydrostatic pressure
@@ -231,7 +231,7 @@ SUBROUTINE varsolver(ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,            
 !    approximate surface xCO2 ~ surface fCO2 (i.e., in situ fCO2 d by exponential pressure correction)
      xCO2approx = xCO2approx * exp( ((1-Ptot)*32.3_r8)/(82.05736_r8*tk0) )   ! of K0 press. correction, see Weiss (1974, equation 5)
   ENDIF
-  xc2 = (1.0d0 - xCO2approx)**2 
+  xc2 = (1.0d0 - xCO2approx)**2
   fugcoeff = exp( Ptot*(B + 2.0d0*xc2*Del)/(Rgas_atm*tk0) )
   pCO2 = fCO2 / fugcoeff
 
@@ -251,7 +251,7 @@ END SUBROUTINE varsolver
 SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,       &
                     temp, salt, ta, tc, pt, sit,                                 &
                     Bt, St, Ft,                                                  &
-                    K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi,  & 
+                    K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi,  &
                     Patm, Phydro_bar, rhodum, optGAS                             )
 
   !   Purpose: Solve for pH and other carbonate system variables (with input from vars routine)
@@ -260,7 +260,7 @@ SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,      
   ! It is similar to subroutine varsolver above except that it computes
   ! partial derivatives of all output (ph, pco2, fco2, co2, hco3, co3, OmegaA and OmegaC)
   ! with respect to four input variables : ta, tc pt and sit
-  !     
+  !
 
   !     INPUT variables:
   !     ================
@@ -272,14 +272,14 @@ SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,      
   !     Bt      = total dissolved inorganic boron      computed in calling routine (vars)
   !     St      = total dissolved inorganic sulfur     computed in calling routine (vars)
   !     Ft      = total dissolved inorganic fluorine   computed in calling routine (vars)
-  !     K's     = K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi 
+  !     K's     = K0, K1, K2, Kb, Kw, Ks, Kf, Kspc, Kspa, K1p, K2p, K3p, Ksi
   !     Patm    = atmospheric pressure [atm]
   !     Phydro_bar = hydrostatic pressure [bar]
   !     rhodum  = density factor as computed in calling routine  (vars)
   !     -----------
   !     optGAS: choose in situ vs. potential fCO2 and pCO2 (default optGAS = 'Pinsitu')
   !     ---------
-  !       PRESSURE & T corrections for K0 and the fugacity coefficient (Cf) 
+  !       PRESSURE & T corrections for K0 and the fugacity coefficient (Cf)
   !       -> 'Pzero'   = 'zero order' fCO2 and pCO2 (typical approach, which is flawed)
   !                      considers in situ T & only atm pressure (hydrostatic=0)
   !       -> 'Ppot'    = 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
@@ -331,13 +331,13 @@ SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,      
   TYPE(DUAL_NUM), INTENT(in) :: K1
   !> K2 for the dissociation of carbonic acid from Lueker et al. (2000) or Millero (2010), depending on optK1K2
   TYPE(DUAL_NUM), INTENT(in) :: K2
-  !> equilibrium constant for dissociation of boric acid 
+  !> equilibrium constant for dissociation of boric acid
   TYPE(DUAL_NUM), INTENT(in) :: Kb
   !> equilibrium constant for the dissociation of water (Millero, 1995)
   TYPE(DUAL_NUM), INTENT(in) :: Kw
   !> equilibrium constant for the dissociation of bisulfate (Dickson, 1990)
   TYPE(DUAL_NUM), INTENT(in) :: Ks
-  !> equilibrium constant for the dissociation of hydrogen fluoride 
+  !> equilibrium constant for the dissociation of hydrogen fluoride
   !! from Dickson and Riley (1979) or Perez and Fraga (1987), depending on optKf
   TYPE(DUAL_NUM), INTENT(in) :: Kf
   !> solubility product for calcite (Mucci, 1983)
@@ -358,7 +358,7 @@ SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,      
   TYPE(DUAL_NUM), INTENT(in) :: Phydro_bar
   !> density factor as computed incalling routine  (vars)
   TYPE(DUAL_NUM), INTENT(in) :: rhodum
-  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction) 
+  !> for K0,fugacity coefficient choose either \b 'Ppot' (no pressure correction) or \b 'Pinsitu' (with pressure correction)
   !! 'Ppot'    - for 'potential' fCO2 and pCO2 (water parcel brought adiabatically to the surface)
   !! 'Pinsitu' - for 'in situ' values of fCO2 and pCO2, accounting for pressure on K0 and Cf
   !! with 'Pinsitu' the fCO2 and pCO2 will be many times higher in the deep ocean
@@ -403,15 +403,15 @@ SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,      
   ENDIF
 
 ! Compute pH from constants and total concentrations
-! - use SolveSAPHE v1.0.1 routines from Munhoven (2013, GMD) 
+! - use SolveSAPHE v1.0.1 routines from Munhoven (2013, GMD)
 !    * modified to use mocsy's Ks instead of its own
 !    * modified to support DNAD (Dual Numbers Automatic Derivation)
 ! 1) Solve for H+ using above result as the initial H+ value
-  H = solve_at_general_DNAD(ta, tc, Bt,                                    & 
+  H = solve_at_general_DNAD(ta, tc, Bt,                                    &
                        pt,     sit,                                        &
                        St, Ft,                                             &
                        K0, K1, K2, Kb, Kw, Ks, Kf, K1p, K2p, K3p, Ksi )
-  
+
 ! 2) Calculate pH from from H+ concentration (mol/kg)
   IF (H > 0.d0) THEN
      pH = -1.*LOG10(H)
@@ -461,7 +461,7 @@ SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,      
      tk0 = tempot + 273.15d0  !potential temperature (K) for fugacity coeff. calc as needed for potential fCO2 & pCO2
      Ptot = Patm              !total pressure (in atm) = atmospheric pressure ONLY
   ELSEIF (trim(opGAS) == 'Pinsitu' .OR. trim(opGAS) == 'pinsitu') THEN
-     !Use in situ temperature and total pressure 
+     !Use in situ temperature and total pressure
      tk0 = tk                             !in situ temperature (K) for fugacity coefficient calculation
      Phydro_atm = Phydro_bar / 1.01325d0  !convert hydrostatic pressure from bar to atm (1.01325 bar / atm)
      Ptot = Patm + Phydro_atm            !total pressure (in atm) = atmospheric pressure + hydrostatic pressure
@@ -484,7 +484,7 @@ SUBROUTINE varsolver_DNAD (ph, pco2, fco2, co2, hco3, co3, OmegaA, OmegaC,      
 !    approximate surface xCO2 ~ surface fCO2 (i.e., in situ fCO2 d by exponential pressure correction)
      xCO2approx = xCO2approx * exp( ((1-Ptot)*32.3_r8)/(82.05736_r8*tk0) )   ! of K0 press. correction, see Weiss (1974, equation 5)
   ENDIF
-  xc2 = (1.0d0 - xCO2approx)**2 
+  xc2 = (1.0d0 - xCO2approx)**2
   fugcoeff = exp( Ptot*(B + 2.0d0*xc2*Del)/(Rgas_atm*tk0) )
   pCO2 = fCO2 / fugcoeff
 

@@ -1,5 +1,5 @@
 !> \file depth2press.f90
-!! \BRIEF 
+!! \BRIEF
 !> Module with depth2press subroutine - converts depth to pressure
 !! with Saunders (1981) formula
 MODULE mdepth2press
@@ -10,7 +10,7 @@ SUBROUTINE depth2press(depth, lat, pdbar, N)
 
   !     Purpose:
   !     Compute pressure [db] from depth [m] & latitude [degrees north].
-  !     Needed because p80 is a function 
+  !     Needed because p80 is a function
 
   USE msingledouble
   USE mp80
